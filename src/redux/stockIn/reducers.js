@@ -215,6 +215,38 @@ const deleteStockInProductReducer = (state = DELETE_STOCKIN_PRODUCT_INITIAL_STAT
     }
 }
 
+const CREATE_STOCKIN_PRODUCT_INITIAL_STATE = {
+    createStockInProduct: [],
+    loading: false
+}
+
+const createStockInProductReducer = (state = CREATE_STOCKIN_PRODUCT_INITIAL_STATE, action) => {
+
+    switch (action.type) {
+        case StockInActionTypes.CREATE_STOCKIN_PRODUCT_LOADING:
+            return {
+                createStockInProduct: state.createStockInProduct,
+                loading: true
+            }
+        case StockInActionTypes.CREATE_STOCKIN_PRODUCT_SUCCESS:
+            return {
+                createStockInProduct: action.payload,
+                loading: false
+            }
+        case StockInActionTypes.CREATE_STOCKIN_PRODUCT_RESET:
+            return {
+                createStockInProduct: [],
+                loading: false,
+            };
+        case StockInActionTypes.CREATE_STOCKIN_PRODUCT_ERROR:
+            return {
+                createStockInProduct: action.payload,
+                loading: false
+            }
+        default: return state
+    }
+}
+
 export {
     stockInListReducer,
     createStockInReducer,
@@ -223,4 +255,5 @@ export {
     stockInByIdReducer,
     updateStockInProductReducer,
     deleteStockInProductReducer,
+    createStockInProductReducer,
 }

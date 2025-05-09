@@ -14,7 +14,7 @@ import { createUsersReducer, deleteUsersReducer, listingUsersReducer, updateUser
 import { createCustomerReducer, customerListReducer, deleteCustomerReducer, listingCustomerReducer, updateCustomerReducer } from './customer/reducers';
 import { createSupplierReducer, deleteSupplierReducer, listingSupplierReducer, supplierListReducer, updateSupplierReducer } from './supplier/reducers';
 import { createStockReducer, deleteStockProductReducer, stockListReducer, updateStockProductReducer, updateStockReducer } from './openingStock/reducers';
-import { createStockInReducer, deleteStockInProductReducer, deleteStockInReducer, stockInByIdReducer, stockInListReducer, updateStockInProductReducer, updateStockInReducer } from './stockIn/reducers';
+import { createStockInProductReducer, createStockInReducer, deleteStockInProductReducer, deleteStockInReducer, stockInByIdReducer, stockInListReducer, updateStockInProductReducer, updateStockInReducer } from './stockIn/reducers';
 import { createDispatchReducer, createStockCheckReducer, deleteDispatchProductReducer, deleteDispatchReducer, getDispatchDataReducer, updateDispatchProductReducer, updateDispatchReducer } from './dispatch/reducers';
 import { reportReducer } from './report/reducers';
 import { getNotificationDataReducer } from './notification/reducers';
@@ -41,7 +41,7 @@ export default (combineReducers({
   // Stock 
   stockListReducer, createStockReducer, updateStockReducer, updateStockProductReducer, deleteStockProductReducer,
   // stockIn 
-  stockInListReducer, createStockInReducer, updateStockInReducer, deleteStockInReducer, stockInByIdReducer, updateStockInProductReducer, deleteStockInProductReducer,
+  stockInListReducer, createStockInReducer, updateStockInReducer, deleteStockInReducer, stockInByIdReducer, updateStockInProductReducer, deleteStockInProductReducer, createStockInProductReducer,
   // dispatch
   getDispatchDataReducer, createDispatchReducer, updateDispatchReducer, deleteDispatchReducer, createStockCheckReducer, updateDispatchProductReducer, deleteDispatchProductReducer,
   // report
