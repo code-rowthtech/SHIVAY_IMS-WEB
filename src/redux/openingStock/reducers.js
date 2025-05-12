@@ -178,6 +178,38 @@ const stockByIdReducer = (state = GET_STOCK_INITIAL_STATE, action) => {
     }
 }
 
+const CREATE_STOCK_PRODUCT_INITIAL_STATE = {
+    createStockProduct: [],
+    loading: false
+}
+
+const createStockProductReducer = (state = CREATE_STOCK_PRODUCT_INITIAL_STATE, action) => {
+
+    switch (action.type) {
+        case StockActionTypes.CREATE_STOCK_PRODUCT_LOADING:
+            return {
+                createStockProduct: state.createStockProduct,
+                loading: true
+            }
+        case StockActionTypes.CREATE_STOCK_PRODUCT_SUCCESS:
+            return {
+                createStockProduct: action.payload,
+                loading: false
+            }
+        case StockActionTypes.CREATE_STOCK_PRODUCT_RESET:
+            return {
+                createStockProduct: [],
+                loading: false,
+            };
+        case StockActionTypes.CREATE_STOCK_PRODUCT_ERROR:
+            return {
+                createStockProduct: action.payload,
+                loading: false
+            }
+        default: return state
+    }
+}
+
 export {
     stockListReducer,
     createStockReducer,
@@ -185,4 +217,5 @@ export {
     updateStockProductReducer,
     deleteStockProductReducer,
     stockByIdReducer,
+    createStockProductReducer,
 }

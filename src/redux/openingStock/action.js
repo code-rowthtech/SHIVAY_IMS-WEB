@@ -33,3 +33,8 @@ export const getStockByIdActions = (data) => ({
     type: StockActionTypes.GET_STOCK_FIRST,
     data
 });
+
+export const createStockProductActions = (data) => ({
+    type: StockActionTypes.CREATE_STOCK_PRODUCT_FIRST,
+    data
+});

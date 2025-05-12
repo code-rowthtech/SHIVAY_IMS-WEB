@@ -215,6 +215,66 @@ const deleteDispatchProductReducer = (state = DELETE_DISPATCH_PRODUCT_INITIAL_ST
     }
 }
 
+
+const GET_DISPATCH_INITIAL_STATE = {
+    dispatchById: [],
+    loading: false
+}
+
+const dispatchByIdReducer = (state = GET_DISPATCH_INITIAL_STATE, action) => {
+
+    switch (action.type) {
+        case DispatchActionTypes.GET_DISPATCH_LOADING:
+            return {
+                dispatchById: state.dispatchById,
+                loading: true
+            }
+        case DispatchActionTypes.GET_DISPATCH_SUCCESS:
+            return {
+                dispatchById: action.payload,
+                loading: false
+            }
+        case DispatchActionTypes.GET_DISPATCH_ERROR:
+            return {
+                dispatchById: action.payload,
+                loading: false
+            }
+        default: return state
+    }
+}
+
+const CREATE_DISPATCH_PRODUCT_INITIAL_STATE = {
+    createDispatchProduct: [],
+    loading: false
+}
+
+const createDispatchProductReducer = (state = CREATE_DISPATCH_PRODUCT_INITIAL_STATE, action) => {
+
+    switch (action.type) {
+        case DispatchActionTypes.CREATE_DISPATCH_PRODUCT_LOADING:
+            return {
+                createDispatchProduct: state.createDispatchProduct,
+                loading: true
+            }
+        case DispatchActionTypes.CREATE_DISPATCH_PRODUCT_SUCCESS:
+            return {
+                createDispatchProduct: action.payload,
+                loading: false
+            }
+        case DispatchActionTypes.CREATE_DISPATCH_PRODUCT_RESET:
+            return {
+                createDispatchProduct: [],
+                loading: false,
+            };
+        case DispatchActionTypes.CREATE_DISPATCH_PRODUCT_ERROR:
+            return {
+                createDispatchProduct: action.payload,
+                loading: false
+            }
+        default: return state
+    }
+}
+
 export {
     getDispatchDataReducer,
     createDispatchReducer,
@@ -223,5 +283,7 @@ export {
     createStockCheckReducer,
     updateDispatchProductReducer,
     deleteDispatchProductReducer,
+    dispatchByIdReducer,
+    createDispatchProductReducer,
 
 }

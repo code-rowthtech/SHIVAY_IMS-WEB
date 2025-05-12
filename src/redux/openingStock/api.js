@@ -22,7 +22,7 @@ function updateStockApi(params) {
 
 function updateStockProductApi(params) {
     const { data } = params
-    return api.create(URL.EDIT_STOCK_PRODUCT, data);
+    return api.update(URL.EDIT_STOCK_PRODUCT, data);
 }
 
 function deleteStockProductApi(params) {
@@ -35,6 +35,11 @@ function getStockByIdApi(params) {
     return api.get(`${URL.GET_STOCK_BY_ID}/${data}`);
 }
 
+function createStockProductApi(params) {
+    const { data } = params
+    return api.create(URL.CREATE_STOCK_PRODUCT, data);
+}
+
 export {
     getStockListApi,
     createStockApi,
@@ -42,4 +47,5 @@ export {
     updateStockProductApi,
     deleteStockProductApi,
     getStockByIdApi,
+    createStockProductApi,
 };
