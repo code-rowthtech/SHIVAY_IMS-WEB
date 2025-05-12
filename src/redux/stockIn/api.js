@@ -41,6 +41,11 @@ function deleteStockInProductApi(params) {
     return api.create(URL.DELETE_STOCKIN_PRODUCT, data);
 }
 
+function createStockInProductApi(params) {
+    const { data } = params
+    return api.create(URL.CREATE_STOCKIN_PRODUCT, data);
+}
+
 export {
     getStockInDataApi,
     createStockInApi,
@@ -49,4 +54,5 @@ export {
     getStockInByIdApi,
     updateStockInProductApi,
     deleteStockInProductApi,
+    createStockInProductApi,
 };

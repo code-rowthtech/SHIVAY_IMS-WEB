@@ -30,10 +30,16 @@ function deleteStockProductApi(params) {
     return api.create(URL.DELETE_STOCK_PRODUCT, data);
 }
 
+function getStockByIdApi(params) {
+    const { data } = params
+    return api.get(`${URL.GET_STOCK_BY_ID}/${data}`);
+}
+
 export {
     getStockListApi,
     createStockApi,
     updateStockApi,
     updateStockProductApi,
     deleteStockProductApi,
+    getStockByIdApi,
 };

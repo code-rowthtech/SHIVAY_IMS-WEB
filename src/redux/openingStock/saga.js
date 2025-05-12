@@ -2,7 +2,7 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import { StockActionTypes } from './constants';
 
-import { createStockApi, deleteStockProductApi, getStockListApi, updateStockApi, updateStockProductApi } from './api';
+import { createStockApi, deleteStockProductApi, getStockByIdApi, getStockListApi, updateStockApi, updateStockProductApi } from './api';
 import ToastContainer from '../../helpers/toast/ToastContainer';
 
 
@@ -157,6 +157,32 @@ function* deleteStockProductFunction(data) {
     }
 }
 
+function* getStockByIdFunction(data) {
+    try {
+        yield put({
+            type: StockActionTypes.GET_STOCK_LOADING,
+            payload: {},
+        });
+        const response = yield call(getStockByIdApi, data);
+        if (response?.status === 200) {
+            yield put({
+                type: StockActionTypes.GET_STOCK_SUCCESS,
+                payload: response.data,
+            });
+        } else {
+            yield put({
+                type: StockActionTypes.GET_STOCK_ERROR,
+                payload: response.data,
+            });
+        }
+    } catch (error) {
+        yield put({
+            type: StockActionTypes.GET_STOCK_ERROR,
+            payload: error,
+        });
+    }
+}
+
 export function* watchUserListData() {
     yield takeEvery(StockActionTypes.STOCK_LIST_FIRST, getStockListFunction);
 }
@@ -177,6 +203,11 @@ export function* watchDeleteStockproductData() {
     yield takeEvery(StockActionTypes.DELETE_STOCK_PRODUCT_FIRST, deleteStockProductFunction);
 }
 
+export function* watchStockData() {
+    yield takeEvery(StockActionTypes.GET_STOCK_FIRST, getStockByIdFunction);
+}
+
+
 function* stockSaga() {
     yield all([
         fork(watchUserListData),
@@ -184,6 +215,7 @@ function* stockSaga() {
         fork(watchUpdateStockData),
         fork(updateStockProductFunction),
         fork(deleteStockProductFunction),
+        fork(watchStockData),
 
     ]);
 }

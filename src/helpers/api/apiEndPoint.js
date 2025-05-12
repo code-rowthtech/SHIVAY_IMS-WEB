@@ -53,6 +53,7 @@ export const LISTING_SUPPLIER = '/api/supplier/list'
 export const GET_STOCK_LIST = '/api/stock/get'
 export const CREATE_STOCK = '/api/stock/add'
 export const UPDATE_STOCK = '/api/stock/edit'
+export const GET_STOCK_BY_ID = '/api/stock'
 export const EDIT_STOCK_PRODUCT = '/api'
 export const DELETE_STOCK_PRODUCT = '/api'
 
@@ -62,8 +63,10 @@ export const CREATE_STOCKIN = '/api/stockIn/add'
 export const UPDATE_STOCKIN = '/api/stockIn/edit'
 export const DELETE_STOCKIN = '/api/stockIn/delete'
 export const GET_STOCKIN_BY_ID = '/api/stockin'
-export const EDIT_STOCKIN_PRODUCT = '/api'
-export const DELETE_STOCKIN_PRODUCT = '/api'
+export const EDIT_STOCKIN_PRODUCT = '/api/stockIn/edit/product'
+export const DELETE_STOCKIN_PRODUCT = '/api/stockIn/delete/product'
+export const CREATE_STOCKIN_PRODUCT = '/api/stockIn/add/product'
+
 
 // Dispatch
 export const GET_DISPATCH = '/api/dispatch/get/customer-list'

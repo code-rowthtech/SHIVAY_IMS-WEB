@@ -151,10 +151,38 @@ const deleteStockProductReducer = (state = DELETE_STOCK_PRODUCT_INITIAL_STATE, a
     }
 }
 
+const GET_STOCK_INITIAL_STATE = {
+    stockById: [],
+    loading: false
+}
+
+const stockByIdReducer = (state = GET_STOCK_INITIAL_STATE, action) => {
+
+    switch (action.type) {
+        case StockActionTypes.GET_STOCK_LOADING:
+            return {
+                stockById: state.stockById,
+                loading: true
+            }
+        case StockActionTypes.GET_STOCK_SUCCESS:
+            return {
+                stockById: action.payload,
+                loading: false
+            }
+        case StockActionTypes.GET_STOCK_ERROR:
+            return {
+                stockById: action.payload,
+                loading: false
+            }
+        default: return state
+    }
+}
+
 export {
     stockListReducer,
     createStockReducer,
     updateStockReducer,
     updateStockProductReducer,
     deleteStockProductReducer,
+    stockByIdReducer,
 }

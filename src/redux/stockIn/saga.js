@@ -2,7 +2,7 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import { StockInActionTypes } from './constants';
 
-import { createStockInApi, deleteStockInApi, deleteStockInProductApi, getStockInByIdApi, getStockInDataApi, updateStockInApi, updateStockInProductApi } from './api';
+import { createStockInApi, createStockInProductApi, deleteStockInApi, deleteStockInProductApi, getStockInByIdApi, getStockInDataApi, updateStockInApi, updateStockInProductApi } from './api';
 import ToastContainer from '../../helpers/toast/ToastContainer';
 
 
@@ -218,6 +218,38 @@ function* deleteStockInProductFunction(data) {
     }
 }
 
+function* createStockInProductFunction(data) {
+    try {
+        yield put({
+            type: StockInActionTypes.CREATE_STOCKIN_PRODUCT_LOADING,
+            payload: {},
+        });
+        const response = yield call(createStockInProductApi, data);
+        if (response?.status === 200) {
+            ToastContainer(response?.data?.message, 'success')
+            yield put({
+                type: StockInActionTypes.CREATE_STOCKIN_PRODUCT_SUCCESS,
+                payload: response.data,
+            });
+            yield put({
+                type: StockInActionTypes.CREATE_STOCKIN_PRODUCT_RESET,
+                payload: {},
+            });
+        } else {
+            yield put({
+                type: StockInActionTypes.CREATE_STOCKIN_PRODUCT_ERROR,
+                payload: response.data,
+            });
+        }
+    } catch (error) {
+        ToastContainer(error, 'danger')
+        yield put({
+            type: StockInActionTypes.CREATE_STOCKIN_PRODUCT_ERROR,
+            payload: error,
+        });
+    }
+}
+
 export function* watchUserListData() {
     yield takeEvery(StockInActionTypes.STOCKIN_LIST_FIRST, getStockInListFunction);
 }
@@ -246,6 +278,10 @@ export function* watchDeleteStockInProductData() {
     yield takeEvery(StockInActionTypes.DELETE_STOCKIN_PRODUCT_FIRST, deleteStockInProductFunction);
 }
 
+export function* watchCreateStockInProductData() {
+    yield takeEvery(StockInActionTypes.CREATE_STOCKIN_PRODUCT_FIRST, createStockInProductFunction);
+}
+
 function* stockInSaga() {
     yield all([
         fork(watchUserListData),
@@ -255,6 +291,8 @@ function* stockInSaga() {
         fork(watchStockInData),
         fork(watchUpdateStockInProductData),
         fork(watchDeleteStockInProductData),
+        fork(watchCreateStockInProductData),
+
 
     ]);
 }

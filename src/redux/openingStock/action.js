@@ -28,3 +28,8 @@ export const deleteStockProductActions = (data) => ({
     type: StockActionTypes.DELETE_STOCK_PRODUCT_FIRST,
     data
 });
+
+export const getStockByIdActions = (data) => ({
+    type: StockActionTypes.GET_STOCK_FIRST,
+    data
+});
