@@ -14,13 +14,12 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
     const store = useSelector((state) => state)
     const ProductSearch = store?.searchProductReducer?.searchProduct?.response;
     const StockCheck = store?.createStockCheckReducer?.createStockCheck;
-    const productId = productData?.productId;
     const Product = productData?.productData
     const [searchTerm, setSearchTerm] = useState('');
     const [productName, setProductName] = useState('');
     const [quantity, setQuantity] = useState()
     const location = useLocation()
-    console.log(productData, 'productData')
+    // console.log(productData, 'productData')
     const CreateResponse = store?.createStockInProductReducer?.createStockInProduct?.status;
     console.log(CreateResponse, 'CreateResponse')
     // console.log(selectedWarehouse, 'selectedWarehouse')

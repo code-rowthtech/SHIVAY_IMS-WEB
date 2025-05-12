@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PageTitle from '../../../../helpers/PageTitle'
-import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap'
 import Select from 'react-select';
 import { IoIosAdd } from 'react-icons/io';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import AddProductModal from './AddProductModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { createStockActions, getStockListActions, getWarehouseListActions, updateStockActions } from '../../../../redux/actions';
+import { createStockActions, deleteStockProductActions, getStockByIdActions, getStockListActions, getWarehouseListActions, updateStockActions } from '../../../../redux/actions';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ButtonLoading } from '../../../../helpers/loader/Loading';
+import { MdDeleteOutline } from 'react-icons/md';
 
 const AddOpeningStock = () => {
 
@@ -18,8 +19,6 @@ const AddOpeningStock = () => {
     const navigate = useNavigate();
     const { handleSubmit, register, setValue } = useForm()
     const [showModal, setShowModal] = useState(false);
-    const handleShow = () => setShowModal(true);
-    const handleClose = () => setShowModal(false);
     const store = useSelector((state) => state)
     const [today, setToday] = useState(new Date().toISOString().split('T')[0]);
     const [searchParams] = useSearchParams();
@@ -38,11 +37,38 @@ const AddOpeningStock = () => {
     console.log(openingProducts, 'openingProducts')
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [productData, setProductData] = useState(null);
+    const [productToDelete, setProductToDelete] = useState(null);
+    console.log(productToDelete, 'hfghgjkl')
+    const [modalType, setModalType] = useState(null)
+    const [showConfirm, setShowConfirm] = useState(false);
+
     const [editedQuantity, setEditedQuantity] = useState(selectedStock?.quantity || '');
     const inputRef = useRef(null);
 
+    const stockData = store?.stockByIdReducer?.stockById?.response;
     const createResponse = store?.createStockReducer?.createStock?.status;
     // console.log(store?.createStockReducer, 'createResponse')
+    console.log(stockData, 'stockData123')
+
+    const handleShow = () => {
+        setShowModal(true)
+        const renderType = stockId ? 'Update' : "Add"
+        setModalType(renderType)
+    };
+
+    const handleEditShow = (data) => {
+        setShowModal(true);
+        setProductData(data);
+        setModalType('Edit')
+    };
+
+    const handleClose = () => {
+        setShowModal(false)
+        setProductData(null)
+        setModalType(null)
+
+    };
 
     useEffect(() => {
         if (createResponse === 200) {
@@ -67,14 +93,20 @@ const AddOpeningStock = () => {
         }));
     }, [dispatch]);
 
-    useEffect(() => {
-        if (stockId && StockInData?.length > 0) {
-            const foundStock = StockInData?.find(item => item._id === stockId);
-            setSelectedStock(foundStock);
-        }
-    }, [stockId, StockInData]);
+    // useEffect(() => {
+    //     if (stockId && StockInData?.length > 0) {
+    //         const foundStock = StockInData?.find(item => item._id === stockId);
+    //         setSelectedStock(foundStock);
+    //     }
+    // }, [stockId, StockInData]);
 
-    console.log(StockInData, 'StockInData')
+    // console.log(StockInData, 'StockInData')
+
+    useEffect(() => {
+        if (stockId) {
+            dispatch(getStockByIdActions(stockId));
+        }
+    }, [dispatch, stockId]);
 
     const onSubmit = (data) => {
         const cleanedProducts = openingProducts.map(({ product, ...rest }) => rest);
@@ -86,7 +118,7 @@ const AddOpeningStock = () => {
             date: data?.date
         };
         if (stockId) {
-            dispatch(updateStockActions({ ...payload, _id: stockId, quantity: editedQuantity }));
+            dispatch(updateStockActions({ ...payload, _id: stockId }));
         } else {
             dispatch(createStockActions(payload));
         }
@@ -99,21 +131,20 @@ const AddOpeningStock = () => {
 
     useEffect(() => {
 
-        if (selectedStock) {
-            setEditedQuantity(selectedStock?.quantity || '');
-            const updateWarehouses = selectedStock?.warehouseData
-                ? [{ value: selectedStock.warehouseData._id, label: selectedStock.warehouseData.name }]
+        if (stockData) {
+            setEditedQuantity(stockData?.[0]?.quantity || '');
+            const updateWarehouses = stockData?.[0]?.warehouseData
+                ? [{ value: stockData?.[0].warehouseId, label: stockData?.[0].warehouseData.name }]
                 : [];
 
             setSelectedWarehouse(updateWarehouses)
-            setToday(selectedStock?.date ? new Date(selectedStock?.date).toISOString().split('T')[0] : '')
-            console.log(selectedStock?.date, 'selectedStock?.date')
+            setToday(stockData?.[0]?.date ? new Date(stockData?.[0]?.date).toISOString().split('T')[0] : '')
 
 
-            setValue('description', selectedStock?.description)
+            setValue('description', stockData?.[0]?.description)
         }
-    }, [selectedStock]);
-    console.log(selectedStock, 'selectedStock')
+    }, [stockData]);
+    console.log(stockData, 'stockData')
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -204,11 +235,11 @@ const AddOpeningStock = () => {
                         </Form.Group>
                     </Col>
                     <Col sm={3} className='text-end mt-1'>
-                        {!isEditMode && <Button className="mt-2 fw-bold custom-button"
+                        <Button className="mt-2 fw-bold custom-button"
                             onClick={handleShow}
                         >
                             <IoIosAdd className="fs-3" />&nbsp;Product
-                        </Button>}
+                        </Button>
                     </Col>
                 </Row>
 
@@ -229,40 +260,39 @@ const AddOpeningStock = () => {
                                 </thead>
                                 <tbody>
                                     {stockId ?
-                                        <>{[selectedStock] && [selectedStock]?.length > 0 ? (
-                                            [selectedStock]?.map((data, index) => (
+                                        <>{stockData?.[0]?.stockProducts && stockData?.[0]?.stockProducts?.length > 0 ? (
+                                            stockData?.[0]?.stockProducts?.map((data, index) => (
                                                 <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
                                                     <th scope="row">{index + 1}</th>
                                                     <td className="text-uppercase fw-bold">
-                                                        {data?.productData?.name || <span className="text-black">-</span>}
+                                                        {data?.product?.name || <span className="text-black">-</span>}
                                                     </td>
                                                     <td className="fw-bold">
-                                                        {data?.productData?.code || <span className="text-black">-</span>}
+                                                        {data?.product?.code || <span className="text-black">-</span>}
                                                     </td>
-                                                    <td className="fw-bold px-0 pb-0">
-                                                        {isEditing ? (
-                                                            <input
-                                                                ref={inputRef}
-                                                                type="number"  // or "text" depending on your needs
-                                                                value={editedQuantity}
-                                                                onChange={handleQuantityChange}
-                                                                onKeyPress={handleKeyPress}
-                                                                // autoFocus
-                                                                className="form-control form-control-md"
-                                                                style={{ width: '5vw', display: 'inline-block', marginTop: '-10px' }}
-                                                            />
-                                                        ) : (
-                                                            <span onClick={handleEditClick} >{editedQuantity}</span> || <span className="text-black">-</span>
-                                                        )}
+                                                    <td className="fw-bold">
+                                                        {data?.quantity || <span className="text-black">0</span>}
                                                     </td>
 
-                                                    <div className="icon-container d-flex pb-0">
+                                                    <div className="icon-container d-flex  pb-0" >
                                                         <span
-                                                            className="icon-wrapper me-4"
+                                                            className="icon-wrapper"
+                                                            onClick={() => {
+                                                                handleEditShow(data)
+                                                            }}
                                                             title="Edit"
-                                                            onClick={handleEditClick}
                                                         >
                                                             <AiOutlineEdit className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                                                        </span>
+                                                        <span
+                                                            className="icon-wrapper"
+                                                            title="Delete"
+                                                            onClick={() => {
+                                                                setProductToDelete(data?._id);
+                                                                setShowConfirm(true);
+                                                            }}
+                                                        >
+                                                            <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
                                                         </span>
                                                     </div>
                                                 </tr>
@@ -338,7 +368,38 @@ const AddOpeningStock = () => {
                 </div>
             </Form>
 
-            <AddProductModal openingProducts={openingProducts} setOpeningProducts={setOpeningProducts} showModal={showModal} handleClose={handleClose} />
+            <AddProductModal
+                openingProducts={openingProducts}
+                setOpeningProducts={setOpeningProducts}
+                showModal={showModal}
+                handleClose={handleClose}
+                Type={modalType}
+                productData={productData}
+                selectedWarehouse={selectedWarehouse}
+                stockId={stockId}
+            />
+
+            {/* delete modal */}
+            <Modal show={showConfirm} onHide={() => setShowConfirm(false)} >
+                <Modal.Body className='text-center'>
+                    <h4 className='text-black'>Confirm Deletion</h4>
+                    <p className='mt-2 mb-3'> Are you sure you want to delete this Product?</p>
+                    <span className='bg-light rounded-circle p-3 '>
+                        <MdDeleteOutline className='fs-1  text-danger' />
+                    </span>
+                    <div className='d-flex justify-content-center mt-3 gap-2'>
+                        <Button className='cancel-button' onClick={() => setShowConfirm(false)}>
+                            Cancel
+                        </Button>
+                        <Button className='custom-button' onClick={() => {
+                            dispatch(deleteStockProductActions({ stockProductId: productToDelete }));
+                            setShowConfirm(false);
+                        }}>
+                            Delete
+                        </Button>
+                    </div>
+                </Modal.Body>
+            </Modal>
 
         </div>
     )

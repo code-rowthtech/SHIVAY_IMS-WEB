@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PageTitle from '../../../../helpers/PageTitle'
-import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap'
 import Select from 'react-select';
 import { IoIosAdd } from 'react-icons/io';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import AddProductModal from '../../openingStock/addStock/AddProductModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { createDispatchActions, getWarehouseListActions, listingCustomerActions, listingUsersActions, updateDispatchActions } from '../../../../redux/actions';
+import { createDispatchActions, deleteDispatchProductActions, getDispatchByIdActions, getWarehouseListActions, listingCustomerActions, listingUsersActions, updateDispatchActions } from '../../../../redux/actions';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CgCloseO } from "react-icons/cg";
 import { HiOutlineFolderDownload } from "react-icons/hi";
 import { ButtonLoading } from '../../../../helpers/loader/Loading';
+import AddProductModal from './AddProductModal';
+import { MdDeleteOutline } from 'react-icons/md';
 
 const AddDispatch = () => {
     const [searchParams] = useSearchParams();
@@ -21,8 +22,6 @@ const AddDispatch = () => {
     const dispatch = useDispatch();
     const { handleSubmit, register, setValue, resetField } = useForm()
     const [showModal, setShowModal] = useState(false);
-    const handleShow = () => setShowModal(true);
-    const handleClose = () => setShowModal(false);
     const store = useSelector((state) => state)
     const [today, setToday] = useState(new Date().toISOString().split('T')[0]);
     const [attachmentType, setAttachmentType] = useState("");
@@ -52,16 +51,41 @@ const AddDispatch = () => {
     // State to handle selected warehouse
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
     console.log(selectedWarehouse, 'selectedWarehouse')
-    const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedUser, setSelectedUser] = useState({
+        value: null,
+        label: null
+    });
     const [selectedCustomer, setSelectedCustomer] = useState(null);
     const [isAccordionOpen, setIsAccordionOpen] = useState(false);
     const [selectedStock, setSelectedStock] = useState(null);
+    const [productToDelete, setProductToDelete] = useState(null);
+    const [modalType, setModalType] = useState(null)
+    const [productData, setProductData] = useState(null);
+    const [showConfirm, setShowConfirm] = useState(false);
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedQuantity, setEditedQuantity] = useState('');
     const inputRef = useRef(null);
-    console.log(editedQuantity, 'editedQuantity')
     const createResponse = store?.createDispatchReducer?.createDispatch?.status;
+    const DispatchProductData = store?.dispatchByIdReducer?.dispatchById?.response;
+
+    const handleShow = () => {
+        setShowModal(true)
+        const renderType = stockId ? 'Update' : "Add"
+        setModalType(renderType)
+    };
+    const handleEditShow = (data) => {
+        setShowModal(true);
+        setProductData(data);
+        setModalType('Edit')
+    };
+    const handleClose = () => {
+        setShowModal(false)
+        setProductData(null)
+        setModalType(null)
+
+    };
+
     const handleQuantityChange = (e) => {
         setEditedQuantity(e.target.value);
     };
@@ -121,34 +145,33 @@ const AddDispatch = () => {
             setSelectedStock(foundStock);
         }
     }, [stockId, DispatchData]);
+
     useEffect(() => {
-        if (stockId && selectedStock) {
-            console.log(selectedStock, '2345432')
-            setToday(selectedStock?.createdAt ? new Date(selectedStock?.createdAt).toISOString().split('T')[0] : '')
-            const updateWarehouses = selectedStock?.warehouseData
-                ? { value: selectedStock.warehouseId, label: selectedStock.warehouseData?.find((ele) => ele?._id === selectedStock?.warehouseId)?.name }
+        if (stockId && DispatchProductData) {
+            setToday(DispatchProductData?.[0]?.createdAt ? new Date(DispatchProductData?.[0]?.createdAt).toISOString().split('T')[0] : '')
+            const updateWarehouses = DispatchProductData?.[0]?.warehouseData
+                ? { value: DispatchProductData?.[0].warehouseId, label: DispatchProductData?.[0].warehouseData?.find((ele) => ele?._id === DispatchProductData?.[0]?.warehouseId)?.name }
                 : {};
             setSelectedWarehouse(updateWarehouses)
 
-            const updatedUser = selectedStock?.customerData ? { value: selectedStock?.customerId, label: selectedStock.customerData?.find((ele) => ele?._id === selectedStock?.customerId)?.name }
+            const updatedUser = DispatchProductData?.[0]?.customerData ? { value: DispatchProductData?.[0]?.customerId, label: DispatchProductData?.[0].customerData?.find((ele) => ele?._id === DispatchProductData?.[0]?.customerId)?.name }
                 : {}
             setSelectedCustomer(updatedUser)
 
-            const updatedSupplier = selectedStock?.dispatchId ? { value: selectedStock?.dispatchId, label: selectedStock.dispatchByData?.[0]?.name }
-                : {}
-            setSelectedUser(updatedSupplier)
+            setSelectedUser({ ...selectedUser, value: DispatchProductData?.[0]?.dispatchBy, label: DispatchProductData?.[0].dispatchByData?.[0]?.name })
 
-            setValue('invoiceNumber', selectedStock?.invoiceNumber || '');
-            setValue('description', selectedStock?.description || '');
-            setValue('invoiceValue', selectedStock?.fright || '');
-            setValue('attachmentGRfile', selectedStock?.attachmentGRfile || '');
-            setValue('invoiceAttachment', selectedStock?.invoiceAttachment || '');
-            setValue('grNumber', selectedStock?.grNumber || '');
-            setEditedQuantity(selectedStock?.productData?.[0]?.stockOutQty || '');
-            setAttachmentType(selectedStock?.invoiceAttachmentType || '')
+            setValue('invoiceNumber', DispatchProductData?.[0]?.invoiceNumber || '');
+            setValue('description', DispatchProductData?.[0]?.description || '');
+            setValue('invoiceValue', DispatchProductData?.[0]?.fright || '');
+            setValue('attachmentGRfile', DispatchProductData?.[0]?.attachmentGRfile || '');
+            setValue('invoiceAttachment', DispatchProductData?.[0]?.invoiceAttachment || '');
+            setValue('grNumber', DispatchProductData?.[0]?.grNumber || '');
+            setEditedQuantity(DispatchProductData?.[0]?.productData?.[0]?.stockOutQty || '');
+            setAttachmentType(DispatchProductData?.[0]?.invoiceAttachmentType || '')
         }
 
-    }, [stockId, selectedStock])
+    }, [stockId, DispatchProductData])
+
     const handleAccordionToggle = () => {
         setIsAccordionOpen(prevState => !prevState);
     };
@@ -176,16 +199,22 @@ const AddDispatch = () => {
         dispatch(listingCustomerActions());
     }, [dispatch]);
 
+    useEffect(() => {
+        if (stockId) {
+            dispatch(getDispatchByIdActions(stockId));
+        }
+    }, [dispatch, stockId]);
+
     const onSubmit = (data) => {
 
         const cleanedProducts = openingProducts.map(({ product, ...rest }) => rest);
 
         const formData = new FormData();
         if (data?.attachmentGRfile?.[0] instanceof File) {
-            formData.append('attachmentGRfile', data.attachmentGRfile[0]);
+            formData.append('attachmentGRfile', data.attachmentGRfile[0] || DispatchProductData?.[0]?.attachmentGRfile);
         }
         if (data?.invoiceAttachment?.[0] instanceof File) {
-            formData.append('invoiceAttachment', data.invoiceAttachment?.[0]);
+            formData.append('invoiceAttachment', data.invoiceAttachment?.[0] || DispatchProductData?.[0]?.invoiceAttachment);
         }
 
         formData.append('warehouseId', selectedWarehouse?.value)
@@ -194,23 +223,29 @@ const AddDispatch = () => {
         formData.append('description', data?.description);
         formData.append('date', data?.date);
         formData.append('grNumber', data?.grNumber);
-        formData.append('invoiceAttachmentType', data?.invoiceAttachmentType);
+        formData.append('invoiceAttachmentType', attachmentType);
+        formData.append('productDispatchQty', stockId ? JSON.stringify([]) : JSON.stringify(cleanedProducts));
 
         if (stockId) {
-            formData.append('quantity', stockId ? editedQuantity : JSON.stringify(cleanedProducts));
-        } else {
-            formData.append('productDispatchQty', stockId ? editedQuantity : JSON.stringify(cleanedProducts));
+            formData.append('newProductArr', JSON.stringify([]));
+            formData.append('dispatchId', stockId);
+
         }
-        if (stockId) {
-            formData.append('_id', stockId);
-            formData.append('productId', selectedStock?.productData?.[0]?._id)
-        }
+        // if (stockId) {
+        //     formData.append('_id', stockId);
+        //     formData.append('productId', selectedStock?.productData?.[0]?._id)
+        // }
         if (stockId) {
             dispatch(updateDispatchActions(formData))
         } else {
             dispatch(createDispatchActions(formData));
         }
         // console.log(formData, 'formData');
+    };
+
+    const handleDelete = () => {
+        dispatch(deleteDispatchProductActions({ dispatchProductId: productToDelete }));
+        setShowConfirm(false);
     };
 
     return (
@@ -223,7 +258,7 @@ const AddDispatch = () => {
                 title={stockId ? "Edit Dispatch" : "Add Dispatch"}
             />
             <Form onSubmit={handleSubmit(onSubmit)}>
-                <div className="accordion mb-3" id="accordionExample">
+                <div className="accordion mb-2" id="accordionExample">
                     <div className="accordion-item" style={{ border: '2px solid #6655D9' }}>
                         <h2 className="accordion-header mt-0">
                             <button
@@ -318,9 +353,9 @@ const AddDispatch = () => {
                                         <Col sm={3}>
                                             <Form.Group className="mb-1">
                                                 <Form.Label className="mb-0">Attach GR File {!stockId && <span className='text-danger'>*</span>}
-                                                    {selectedStock?.attachmentGRfile && (
+                                                    {DispatchProductData?.[0]?.attachmentGRfile && (
                                                         <a
-                                                            href={selectedStock.attachmentGRfile}
+                                                            href={DispatchProductData?.[0]?.attachmentGRfile}
                                                             target="_blank"
                                                             title='Download GR File'
                                                             rel="noopener noreferrer"
@@ -333,7 +368,7 @@ const AddDispatch = () => {
                                                     type="file"
                                                     placeholder="Upload file"
                                                     {...register('attachmentGRfile', {
-                                                        required: !selectedStock?.attachmentGRfile, // only require if no existing
+                                                        required: !DispatchProductData?.[0]?.attachmentGRfile, // only require if no existing
                                                     })}
                                                 />
 
@@ -346,9 +381,9 @@ const AddDispatch = () => {
                                                     {attachmentType && (
                                                         <span className="text-capitalize"> ({attachmentType})</span>
                                                     )}
-                                                    {selectedStock?.invoiceAttachment && (
+                                                    {DispatchProductData?.[0]?.invoiceAttachment && (
                                                         <a
-                                                            href={selectedStock?.invoiceAttachment}
+                                                            href={DispatchProductData?.[0]?.invoiceAttachment}
                                                             target="_blank"
                                                             title='Download Attachment'
                                                             rel="noopener noreferrer"
@@ -413,6 +448,27 @@ const AddDispatch = () => {
                     </div>
                 </div>
 
+                {stockId &&
+                    <div className="text-end">
+                        {/* <Button
+                                className="fw-bold cancel-button me-2"
+                                onClick={() => navigate("/shivay/dispatch")}
+                            >
+                                Cancel
+                            </Button> */}
+                        <Button
+                            type="submit"
+                            className="custom-button fw-bold"
+                            disabled={store?.updateDispatchReducer?.loading}
+                            style={{ width: '100px' }}
+                        >
+                            {store?.updateDispatchReducer?.loading ? (
+                                <ButtonLoading color="white" />
+                            ) : 'Update'}
+                        </Button>
+                    </div>
+                }
+
                 <div className='mt-2'>
                     <Card
                         style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
@@ -449,9 +505,9 @@ const AddDispatch = () => {
                                                     <td></td>
                                                     {/* <td></td> */}
                                                     <div className="icon-container d-flex pb-0">
-                                                        <span className="icon-wrapper" title="Edit">
+                                                        {/* <span className="icon-wrapper" title="Edit">
                                                             <AiOutlineEdit className="fs-4 text-black" style={{ cursor: 'pointer' }} />
-                                                        </span>
+                                                        </span> */}
                                                         <span className="icon-wrapper" title="Delete">
                                                             <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
                                                         </span>
@@ -469,36 +525,26 @@ const AddDispatch = () => {
                                 }
                                 {stockId &&
                                     <tbody>
-                                        {selectedStock?.productData?.map((data, index) => (
+                                        {DispatchProductData?.[0]?.dispatchProducts?.map((data, index) => (
                                             <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
                                                 <td>{index + 1}</td>
-                                                <td>{data?.name}</td>
-                                                <td>{selectedStock?.modelData?.find((ele) => ele?._id === data?.modelId)?.name}</td>
-                                                <td>{data?.code}</td>
-                                                <td>
-                                                    {isEditing ? (
-                                                        <input
-                                                            ref={inputRef}
-                                                            type="number"  // or "text" depending on your needs
-                                                            value={editedQuantity}
-                                                            onChange={handleQuantityChange}
-                                                            onKeyPress={handleKeyPress}
-                                                            // autoFocus
-                                                            className="form-control form-control-md"
-                                                            style={{ width: '5vw', display: 'inline-block', marginTop: '-10px' }}
-                                                        />
-                                                    ) : (
-                                                        <span onClick={handleEditClick} > {editedQuantity}</span> || <span className="text-black">-</span>
-                                                    )}
+                                                <td>{data?.productData?.name}</td>
+                                                <td>{data?.modelData?.find((ele) => ele?._id === data?.modelId)?.name || '-'}</td>
+                                                <td>{data?.productData?.code || '-'}</td>
+                                                <td className="fw-bold">
+                                                    {data?.quantity || <span className="text-black">-</span>}
                                                 </td>
                                                 {/* <td>{data?.stockOutQty}</td> */}
-                                                <div className="icon-container d-flex pb-0">
+                                                <div className="icon-container d-flex  pb-0" >
                                                     <span
-                                                        className="icon-wrapper me-4"
+                                                        className="icon-wrapper"
+                                                        onClick={() => { handleEditShow(data, data?.productData?.name) }}
                                                         title="Edit"
-                                                        onClick={handleEditClick}
                                                     >
                                                         <AiOutlineEdit className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                                                    </span>
+                                                    <span className="icon-wrapper" title="Delete" onClick={() => { setProductToDelete(data?._id); setShowConfirm(true); }}>
+                                                        <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
                                                     </span>
                                                 </div>
                                             </tr>
@@ -509,32 +555,58 @@ const AddDispatch = () => {
 
                         </Card.Body>
                     </Card>
-                    <div className="text-end">
-                        <Button
-                            className="fw-bold cancel-button me-2"
-                            onClick={() => navigate("/shivay/dispatch")}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="submit"
-                            className="custom-button fw-bold"
-                            disabled={store?.createDispatchReducer?.loading}
-                            style={{ width: '100px' }}
-                        >
-                            {store?.createDispatchReducer?.loading ? (
-                                <ButtonLoading color="white" />
-                            ) : stockId ? (
-                                'Update'
-                            ) : (
-                                'Submit'
-                            )}
-                        </Button>
-                    </div>
+                    {!stockId &&
+                        <div className="text-end">
+                            <Button
+                                className="fw-bold cancel-button me-2"
+                                onClick={() => navigate("/shivay/dispatch")}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                className="custom-button fw-bold"
+                                disabled={store?.createDispatchReducer?.loading}
+                                style={{ width: '100px' }}
+                            >
+                                {store?.createDispatchReducer?.loading ? (
+                                    <ButtonLoading color="white" />
+                                ) : 'Submit'}
+                            </Button>
+                        </div>
+                    }
                 </div>
             </Form>
 
-            <AddProductModal selectedWarehouse={selectedWarehouse} openingProducts={openingProducts} setOpeningProducts={setOpeningProducts} showModal={showModal} handleClose={handleClose} />
+            <AddProductModal
+                selectedWarehouse={selectedWarehouse}
+                openingProducts={openingProducts}
+                setOpeningProducts={setOpeningProducts}
+                showModal={showModal}
+                handleClose={handleClose}
+                productData={productData}
+                stockId={stockId}
+                Type={modalType}
+            />
+
+            {/* delete modal */}
+            <Modal show={showConfirm} onHide={() => setShowConfirm(false)} >
+                <Modal.Body className='text-center'>
+                    <h4 className='text-black'>Confirm Deletion</h4>
+                    <p className='mt-2 mb-3'> Are you sure you want to delete this Product?</p>
+                    <span className='bg-light rounded-circle p-3 '>
+                        <MdDeleteOutline className='fs-1  text-danger' />
+                    </span>
+                    <div className='d-flex justify-content-center mt-3 gap-2'>
+                        <Button className='cancel-button' onClick={() => setShowConfirm(false)}>
+                            Cancel
+                        </Button>
+                        <Button className='custom-button' onClick={handleDelete}>
+                            Delete
+                        </Button>
+                    </div>
+                </Modal.Body>
+            </Modal>
         </div>
     )
 }

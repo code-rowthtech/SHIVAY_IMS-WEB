@@ -40,6 +40,16 @@ function deleteDispatchProductApi(params) {
     return api.create(URL.DELETE_DISPATCH_PRODUCT, data);
 }
 
+function getDispatchByIdApi(params) {
+    const { data } = params
+    return api.get(`${URL.GET_DISPATCH_BY_ID}/${data}`);
+}
+
+function createDispatchProductApi(params) {
+    const { data } = params
+    return api.create(URL.CREATE_DISPATCH_PRODUCT, data);
+}
+
 export {
     getDispatchListApi,
     createDispatchApi,
@@ -47,5 +57,7 @@ export {
     deleteDispatchApi,
     createStockCheckApi,
     updateDispatchProductApi,
-    deleteDispatchProductApi
+    deleteDispatchProductApi,
+    getDispatchByIdApi,
+    createDispatchProductApi,
 };

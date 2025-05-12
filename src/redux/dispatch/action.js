@@ -38,3 +38,13 @@ export const deleteDispatchProductActions = (data) => ({
     type: DispatchActionTypes.DELETE_DISPATCH_PRODUCT_FIRST,
     data
 });
+
+export const getDispatchByIdActions = (data) => ({
+    type: DispatchActionTypes.GET_DISPATCH_FIRST,
+    data
+});
+
+export const createDispatchProductActions = (data) => ({
+    type: DispatchActionTypes.CREATE_DISPATCH_PRODUCT_FIRST,
+    data
+});

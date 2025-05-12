@@ -1,34 +1,52 @@
 import React, { useEffect, useState } from 'react'
 import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 import Select from 'react-select'; // Import React Select
-import { createStockCheckActions, createStockProductActions, searchProductActions, updateStockProductActions } from '../../../../redux/actions';
+import { createDispatchProductActions, createStockCheckActions, searchProductActions, updateDispatchProductActions } from '../../../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import ToastContainer from '../../../../helpers/toast/ToastContainer';
 import { useLocation } from 'react-router-dom';
 
 const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningProducts, selectedWarehouse, productData, stockId, Type }) => {
-
+    console.log({ Type }, 'Type')
     const dispatch = useDispatch();
     const { handleSubmit, register, reset } = useForm()
     const store = useSelector((state) => state)
     const ProductSearch = store?.searchProductReducer?.searchProduct?.response;
-    const Product = productData
     const StockCheck = store?.createStockCheckReducer?.createStockCheck;
+    const Product = productData?.productData
     const [searchTerm, setSearchTerm] = useState('');
     const [productName, setProductName] = useState('');
     const [quantity, setQuantity] = useState()
     const location = useLocation()
     console.log(productData, 'productData')
-
+    const CreateResponse = store?.createStockInProductReducer?.createStockInProduct?.status;
+    console.log(CreateResponse, 'CreateResponse')
+    // console.log(selectedWarehouse, 'selectedWarehouse')
     const [searchType, setSearchType] = useState('modelName'); // default search type
+
     useEffect(() => {
-        if (location.pathname === '/shivay/addDispatch' && quantity) {
+        if (Type === 'Edit') {
             dispatch(createStockCheckActions({
-                warehouseId: selectedWarehouse?.value, qty: quantity, productId: ProductSearch?.[0]?._id
-            }))
+                warehouseId: selectedWarehouse?.value,
+                qty: quantity,
+                productId: Product?._id
+            }));
+        } else {
+            dispatch(createStockCheckActions({
+                warehouseId: selectedWarehouse?.value,
+                qty: quantity,
+                productId: ProductSearch?.[0]?._id
+            }));
         }
-    }, [location, quantity])
+    }, [quantity])
+
+    useEffect(() => {
+        if (CreateResponse === 200) {
+            handleClose();
+        }
+    }, [CreateResponse]);
+
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             if (searchTerm) {
@@ -57,7 +75,9 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
 
     // State to handle selected options
     const [selectedModal, setSelectedModal] = useState(null);
+    console.log(selectedModal, 'selectedModalselectedModal')
     const [selectedCode, setSelectedCode] = useState(null);
+    console.log(selectedCode, 'selectedCode')
 
     // Handle changes in modal selection
     const handleModalChange = (selectedOption) => {
@@ -94,20 +114,20 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
 
     const AddProduct = () => {
         const data = {
-            stockId: stockId,
+            dispatchId: stockId,
             productId: selectedModal?.value,
             quantity: quantity,
-            warehouseId: selectedWarehouse?.[0]?.value,
+            warehouseId: selectedWarehouse?.value,
         }
-        dispatch(createStockProductActions(data));
+        dispatch(createDispatchProductActions(data));
     }
-console.log(selectedWarehouse,'selectedWarehouse')
+
     const UpdateProduct = () => {
         const data = {
-            stockProductId: productData?._id,
+            dispatchProductId: productData?._id,
             quantity: quantity,
         }
-        dispatch(updateStockProductActions(data));
+        dispatch(updateDispatchProductActions(data));
     }
 
     const onSubmit = (data) => {
@@ -129,14 +149,14 @@ console.log(selectedWarehouse,'selectedWarehouse')
             setQuantity('');
         }
     }
-    console.log(StockCheck, '0987')
+    console.log(productData, 'productData')
+    console.log(Product, '0987')
 
     useEffect(() => {
         setQuantity(productData?.quantity);
-        setProductName(Product?.product?.name)
-    }, [Product?.product?._id])
+        setProductName(Product?.name)
+    }, [Product?._id]);
 
-    console.log(Product, 'product567890-=')
 
     return (
         <div>
@@ -153,20 +173,21 @@ console.log(selectedWarehouse,'selectedWarehouse')
                         AddProduct(data);
                     }
                 })}>
+
                     <Modal.Body>
                         {/* Your form or content here */}
                         <Row>
                             {Type === "Edit" ? <>
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
-                                        <Form.Label className="mb-0" >Model </Form.Label>
-                                        <Form.Control type='text' placeholder="Modal Name" value={Product?.product?.model?.name} readOnly />
+                                        <Form.Label className="mb-0" >Model Name</Form.Label>
+                                        <Form.Control type='text' placeholder="Modal Name" value={Product?.modelData?.[0]?.name} readOnly />
                                     </Form.Group>
                                 </Col>
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
                                         <Form.Label className="mb-0" >Code</Form.Label>
-                                        <Form.Control type='text' placeholder="Code" value={Product?.product?.code} readOnly />
+                                        <Form.Control type='text' placeholder="Code" value={Product?.code} readOnly />
                                     </Form.Group>
                                 </Col>
                             </> :
@@ -189,57 +210,58 @@ console.log(selectedWarehouse,'selectedWarehouse')
                                             </Form.Select>
                                         </Form.Group>
                                     </Col>
-
                                     {searchType === 'modelName' ? (
-                                        <Col sm={6}>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label className="mb-0">Model Name</Form.Label>
-                                                <Select
-                                                    value={selectedModal}
-                                                    onChange={handleModalChange}
-                                                    onInputChange={(inputValue) => setSearchTerm(inputValue)}
-                                                    options={modalOptions}
-                                                    placeholder="Search Modal"
-                                                    isClearable
-                                                    isSearchable
-                                                    isLoading={store?.searchProductReducer?.loading}
-                                                />
-                                            </Form.Group>
-                                        </Col>
+                                        <>
+                                            <Col sm={6}>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label className="mb-0">Model Name</Form.Label>
+                                                    <Select
+                                                        value={selectedModal}
+                                                        onChange={handleModalChange}
+                                                        onInputChange={(inputValue) => setSearchTerm(inputValue)}
+                                                        options={modalOptions}
+                                                        placeholder="Search Modal"
+                                                        isClearable
+                                                        isSearchable
+                                                        isLoading={store?.searchProductReducer?.loading}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col sm={6}>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label className="mb-0" >Code</Form.Label>
+                                                    <Form.Control type='text' placeholder="Code" value={selectedCode?.label} />
+                                                </Form.Group>
+                                            </Col>
+                                        </>
                                     ) : (
-                                        <Col sm={6}>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label className="mb-0">Code</Form.Label>
-                                                <Select
-                                                    value={selectedCode}
-                                                    onChange={handleCodeChange}
-                                                    onInputChange={(inputValue) => setSearchTerm(inputValue)}
-                                                    options={codeOptions}
-                                                    placeholder="Search Code"
-                                                    isClearable
-                                                    isSearchable
-                                                    isLoading={store?.searchProductReducer?.loading}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                    )}
-                                    {searchType === 'modelName' ? (
-                                        <Col sm={6}>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label className="mb-0" >Code</Form.Label>
-                                                <Form.Control type='text' placeholder="Code" value={selectedCode?.label} />
-                                            </Form.Group>
-                                        </Col>
-                                    ) : (
-                                        <Col sm={6}>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label className="mb-0" >Model Name</Form.Label>
-                                                <Form.Control type='text' placeholder="Modal Name" value={selectedModal?.label} />
-                                            </Form.Group>
-                                        </Col>
+                                        <>
+                                            <Col sm={6}>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label className="mb-0">Code</Form.Label>
+                                                    <Select
+                                                        value={selectedCode}
+                                                        onChange={handleCodeChange}
+                                                        onInputChange={(inputValue) => setSearchTerm(inputValue)}
+                                                        options={codeOptions}
+                                                        placeholder="Search Code"
+                                                        isClearable
+                                                        isSearchable
+                                                        isLoading={store?.searchProductReducer?.loading}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col sm={6}>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label className="mb-0" >Model Name</Form.Label>
+                                                    <Form.Control type='text' placeholder="Modal Name" value={selectedModal?.label} />
+                                                </Form.Group>
+                                            </Col>
+                                        </>
                                     )}
                                 </>
                             }
+
 
                             {(selectedModal || selectedCode || Product?._id) && (
                                 <Col sm={6}>

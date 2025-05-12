@@ -77,10 +77,10 @@ const OpeningStock = () => {
                     <tr className="table_header">
                       <th scope="col"><i className="mdi mdi-merge"></i></th>
                       <th scope="col">Warehouse</th>
-                      <th scope="col">Code</th>
+                      {/* <th scope="col">Code</th> */}
                       <th scope="col">Date</th>
                       <th scope="col">Discription</th>
-                      <th scope="col">Quantity</th>
+                      {/* <th scope="col">Quantity</th> */}
                     </tr>
                   </thead>
                   {store?.stockListReducer?.loading ? (
@@ -98,9 +98,9 @@ const OpeningStock = () => {
                             <td className="text-uppercase fw-bold">
                               {data?.warehouseData?.name || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            {/* <td className="fw-bold">
                               {data?.productData?.code || <span className="text-black">-</span>}
-                            </td>
+                            </td> */}
                             <td className="fw-bold">
                               {data?.date ? new Date(data.date).toLocaleDateString('en-GB') : <span className="text-black">-</span>}
                             </td>
@@ -108,9 +108,9 @@ const OpeningStock = () => {
                             <td className="fw-bold">
                               {data?.description || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
-                              {data?.quantity || <span className="text-black">-</span>}
-                            </td>
+                            {/* <td className="fw-bold">
+                              {data?.stockProducts?.product?.quantity || <span className="text-black">-</span>}
+                            </td> */}
                             <td></td>
                             <td></td>
                             <div className="icon-container d-flex  pb-0" >

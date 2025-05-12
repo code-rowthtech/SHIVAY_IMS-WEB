@@ -54,8 +54,9 @@ export const GET_STOCK_LIST = '/api/stock/get'
 export const CREATE_STOCK = '/api/stock/add'
 export const UPDATE_STOCK = '/api/stock/edit'
 export const GET_STOCK_BY_ID = '/api/stock'
-export const EDIT_STOCK_PRODUCT = '/api'
-export const DELETE_STOCK_PRODUCT = '/api'
+export const EDIT_STOCK_PRODUCT = '/api/stock/edit/product'
+export const DELETE_STOCK_PRODUCT = '/api/stock/delete/product'
+export const CREATE_STOCK_PRODUCT = '/api/stock/add/product'
 
 // Stock In
 export const GET_STOCKIN_DATA = '/api/stockin/get/supplier-list'
@@ -74,8 +75,11 @@ export const CREATE_DISPATCH = '/api/dispatch/add'
 export const UPDATE_DISPATCH = '/api/dispatch/edit'
 export const DELETE_DISPATCH = '/api/dispatch/delete'
 export const STOCK_CHECK = '/api/dispatch/stock-check'
-export const EDIT_DISPATCH_PRODUCT = '/api'
-export const DELETE_DISPATCH_PRODUCT = '/api'
+export const EDIT_DISPATCH_PRODUCT = '/api/dispatch/edit/product'
+export const DELETE_DISPATCH_PRODUCT = '/api/dispatch/delete/product'
+export const CREATE_DISPATCH_PRODUCT = '/api/dispatch/add/product'
+export const GET_DISPATCH_BY_ID = '/api/dispatch'
+
 
 // report 
 export const GET_REPORT = 'api/report/send'

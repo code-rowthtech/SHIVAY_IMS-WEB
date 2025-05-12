@@ -2,7 +2,7 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import { StockActionTypes } from './constants';
 
-import { createStockApi, deleteStockProductApi, getStockByIdApi, getStockListApi, updateStockApi, updateStockProductApi } from './api';
+import { createStockApi, createStockProductApi, deleteStockProductApi, getStockByIdApi, getStockListApi, updateStockApi, updateStockProductApi } from './api';
 import ToastContainer from '../../helpers/toast/ToastContainer';
 
 
@@ -183,6 +183,38 @@ function* getStockByIdFunction(data) {
     }
 }
 
+function* createStockProductFunction(data) {
+    try {
+        yield put({
+            type: StockActionTypes.CREATE_STOCK_PRODUCT_LOADING,
+            payload: {},
+        });
+        const response = yield call(createStockProductApi, data);
+        if (response?.status === 200) {
+            ToastContainer(response?.data?.message, 'success')
+            yield put({
+                type: StockActionTypes.CREATE_STOCK_PRODUCT_SUCCESS,
+                payload: response.data,
+            });
+            yield put({
+                type: StockActionTypes.CREATE_STOCK_PRODUCT_RESET,
+                payload: {},
+            });
+        } else {
+            yield put({
+                type: StockActionTypes.CREATE_STOCK_PRODUCT_ERROR,
+                payload: response.data,
+            });
+        }
+    } catch (error) {
+        ToastContainer(error, 'danger')
+        yield put({
+            type: StockActionTypes.CREATE_STOCK_PRODUCT_ERROR,
+            payload: error,
+        });
+    }
+}
+
 export function* watchUserListData() {
     yield takeEvery(StockActionTypes.STOCK_LIST_FIRST, getStockListFunction);
 }
@@ -207,15 +239,19 @@ export function* watchStockData() {
     yield takeEvery(StockActionTypes.GET_STOCK_FIRST, getStockByIdFunction);
 }
 
+export function* watchCreateStockProductData() {
+    yield takeEvery(StockActionTypes.CREATE_STOCK_PRODUCT_FIRST, createStockProductFunction);
+}
 
 function* stockSaga() {
     yield all([
         fork(watchUserListData),
         fork(watchCreateStockData),
         fork(watchUpdateStockData),
-        fork(updateStockProductFunction),
-        fork(deleteStockProductFunction),
+        fork(watchUpdateStockProductData),
+        fork(watchDeleteStockproductData),
         fork(watchStockData),
+        fork(watchCreateStockProductData),
 
     ]);
 }
