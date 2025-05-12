@@ -13,7 +13,7 @@ import { createProductReducer, deleteProductReducer, productListReducer, searchP
 import { createUsersReducer, deleteUsersReducer, listingUsersReducer, updateUsersReducer, userListReducer } from './users/reducers';
 import { createCustomerReducer, customerListReducer, deleteCustomerReducer, listingCustomerReducer, updateCustomerReducer } from './customer/reducers';
 import { createSupplierReducer, deleteSupplierReducer, listingSupplierReducer, supplierListReducer, updateSupplierReducer } from './supplier/reducers';
-import { createStockReducer, deleteStockProductReducer, stockListReducer, updateStockProductReducer, updateStockReducer } from './openingStock/reducers';
+import { createStockReducer, deleteStockProductReducer, stockByIdReducer, stockListReducer, updateStockProductReducer, updateStockReducer } from './openingStock/reducers';
 import { createStockInProductReducer, createStockInReducer, deleteStockInProductReducer, deleteStockInReducer, stockInByIdReducer, stockInListReducer, updateStockInProductReducer, updateStockInReducer } from './stockIn/reducers';
 import { createDispatchReducer, createStockCheckReducer, deleteDispatchProductReducer, deleteDispatchReducer, getDispatchDataReducer, updateDispatchProductReducer, updateDispatchReducer } from './dispatch/reducers';
 import { reportReducer } from './report/reducers';
@@ -39,7 +39,7 @@ export default (combineReducers({
   // supplier 
   supplierListReducer, createSupplierReducer, updateSupplierReducer, deleteSupplierReducer, listingSupplierReducer,
   // Stock 
-  stockListReducer, createStockReducer, updateStockReducer, updateStockProductReducer, deleteStockProductReducer,
+  stockListReducer, createStockReducer, updateStockReducer, updateStockProductReducer, deleteStockProductReducer, stockByIdReducer,
   // stockIn 
   stockInListReducer, createStockInReducer, updateStockInReducer, deleteStockInReducer, stockInByIdReducer, updateStockInProductReducer, deleteStockInProductReducer, createStockInProductReducer,
   // dispatch
