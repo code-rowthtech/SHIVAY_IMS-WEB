@@ -68,6 +68,9 @@ const AddDispatch = () => {
     const inputRef = useRef(null);
     const createResponse = store?.createDispatchReducer?.createDispatch?.status;
     const DispatchProductData = store?.dispatchByIdReducer?.dispatchById?.response;
+    const CreateProductResponse = store?.createDispatchProductReducer?.createDispatchProduct?.status;
+    const DeleteProductResponse = store?.deleteDispatchProductReducer?.deleteStockProduct?.status;
+    const UpdateProductResponse = store?.updateDispatchProductReducer?.updateStockProduct?.status;
 
     const handleShow = () => {
         setShowModal(true)
@@ -204,6 +207,12 @@ const AddDispatch = () => {
             dispatch(getDispatchByIdActions(stockId));
         }
     }, [dispatch, stockId]);
+
+    useEffect(() => {
+        if (CreateProductResponse === 200 || DeleteProductResponse === 200 || UpdateProductResponse === 200) {
+            dispatch(getDispatchByIdActions(stockId));
+        }
+    }, [CreateProductResponse, DeleteProductResponse, UpdateProductResponse]);
 
     const onSubmit = (data) => {
 
@@ -529,7 +538,7 @@ const AddDispatch = () => {
                                             <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
                                                 <td>{index + 1}</td>
                                                 <td>{data?.productData?.name}</td>
-                                                <td>{data?.modelData?.find((ele) => ele?._id === data?.modelId)?.name || '-'}</td>
+                                                <td>{data?.productData?.modelData?.[0]?.name || '-'}</td>
                                                 <td>{data?.productData?.code || '-'}</td>
                                                 <td className="fw-bold">
                                                     {data?.quantity || <span className="text-black">-</span>}

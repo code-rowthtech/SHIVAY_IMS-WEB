@@ -48,7 +48,10 @@ const AddOpeningStock = () => {
 
     const stockData = store?.stockByIdReducer?.stockById?.response;
     const createResponse = store?.createStockReducer?.createStock?.status;
-    // console.log(store?.createStockReducer, 'createResponse')
+    const CreateProductResponse = store?.createStockProductReducer?.createStockProduct?.status;
+    const DeleteProductResponse = store?.deleteStockProductReducer?.deleteStockProduct?.status;
+    const UpdateProductResponse = store?.updateStockProductReducer?.updateStockProduct?.status;
+
     console.log(stockData, 'stockData123')
 
     const handleShow = () => {
@@ -107,6 +110,12 @@ const AddOpeningStock = () => {
             dispatch(getStockByIdActions(stockId));
         }
     }, [dispatch, stockId]);
+
+    useEffect(() => {
+        if (CreateProductResponse === 200 || DeleteProductResponse === 200 || UpdateProductResponse === 200) {
+            dispatch(getStockByIdActions(stockId));
+        }
+    }, [CreateProductResponse, DeleteProductResponse, UpdateProductResponse]);
 
     const onSubmit = (data) => {
         const cleanedProducts = openingProducts.map(({ product, ...rest }) => rest);
