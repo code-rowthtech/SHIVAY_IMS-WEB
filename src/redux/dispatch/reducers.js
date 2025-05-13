@@ -142,6 +142,11 @@ const createStockCheckReducer = (state = CREATE_STOCK_CHECK_INITIAL_STATE, actio
                 createStockCheck: action.payload,
                 loading: false
             }
+        case DispatchActionTypes.CREATE_STOCK_CHECK_RESET:
+            return {
+                createStockCheck: [],
+                loading: false,
+            };
         case DispatchActionTypes.CREATE_STOCK_CHECK_ERROR:
             return {
                 createStockCheck: action.payload,
@@ -149,7 +154,7 @@ const createStockCheckReducer = (state = CREATE_STOCK_CHECK_INITIAL_STATE, actio
             }
         default: return state
     }
-} 
+}
 
 const UPDATE_DISPATCH_PRODUCT_INITIAL_STATE = {
     updateStockProduct: [],

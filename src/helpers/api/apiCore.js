@@ -229,4 +229,4 @@ if (user) {
     }
 }
 
-export { APICore, setAuthorization };
+export { APICore, setAuthorization,getUserFromSession };

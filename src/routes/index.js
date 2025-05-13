@@ -24,6 +24,7 @@ const LockScreen = React.lazy(() => import('../pages/account/LockScreen'));
 
 
 const Dashboard = React.lazy(() => import('../pages/shivay/dashboard/Dashboard'));
+const ViewProduct = React.lazy(() => import('../pages/shivay/dashboard/ViewProduct'));
 
 // SHIVAY pages 
 const Inventory = React.lazy(() => import('../pages/shivay/inventory/inventory'))
@@ -136,6 +137,10 @@ const AllRoutes = () => {
                         {
                             path: 'dashboard',
                             element: <LoadComponent component={Dashboard} />,
+                        },
+                        {
+                            path: 'viewProduct',
+                            element: <LoadComponent component={ViewProduct} />,
                         },
                         {
                             path: 'inventory',

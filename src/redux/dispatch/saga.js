@@ -141,6 +141,10 @@ function* createStockCheckFunction(data) {
                 type: DispatchActionTypes.CREATE_STOCK_CHECK_SUCCESS,
                 payload: response.data,
             });
+            yield put({
+                type: DispatchActionTypes.CREATE_STOCK_CHECK_RESET,
+                payload: {},
+            });
         } else {
             yield put({
                 type: DispatchActionTypes.CREATE_STOCK_CHECK_ERROR,

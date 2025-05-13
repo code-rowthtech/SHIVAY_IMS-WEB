@@ -51,10 +51,8 @@ const AddDispatch = () => {
     // State to handle selected warehouse
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
     console.log(selectedWarehouse, 'selectedWarehouse')
-    const [selectedUser, setSelectedUser] = useState({
-        value: null,
-        label: null
-    });
+    const [selectedUser, setSelectedUser] = useState();
+    console.log(selectedUser, 'uydsdfdghtyuiufdfghjj')
     const [selectedCustomer, setSelectedCustomer] = useState(null);
     const [isAccordionOpen, setIsAccordionOpen] = useState(false);
     const [selectedStock, setSelectedStock] = useState(null);
@@ -257,6 +255,11 @@ const AddDispatch = () => {
         setShowConfirm(false);
     };
 
+    const handleDeleteProduct = (indexToRemove) => {
+        const updatedProducts = openingProducts.filter((_, index) => index !== indexToRemove);
+        setOpeningProducts(updatedProducts);
+    };
+
     return (
         <div>
             <PageTitle
@@ -302,12 +305,12 @@ const AddDispatch = () => {
                                     <Row>
                                         <Col sm={3}>
                                             <Form.Group className="mb-1">
-                                                <Form.Label className='mb-0'>Warehouse {!stockId && <span className='text-danger'>*</span>}</Form.Label>
+                                                <Form.Label className='mb-0'>Warehouse <span className='text-danger'>*</span></Form.Label>
                                                 <Select
                                                     value={selectedWarehouse}
                                                     onChange={handleWarehouseChange}
                                                     options={warehouseOptions}
-                                                    placeholder="Select a warehouse"
+                                                    placeholder="Select a Warehouse"
                                                     isClearable
                                                     required
                                                 />
@@ -315,7 +318,7 @@ const AddDispatch = () => {
                                         </Col>
                                         <Col sm={3}>
                                             <Form.Group className="mb-1">
-                                                <Form.Label className="mb-0">Customer {!stockId && <span className='text-danger'>*</span>}</Form.Label>
+                                                <Form.Label className="mb-0">Customer <span className='text-danger'>*</span></Form.Label>
                                                 <Select
                                                     value={selectedCustomer}
                                                     onChange={handleCustomerChange}
@@ -328,7 +331,7 @@ const AddDispatch = () => {
                                         </Col>
                                         <Col sm={3}>
                                             <Form.Group className="mb-1">
-                                                <Form.Label className="mb-0">Dispatch By {!stockId && <span className='text-danger'>*</span>}</Form.Label>
+                                                <Form.Label className="mb-0">Dispatch By <span className='text-danger'>*</span></Form.Label>
                                                 <Select
                                                     value={selectedUser}
                                                     onChange={handleUserChange}
@@ -356,12 +359,20 @@ const AddDispatch = () => {
                                                     type="text"
                                                     placeholder="Enter Invoice Number"
                                                     {...register('grNumber')}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === ' ') e.preventDefault();
+                                                    }}
+                                                    onPaste={(e) => {
+                                                        const pasted = e.clipboardData.getData('text');
+                                                        if (/\s/.test(pasted)) e.preventDefault();
+                                                    }}
                                                 />
                                             </Form.Group>
+
                                         </Col>
                                         <Col sm={3}>
                                             <Form.Group className="mb-1">
-                                                <Form.Label className="mb-0">Attach GR File {!stockId && <span className='text-danger'>*</span>}
+                                                <Form.Label className="mb-0">Attach GR File <span className='text-danger'>*</span>
                                                     {DispatchProductData?.[0]?.attachmentGRfile && (
                                                         <a
                                                             href={DispatchProductData?.[0]?.attachmentGRfile}
@@ -388,7 +399,7 @@ const AddDispatch = () => {
                                                 <Form.Label className="mb-0">
                                                     Attachment
                                                     {attachmentType && (
-                                                        <span className="text-capitalize"> ({attachmentType})</span>
+                                                        <span className="text-capitalize"> ({attachmentType}) <span className="text-danger"> *</span></span>
                                                     )}
                                                     {DispatchProductData?.[0]?.invoiceAttachment && (
                                                         <a
@@ -401,7 +412,6 @@ const AddDispatch = () => {
                                                             <HiOutlineFolderDownload className='ms-1 fs-4' />
                                                         </a>
                                                     )}
-                                                    {!stockId && <span className="text-danger"> *</span>}
                                                 </Form.Label>
 
                                                 {!attachmentType ? (
@@ -517,7 +527,7 @@ const AddDispatch = () => {
                                                         {/* <span className="icon-wrapper" title="Edit">
                                                             <AiOutlineEdit className="fs-4 text-black" style={{ cursor: 'pointer' }} />
                                                         </span> */}
-                                                        <span className="icon-wrapper" title="Delete">
+                                                        <span className="icon-wrapper me-4" title="Delete" onClick={() => handleDeleteProduct(index)}>
                                                             <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
                                                         </span>
                                                     </div>

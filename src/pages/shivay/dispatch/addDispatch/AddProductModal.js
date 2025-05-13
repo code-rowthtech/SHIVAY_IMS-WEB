@@ -15,12 +15,14 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
     const store = useSelector((state) => state)
     const ProductSearch = store?.searchProductReducer?.searchProduct?.response;
     const StockCheck = store?.createStockCheckReducer?.createStockCheck;
+    const StockChecking = store?.createStockCheckReducer;
+    console.log(StockChecking, 'StockChecking')
     const Product = productData?.productData
     const [searchTerm, setSearchTerm] = useState('');
     const [productName, setProductName] = useState('');
     const [quantity, setQuantity] = useState()
     const location = useLocation()
-    console.log(productData, 'productData')
+    console.log(Product, 'Product')
     const CreateResponse = store?.createDispatchProductReducer?.createDispatchProduct?.status;
     const UpdateResponse = store?.updateDispatchProductReducer?.updateStockProduct?.status;
 
@@ -33,13 +35,15 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
             dispatch(createStockCheckActions({
                 warehouseId: selectedWarehouse?.value,
                 qty: quantity,
-                productId: Product?._id
+                productId: Product?._id,
+                oldQty: productData?.quantity
             }));
         } else {
             dispatch(createStockCheckActions({
                 warehouseId: selectedWarehouse?.value,
                 qty: quantity,
-                productId: ProductSearch?.[0]?._id
+                productId: ProductSearch?.[0]?._id,
+                oldQty: ''
             }));
         }
     }, [quantity])
@@ -301,12 +305,14 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                             </Col>
 
                         </Row>
-                        {StockCheck?.status == 400 && location.pathname === '/shivay/addDispatch' && (
+                        {StockCheck?.status == 400 && location.pathname === '/shivay/addDispatch' ? (
                             <Row className="px-2">
                                 <div className="py-1 text-center border border-primary rounded bg-light text-primary">
                                     {StockCheck?.error || JSON.stringify(StockCheck)}
                                 </div>
                             </Row>
+                        ) : (
+                            <></>
                         )}
 
                     </Modal.Body>

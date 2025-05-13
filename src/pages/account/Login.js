@@ -31,6 +31,9 @@ const Login = (): React$Element<any> => {
         userLoggedIn: state.Auth.userLoggedIn,
     }));
 
+    console.log(userLoggedIn,'userLoggedIn')
+    console.log(user,'user')
+    
     useEffect(() => {
         dispatch(getRolesListActions());
     }, [dispatch]);

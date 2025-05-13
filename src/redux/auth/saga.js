@@ -25,12 +25,9 @@ function* login({ payload: data }) {
     try {
         const response = yield call(loginApi, data);
         const user = response?.data;
-        console.log({ response, user })
+        console.log({ user })
         let userData = {
-            id: user?.data?._id,
-            name: user?.data?.name,
-            email: user?.data?.email,
-            role: user?.data?.role,
+           user:user?.response,
             token: user?.token,
         };
         // NOTE - You can change this according to response format from your api

@@ -1,4 +1,10 @@
-const MENU_ITEMS = [
+// src/constants/menuItems.ts
+
+import { getUserFromSession } from "../helpers/api/apiCore";
+
+const Role = getUserFromSession()?.user?.role?.name;
+
+const RAW_MENU_ITEMS = [
     { key: 'navigation', label: 'Navigation', isTitle: true },
     {
         key: 'dashboard',
@@ -9,7 +15,7 @@ const MENU_ITEMS = [
     },
     {
         key: 'inventory',
-        label: 'Inventory',
+        label: 'Product',
         isTitle: false,
         icon: ' uil-shopping-cart-alt',
         url: '/shivay/inventory',
@@ -63,21 +69,17 @@ const MENU_ITEMS = [
         icon: ' uil-users-alt',
         url: '/shivay/customer',
     },
-     {
+    {
         key: 'supplier',
         label: 'Supplier',
         isTitle: false,
         icon: ' uil-truck',
         url: '/shivay/supplier',
     },
-    //  {
-    //     key: 'setting',
-    //     label: 'Settings',
-    //     isTitle: false,
-    //     icon: ' uil-cog',
-    //     url: '/shivay/setting',
-    // },
-   
 ];
+
+const MENU_ITEMS = Role === 'admin'
+    ? RAW_MENU_ITEMS
+    : RAW_MENU_ITEMS.filter(item => !['user', 'openingStock'].includes(item.key));
 
 export default MENU_ITEMS;
