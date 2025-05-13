@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import ToastContainer from '../../../../helpers/toast/ToastContainer';
 import { useLocation } from 'react-router-dom';
+import { ButtonLoading } from '../../../../helpers/loader/Loading';
 
 const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningProducts, selectedWarehouse, productData, stockId, Type }) => {
     console.log({ Type }, 'Type')
@@ -21,7 +22,8 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
     const location = useLocation()
     // console.log(productData, 'productData')
     const CreateResponse = store?.createStockInProductReducer?.createStockInProduct?.status;
-    console.log(CreateResponse, 'CreateResponse')
+    const UpdateResponse = store?.updateStockInProductReducer?.updateStockInProduct?.status;
+
     // console.log(selectedWarehouse, 'selectedWarehouse')
     const [searchType, setSearchType] = useState('modelName'); // default search type
 
@@ -34,10 +36,14 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
     }, [location, quantity])
 
     useEffect(() => {
-        if (CreateResponse === 200) {
+        if (CreateResponse === 200 || UpdateResponse === 200) {
             handleClose();
+            reset();
+            setSearchTerm('');
+            setProductName(null);
+            setQuantity(null);
         }
-    }, [CreateResponse]);
+    }, [CreateResponse, UpdateResponse]);
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
@@ -302,9 +308,28 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                         <Button className='cancel-button' onClick={handleClose}>
                             Close
                         </Button>
-                        <Button type='submit' className='custom-button' >
-                            {Type === 'Edit' ? 'Update' : 'Save'}
-                        </Button>
+                        {Type === "Edit" ? (
+                            <Button
+                                type='submit'
+                                className='custom-button'
+                                disabled={store?.updateStockInProductReducer?.loading}
+                                style={{ width: '100px' }}
+                            >
+                                {store?.updateStockInProductReducer?.loading ? (
+                                    <ButtonLoading color="white" />
+                                ) : 'Update'}
+                            </Button>
+                        ) : (
+                            <Button
+                                type='submit'
+                                className='custom-button'
+                                disabled={store?.createStockInProductReducer?.loading}
+                            >
+                                {store?.createStockInProductReducer?.loading ? (
+                                    <ButtonLoading color="white" />
+                                ) : 'Save'}
+                            </Button>
+                        )}
                     </Modal.Footer>
                 </Form>
             </Modal>
