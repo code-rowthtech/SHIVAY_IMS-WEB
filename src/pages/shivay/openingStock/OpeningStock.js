@@ -8,10 +8,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getStockListActions } from '../../../redux/actions';
 import Pagination from '../../../helpers/Pagination';
 import { Loading } from '../../../helpers/loader/Loading';
+import { useForm } from 'react-hook-form';
 
 const OpeningStock = () => {
 
   const navigate = useNavigate();
+  const { reset } = useForm()
   const dispatch = useDispatch();
   const [search, setSearch] = useState('')
   const totalRecords = '0';
@@ -59,7 +61,8 @@ const OpeningStock = () => {
               />
               <Button className="mt-2 fw-bold custom-button"
                 onClick={() => {
-                  navigate('/shivay/addOpeningStock')
+                  navigate('/shivay/addOpeningStock');
+                  reset();
                 }}
               >
                 <IoIosAdd className="fs-3" />&nbsp;Opening Stock
@@ -79,8 +82,8 @@ const OpeningStock = () => {
                       <th scope="col">Warehouse</th>
                       {/* <th scope="col">Code</th> */}
                       <th scope="col">Date</th>
-                      <th scope="col">Discription</th>
-                      {/* <th scope="col">Quantity</th> */}
+                      <th scope="col">Description</th>
+                      <th scope="col">Quantity</th>
                     </tr>
                   </thead>
                   {store?.stockListReducer?.loading ? (
@@ -108,9 +111,9 @@ const OpeningStock = () => {
                             <td className="fw-bold">
                               {data?.description || <span className="text-black">-</span>}
                             </td>
-                            {/* <td className="fw-bold">
-                              {data?.stockProducts?.product?.quantity || <span className="text-black">-</span>}
-                            </td> */}
+                            <td className="fw-bold">
+                              {data?.totalStockProductCount || <span className="text-black">-</span>}
+                            </td>
                             <td></td>
                             <td></td>
                             <div className="icon-container d-flex  pb-0" >

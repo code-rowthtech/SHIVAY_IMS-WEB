@@ -255,7 +255,7 @@ const AddStockIn = () => {
         if (stockId) {
             formData.append('stockInId', stockId);
         }
-       
+
         if (stockId) {
             formData.append('productDetailsArr', JSON.stringify([]));
         }
@@ -266,7 +266,7 @@ const AddStockIn = () => {
 
         if (!stockId) {
             formData.append('stockInQty', stockId ? parseInt(editedQuantity) : JSON.stringify(cleanedProducts));
-        } 
+        }
         if (stockId) {
             dispatch(updateStockInActions(formData))
         } else {
@@ -328,12 +328,12 @@ const AddStockIn = () => {
                                 <Row>
                                     <Col sm={3}>
                                         <Form.Group className="mb-1">
-                                            <Form.Label className='mb-0'>Warehouse {!stockId && <span className='text-danger'>*</span>}</Form.Label>
+                                            <Form.Label className='mb-0'>Warehouse <span className='text-danger'>*</span></Form.Label>
                                             <Select
                                                 value={selectedWarehouse}
                                                 onChange={handleWarehouseChange}
                                                 options={warehouseOptions}
-                                                placeholder="Select a warehouse"
+                                                placeholder="Select a Warehouse"
                                                 isClearable
                                                 required
                                             />
@@ -341,7 +341,7 @@ const AddStockIn = () => {
                                     </Col>
                                     <Col sm={3}>
                                         <Form.Group className="mb-1">
-                                            <Form.Label className="mb-0">Received By {!stockId && <span className='text-danger'>*</span>}</Form.Label>
+                                            <Form.Label className="mb-0">Received By <span className='text-danger'>*</span></Form.Label>
                                             <Select
                                                 value={selectedUser}
                                                 onChange={handleUserChange}
@@ -354,7 +354,7 @@ const AddStockIn = () => {
                                     </Col>
                                     <Col sm={3}>
                                         <Form.Group className="mb-1">
-                                            <Form.Label className="mb-0">Supplier {!stockId && <span className='text-danger'>*</span>}</Form.Label>
+                                            <Form.Label className="mb-0">Supplier <span className='text-danger'>*</span></Form.Label>
                                             <Select
                                                 value={selectedSupplier}
                                                 onChange={handleSupplierChange}
@@ -377,7 +377,7 @@ const AddStockIn = () => {
                                     </Col>
                                     <Col sm={3}>
                                         <Form.Group className="mb-1">
-                                            <Form.Label className="mb-0">Invoice Number {!stockId && <span className='text-danger'>*</span>}</Form.Label>
+                                            <Form.Label className="mb-0">Invoice Number <span className='text-danger'>*</span></Form.Label>
                                             <Form.Control
                                                 type="number"
                                                 placeholder="Enter Invoice Number"
@@ -404,7 +404,7 @@ const AddStockIn = () => {
                                                         <HiOutlineFolderDownload className='ms-1 fs-4' />
                                                     </a>
                                                 )}
-                                                {!stockId && <span className="text-danger"> *</span>}
+                                                <span className="text-danger"> *</span>
                                             </Form.Label>
 
                                             {!attachmentType ? (
@@ -413,7 +413,7 @@ const AddStockIn = () => {
                                                     // defaultValue=""
                                                     value={attachmentType}
                                                     onChange={handleAttachmentTypeChange}
-
+                                                    required
                                                 >
                                                     <option value="">Select Attachment Type</option>
                                                     <option value="Invoice">Invoice</option>

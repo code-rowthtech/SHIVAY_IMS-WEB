@@ -55,6 +55,7 @@ const Dispatch = () => {
   },
     [totalRecords, pageSize]);
 
+    console.log(DispatchData,'DispatchData')
   return (
     <div>
       <PageTitle
@@ -98,9 +99,11 @@ const Dispatch = () => {
                     <tr className="table_header">
                       <th scope="col"><i className="mdi mdi-merge"></i></th>
                       <th scope="col">Customer Name</th>
+                      <th scope="col">GR Number</th>
+                      <th scope="col">Warehouse</th>
                       <th scope="col">Location</th>
                       <th scope="col">Date</th>
-                      <th scope="col">Quantity</th>
+                      <th scope="col">Products</th>
                     </tr>
                   </thead>
                   {store?.getDispatchDataReducer?.loading ? (
@@ -124,6 +127,12 @@ const Dispatch = () => {
                             <td className="text-uppercase fw-bold ">
                               {data?.customerData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
+                            <td className="fw-bold ">
+                              {data?.grNumber || <span className="text-black">-</span>}
+                            </td>
+                            <td className="text-uppercase fw-bold ">
+                              {data?.warehouseData?.[0]?.name || <span className="text-black">-</span>}
+                            </td>
                             <td className="fw-bold">
                               {data?.customerData?.[0]?.location || <span className="text-black">-</span>}
                             </td>
@@ -135,7 +144,7 @@ const Dispatch = () => {
                               )}
                             </td>
                             <td className="fw-bold">
-                              {data?.quantity || <span className="text-black">-</span>}
+                              {data?.totalDispatchProductCount || <span className="text-black">-</span>}
                             </td>
                             <td></td>
                             <td></td>

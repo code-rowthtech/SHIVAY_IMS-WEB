@@ -29,10 +29,9 @@ function searchProductApi(params) {
     const { data } = params
     return api.create(URL.SEARCH_PRODUCT, data);
 }
-
 function viewProductApi(params) {
-    const { productId, page, limit, startDate, endDate, warehouseId } = params?.data
-    return api.get(`${URL.VIEW_PRODUCT}?productId=${productId}&page=${page}&limit=${limit}&warehouseId=${warehouseId}&startDate=${startDate}&endDate=${endDate}`);
+    const { warehouseId,productId } = params?.data
+    return api.get(`${URL.VIEW_PRODUCT}?warehouseId=${warehouseId}&productId=${productId}`);
 }
 
 export {

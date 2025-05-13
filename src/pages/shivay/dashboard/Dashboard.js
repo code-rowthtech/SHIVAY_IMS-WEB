@@ -248,7 +248,11 @@ const Dashboard = () => {
                                 {/* Horizontally centered icons */}
                                 <div className="icon-container d-flex  pb-0" >
                                   <span className="icon-wrapper me-4" title="View">
-                                    <PiEye className="fs-4 text-black" onClick={() => navigate(`/shivay/addStockIn?id=${data?.productId}`)} style={{ cursor: 'pointer' }} />
+                                    <PiEye
+                                      className="fs-4 text-black"
+                                      onClick={() => navigate(`/shivay/ViewProduct?id=${data?.productId}&warehouseId=${data?.warehouseId}`)}
+                                      style={{ cursor: 'pointer' }}
+                                    />
                                   </span>
                                 </div>
                               </tr>
@@ -273,9 +277,11 @@ const Dashboard = () => {
                           <tr className="table_header">
                             <th scope="col"><i className="mdi mdi-merge"></i></th>
                             <th scope="col" className="test"> Product Name</th>
+                            <th scope="col">Code</th>
                             <th scope="col">Dispatch</th>
+                            <th scope="col">Customer</th>
                             <th scope="col">Stock</th>
-                            {/* <th scope="col">View</th> */}
+                            <th scope="col">Date</th>
                           </tr>
                         </thead>
                         {store?.dispatchListReducer?.loading ? (
@@ -288,7 +294,7 @@ const Dashboard = () => {
                           <tbody>
                             {DispatchData?.length === 0 ? (
                               <tr>
-                                <td colSpan={6} className='text-center'>
+                                <td colSpan={8} className='text-center'>
                                   <p className='my-4 py-5'>No dispatch data to show.</p>
                                 </td>
                               </tr>
@@ -299,16 +305,31 @@ const Dashboard = () => {
                                   <td className="text-uppercase fw-bold ">
                                     {data?.productName || <span className="text-black">-</span>}
                                   </td>
+                                  <td className="fw-bold ">
+                                    {data?.code || <span className="text-black">-</span>}
+                                  </td>
                                   <td className="text-uppercase fw-bold ">
                                     {data?.stockOut !== undefined ? data.stockOut : <span className="text-black">-</span>}
                                   </td>
-                                  <td className="text-uppercase fw-bold ">
-                                    {data?.stock !== undefined ? data.stock : <span className="text-black">-</span>}
+                                  <td className="fw-bold ">
+                                    {data?.customerName || <span className="text-black">-</span>}
                                   </td>
+                                  <td className="text-uppercase fw-bold ">
+                                    {data?.stock !== null && data?.stock !== undefined
+                                      ? data.stock
+                                      : <span className="text-black">-</span>}
+                                  </td>
+                                  <td className="text-uppercase fw-bold ">
+                                    {data?.date
+                                      ? new Date(data.date).toLocaleDateString('en-GB') // dd/mm/yyyy
+                                      : <span className="text-black">-</span>}
+
+                                  </td>
+                                  <td ></td>
                                   <td ></td>
                                   <div className="icon-container d-flex  pb-0" >
                                     <span className="icon-wrapper me-4" title="View">
-                                      <PiEye className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                                      <PiEye className="fs-4 text-black" onClick={() => navigate(`/shivay/ViewProduct?id=${data?.productId}/warehouseId=${data?.warehouseId}`)} style={{ cursor: 'pointer' }} />
                                     </span>
                                   </div>
                                 </tr>

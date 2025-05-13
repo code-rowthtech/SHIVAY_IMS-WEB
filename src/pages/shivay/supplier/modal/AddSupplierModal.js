@@ -71,7 +71,7 @@ const AddSupplierModal = ({ showModal, handleClose, SupplierData }) => {
 
     return (
         <div>
-            <Modal show={showModal} centered size='lg' onHide={handleClose} backdrop="static" keyboard={false}>
+            <Modal show={showModal} centered size='lg' onHide={closeModal} backdrop="static" keyboard={false}>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Header closeButton>
                         <Modal.Title className='text-black'>{type} Supplier</Modal.Title>
@@ -93,57 +93,83 @@ const AddSupplierModal = ({ showModal, handleClose, SupplierData }) => {
                                             validate: value => value.trim() !== '' || 'Supplier name cannot be empty spaces'
                                         })}
                                     />
-                                    {errors.warehouse && (
-                                        <small className="text-danger">{errors.warehouse.message}</small>
+                                    {errors.name && (
+                                        <small className="text-danger">{errors.name.message}</small>
                                     )}
                                 </Form.Group>
 
                             </Col>
                             <Col sm={6}>
                                 <Form.Group className="mb-1">
-                                    <Form.Label className='mb-0'>Email Id <span className='text-danger'>*</span></Form.Label>
+                                    <Form.Label className='mb-0'>
+                                        Email Id <span className='text-danger'>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Enter Email Id"
                                         name="email"
                                         {...register('email', {
                                             required: 'Email Id is required',
-                                            validate: value => value.trim() !== '' || 'Email Id cannot be empty spaces'
+                                            pattern: {
+                                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                                message: 'Invalid email format'
+                                            }
                                         })}
+                                        onKeyDown={(e) => {
+                                            if (e.key === ' ') e.preventDefault();
+                                        }}
+                                        onPaste={(e) => {
+                                            const pasted = e.clipboardData.getData('text');
+                                            if (/\s/.test(pasted)) {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                     />
                                     {errors.email && (
                                         <small className="text-danger">{errors.email.message}</small>
                                     )}
                                 </Form.Group>
 
+
                             </Col>
                             <Col sm={6}>
                                 <Form.Group className="mb-1">
-                                    <Form.Label className="mb-0">Phone Number<span className='text-danger'>*</span></Form.Label>
+                                    <Form.Label className="mb-0">
+                                        Phone Number<span className='text-danger'>*</span>
+                                    </Form.Label>
                                     <InputGroup>
                                         <InputGroup.Text>+91</InputGroup.Text>
                                         <Form.Control
                                             type="text"
                                             placeholder="Enter Phone Number"
                                             name="Phone"
-                                            maxLength={10} // Only for the 10 digits after +91
+                                            maxLength={10}
                                             {...register('phoneNumber', {
                                                 required: 'Phone is required',
                                                 pattern: {
-                                                    value: /^\d{10}$/, // Only 10 digits allowed after +91
+                                                    value: /^\d{10}$/,
                                                     message: 'Phone must be exactly 10 digits'
                                                 },
                                                 validate: value => value.trim() !== '' || 'Phone cannot be only empty spaces'
                                             })}
+                                            onKeyDown={(e) => {
+                                                const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+                                                if (!/^\d$/.test(e.key) && !allowedKeys.includes(e.key)) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            onPaste={(e) => {
+                                                const pasted = e.clipboardData.getData('text');
+                                                if (!/^\d+$/.test(pasted)) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
                                         />
                                     </InputGroup>
-                                    {errors.Phone && (
-                                        <small className="text-danger">{errors.Phone.message}</small>
+                                    {errors.phoneNumber && (
+                                        <small className="text-danger">{errors.phoneNumber.message}</small>
                                     )}
                                 </Form.Group>
-
-
-
 
                             </Col>
                             <Col sm={6}>
@@ -190,7 +216,7 @@ const AddSupplierModal = ({ showModal, handleClose, SupplierData }) => {
                         </Row>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button className='cancel-button' onClick={handleClose}>
+                        <Button className='cancel-button' onClick={closeModal}>
                             Close
                         </Button>
                         <Button className='custom-button' type='submit'>
