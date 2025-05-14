@@ -3,7 +3,6 @@ import PageTitle from '../../../helpers/PageTitle'
 import { Card, Form } from 'react-bootstrap'
 import DatePicker from 'react-datepicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { viewProductApi } from '../../../redux/inventory/api';
 import { useSearchParams } from 'react-router-dom';
 import { viewProductActions } from '../../../redux/actions';
 import { Loading } from '../../../helpers/loader/Loading';

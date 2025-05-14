@@ -329,7 +329,9 @@ const Dashboard = () => {
                                   <td ></td>
                                   <div className="icon-container d-flex  pb-0" >
                                     <span className="icon-wrapper me-4" title="View">
-                                      <PiEye className="fs-4 text-black" onClick={() => navigate(`/shivay/ViewProduct?id=${data?.productId}/warehouseId=${data?.warehouseId}`)} style={{ cursor: 'pointer' }} />
+                                      <PiEye className="fs-4 text-black"
+                                       onClick={() => navigate(`/shivay/ViewProduct?id=${data?.productId}&warehouseId=${data?.warehouseId}`)}
+                                        style={{ cursor: 'pointer' }} />
                                     </span>
                                   </div>
                                 </tr>
