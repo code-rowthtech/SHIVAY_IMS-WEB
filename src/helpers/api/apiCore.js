@@ -32,9 +32,7 @@ axios.interceptors.response.use(
                 message = data?.message;
                 // message = "Sorry! The data you are looking for could not be found.";
                 break;
-            case 500:
-                message = "Internal Server Error. Please try again later.";
-                break;
+            
             default:
                 console.error(`Error ${status}:`, data);
         }

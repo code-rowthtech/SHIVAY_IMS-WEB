@@ -121,18 +121,21 @@ const AddOpeningStock = () => {
         const cleanedProducts = openingProducts.map(({ product, ...rest }) => rest);
 
         const payload = {
-            warehouseId: selectedWarehouse?.value,
+
+            ...(!stockId && { warehouseId: selectedWarehouse?.value, }),
             ...(!stockId && { productStock: cleanedProducts }),
+            ...(stockId && { warehouseId: selectedWarehouse?.[0]?.value }),
             description: data?.description,
             date: data?.date
         };
         if (stockId) {
-            dispatch(updateStockActions({ ...payload, _id: stockId }));
+            dispatch(updateStockActions({ ...payload, stockId: stockId }));
         } else {
             dispatch(createStockActions(payload));
         }
     };
 
+    console.log(selectedWarehouse?.[0]?.value, 'selectedWarehouse123')
     const handleDeleteProduct = (indexToRemove) => {
         const updatedProducts = openingProducts.filter((_, index) => index !== indexToRemove);
         setOpeningProducts(updatedProducts);

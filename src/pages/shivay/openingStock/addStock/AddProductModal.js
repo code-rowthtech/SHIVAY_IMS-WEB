@@ -148,7 +148,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
     }, [Product?.product?._id])
 
     console.log(Product, 'product567890-=')
-
+    console.log(StockCheck, 'StockCheck123')
     return (
         <div>
             <Modal show={showModal} centered size='lg' onHide={handleClose} backdrop="static" keyboard={false}>

@@ -304,17 +304,31 @@ const AddDispatch = () => {
                                 <Form>
                                     <Row>
                                         <Col sm={3}>
-                                            <Form.Group className="mb-1">
-                                                <Form.Label className='mb-0'>Warehouse <span className='text-danger'>*</span></Form.Label>
-                                                <Select
-                                                    value={selectedWarehouse}
-                                                    onChange={handleWarehouseChange}
-                                                    options={warehouseOptions}
-                                                    placeholder="Select a Warehouse"
-                                                    isClearable
-                                                    required
-                                                />
-                                            </Form.Group>
+                                            {stockId ? (
+                                                <Form.Group className="mb-1">
+                                                    <Form.Label className='mb-0'>Warehouse<span className='text-danger'>*</span></Form.Label>
+                                                    <Select
+                                                        value={selectedWarehouse}
+                                                        onChange={handleWarehouseChange}
+                                                        options={warehouseOptions}
+                                                        placeholder="Select a Warehouse"
+                                                        isClearable
+                                                        required
+                                                        isDisabled
+                                                    />
+                                                </Form.Group>) : (
+                                                <Form.Group className="mb-1">
+                                                    <Form.Label className='mb-0'>Warehouse <span className='text-danger'>*</span></Form.Label>
+                                                    <Select
+                                                        value={selectedWarehouse}
+                                                        onChange={handleWarehouseChange}
+                                                        options={warehouseOptions}
+                                                        placeholder="Select a Warehouse"
+                                                        isClearable
+                                                        required
+                                                    />
+                                                </Form.Group>
+                                            )}
                                         </Col>
                                         <Col sm={3}>
                                             <Form.Group className="mb-1">

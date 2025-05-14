@@ -15,6 +15,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
     const store = useSelector((state) => state)
     const ProductSearch = store?.searchProductReducer?.searchProduct?.response;
     const StockCheck = store?.createStockCheckReducer?.createStockCheck;
+    console.log(StockCheck, 'nbhjikopklp')
     const StockChecking = store?.createStockCheckReducer;
     console.log(StockChecking, 'StockChecking')
     const Product = productData?.productData
@@ -31,20 +32,22 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
     const [searchType, setSearchType] = useState('modelName'); // default search type
 
     useEffect(() => {
-        if (Type === 'Edit') {
-            dispatch(createStockCheckActions({
-                warehouseId: selectedWarehouse?.value,
-                qty: quantity,
-                productId: Product?._id,
-                oldQty: productData?.quantity
-            }));
-        } else {
-            dispatch(createStockCheckActions({
-                warehouseId: selectedWarehouse?.value,
-                qty: quantity,
-                productId: ProductSearch?.[0]?._id,
-                oldQty: ''
-            }));
+        if (quantity) {
+            if (Type === 'Edit') {
+                dispatch(createStockCheckActions({
+                    warehouseId: selectedWarehouse?.value,
+                    qty: quantity,
+                    productId: Product?._id,
+                    oldQty: productData?.quantity
+                }));
+            } else {
+                dispatch(createStockCheckActions({
+                    warehouseId: selectedWarehouse?.value,
+                    qty: quantity,
+                    productId: ProductSearch?.[0]?._id,
+                    oldQty: ''
+                }));
+            }
         }
     }, [quantity])
 
@@ -165,6 +168,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
         setProductName(Product?.name)
     }, [Product?._id]);
 
+    console.log(StockCheck, 'StockCheck123')
 
     return (
         <div>
@@ -305,15 +309,18 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                             </Col>
 
                         </Row>
-                        {StockCheck?.status == 400 && location.pathname === '/shivay/addDispatch' ? (
-                            <Row className="px-2">
+                        <Row className="px-2">
+                            {StockCheck?.error && StockCheck?.error.trim() !== '' || 'Server Error' && (
                                 <div className="py-1 text-center border border-primary rounded bg-light text-primary">
-                                    {StockCheck?.error || JSON.stringify(StockCheck)}
+                                    {StockCheck.error}
                                 </div>
-                            </Row>
+                            )}
+                        </Row>
+                        {/* {StockCheck?.status == 400 && location.pathname === '/shivay/addDispatch' ? (
+                            
                         ) : (
                             <></>
-                        )}
+                        )} */}
 
                     </Modal.Body>
                     <Modal.Footer>
