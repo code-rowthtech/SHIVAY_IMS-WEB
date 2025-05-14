@@ -379,7 +379,7 @@ const AddStockIn = () => {
                                         <Form.Group className="mb-1">
                                             <Form.Label className="mb-0">Invoice Number <span className='text-danger'>*</span></Form.Label>
                                             <Form.Control
-                                                type="number"
+                                                type="text"
                                                 placeholder="Enter Invoice Number"
                                                 {...register('invoiceNumber', { required: true })}
                                                 required

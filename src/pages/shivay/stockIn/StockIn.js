@@ -101,7 +101,7 @@ const StockIn = () => {
                       <th scope="col">Warehouse</th>
                       <th scope="col">Date</th>
                       <th scope="col">Products</th>
-                      <th scope="col">Quantity</th>
+                      <th scope="col">Invoice Number</th>
                       {/* <th scope="col">Action</th> */}
                     </tr>
                   </thead>
@@ -143,7 +143,7 @@ const StockIn = () => {
                               {data?.totalStockInProductCount || <span className="text-black">-</span>}
                             </td>
                             <td className="fw-bold">
-                              {data?.stockInProducts?.[0]?.quantity || <span className="text-black">-</span>}
+                              {data?.invoiceNumber || <span className="text-black">-</span>}
                             </td>
                             <td></td>
                             <td></td>

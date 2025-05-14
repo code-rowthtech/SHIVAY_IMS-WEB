@@ -83,7 +83,7 @@ const OpeningStock = () => {
                       {/* <th scope="col">Code</th> */}
                       <th scope="col">Date</th>
                       <th scope="col">Description</th>
-                      <th scope="col">Quantity</th>
+                      <th scope="col">Products</th>
                     </tr>
                   </thead>
                   {store?.stockListReducer?.loading ? (

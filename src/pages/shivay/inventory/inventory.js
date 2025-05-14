@@ -77,10 +77,10 @@ const Inventory = () => {
         <div>
             <PageTitle
                 breadCrumbItems={[
-                    { label: "SHIVAY Inventory", path: "/shivay/inventory" },
-                    { label: "Inventory", path: "/shivay/inventory", active: true },
+                    { label: "SHIVAY Product List", path: "/shivay/inventory" },
+                    { label: "Product", path: "/shivay/inventory", active: true },
                 ]}
-                title={"Inventory"}
+                title={"Products List"}
             />
             <Form>
                 <Row>
