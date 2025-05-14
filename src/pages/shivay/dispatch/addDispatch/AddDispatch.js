@@ -193,8 +193,12 @@ const AddDispatch = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(listingUsersActions());
-    }, [dispatch]);
+        if (selectedWarehouse?.value) {
+            dispatch(listingUsersActions({ warehouseId: selectedWarehouse.value }));
+        }
+    }, [dispatch, selectedWarehouse]);
+
+
 
     useEffect(() => {
         dispatch(listingCustomerActions());
@@ -349,6 +353,7 @@ const AddDispatch = () => {
                                                 <Select
                                                     value={selectedUser}
                                                     onChange={handleUserChange}
+                                                    className='text-capitalize'
                                                     options={usersOptions}
                                                     placeholder="Select a User"
                                                     isClearable

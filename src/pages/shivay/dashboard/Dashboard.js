@@ -16,6 +16,9 @@ import Filter from "./filterSection/Filter";
 import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../../../helpers/Pagination";
 import { useForm } from "react-hook-form";
+import { getUserFromSession } from "../../../helpers/api/apiCore";
+import { AiOutlineFileDone } from "react-icons/ai";
+import { BsTruck } from "react-icons/bs";
 
 const Dashboard = () => {
 
@@ -40,7 +43,7 @@ const Dashboard = () => {
   const [dispatchPageSize, setDispatchPageSize] = useState(10);
   const [dispatchTotalPages, setDispatchTotalPages] = useState(Math.ceil(dispatchTotalRecords / dispatchPageSize));
   const store = useSelector((state) => state)
-
+  const Role = getUserFromSession()?.user?.role?.name;
   const StockinData = store?.stockinTransListReducer?.stockinList?.data;
   const DispatchData = store?.dispatchListReducer?.dispatchList?.data;
   const DashboardCount = store?.dashboardDataReducer?.dashboardData?.response;
@@ -106,6 +109,33 @@ const Dashboard = () => {
     }
   ];
 
+  const dashboardItemsUsers = [
+    {
+      title: "Dispatch",
+      icon: <MdOutlineSell />,
+      background: "#5566D9",
+      link: "/shivay/dispatch"
+    },
+    {
+      title: "Stock In",
+      icon: <AiOutlineFileDone />,
+      background: "#5566D9",
+      link: "/shivay/stockIn"
+    },
+    {
+      title: "Customer",
+      icon: <FaUsers />,
+      background: "#5566D9",
+      link: "/shivay/customer"
+    },
+    {
+      title: "Supplier",
+      icon: <BsTruck />,
+      background: "#5566D9",
+      link: "/shivay/supplier"
+    }
+  ];
+
 
   const connectTab = (tabIndex) => {
     setActiveTab(tabIndex);
@@ -122,34 +152,74 @@ const Dashboard = () => {
       />
       {/* card section */}
       <Row className="g-4 mt-2">
-        {dashboardItems?.map((item, index) => (
-          <Col key={index} md={6} lg={3}>
-            <Link to={item.link} className="text-decoration-none">
+        {Role === 'admin' ? (
+          <div>
+            <Row>
+              {dashboardItems?.map((item, index) => (
+                <Col key={index} md={6} lg={3}>
+                  <Link to={item.link} className="text-decoration-none">
 
-              <Card
-                className="border-0 text-white card-hover-effect cursor"
-                style={
-                  item.background.startsWith("#")
-                    ? { backgroundColor: item.background }
-                    : {
-                      backgroundImage: `url('${item.background}')`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center'
-                    }
-                }
-              >
-                <Card.Body className="d-flex align-items-center justify-content-between card-body-zoom">
-                  <div>
-                    <h6 className="fw-bold">{item.title}</h6>
-                    <h2 className="fw-bold">{item.value}</h2>
-                  </div>
-                  <div className="fs-1">{item.icon}</div>
-                </Card.Body>
-              </Card>
-            </Link>
+                    <Card
+                      className="border-0 text-white card-hover-effect cursor"
+                      style={
+                        item.background.startsWith("#")
+                          ? { backgroundColor: item.background }
+                          : {
+                            backgroundImage: `url('${item.background}')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }
+                      }
+                    >
+                      <Card.Body className="d-flex align-items-center justify-content-between card-body-zoom">
+                        <div>
+                          <h6 className="fw-bold">{item.title}</h6>
+                          <h2 className="fw-bold">{item.value}</h2>
+                        </div>
+                        <div className="fs-1">{item.icon}</div>
+                      </Card.Body>
+                    </Card>
+                  </Link>
 
-          </Col>
-        ))}
+                </Col>
+              ))}
+            </Row>
+          </div>
+        ) : (
+          <div>
+            <Row>
+              {dashboardItemsUsers?.map((item, index) => (
+                <Col key={index} md={6} lg={3}>
+                  <Link to={item.link} className="text-decoration-none">
+
+                    <Card
+                      className="border-0 text-white card-hover-effect cursor"
+                      style={
+                        item.background.startsWith("#")
+                          ? { backgroundColor: item.background }
+                          : {
+                            backgroundImage: `url('${item.background}')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }
+                      }
+                    >
+                      <Card.Body className="d-flex align-items-center justify-content-between card-body-zoom">
+                        <div>
+                          <h4 className="fw-bold">{item.title}</h4>
+                          {/* <h2 className="fw-bold">{item.value}</h2> */}
+                        </div>
+                        <div className="fs-1">{item.icon}</div>
+                      </Card.Body>
+                    </Card>
+                  </Link>
+
+                </Col>
+              ))}
+            </Row>
+          </div>
+        )}
+
         <div>
 
           {/* List section */}
@@ -330,7 +400,7 @@ const Dashboard = () => {
                                   <div className="icon-container d-flex  pb-0" >
                                     <span className="icon-wrapper me-4" title="View">
                                       <PiEye className="fs-4 text-black"
-                                       onClick={() => navigate(`/shivay/ViewProduct?id=${data?.productId}&warehouseId=${data?.warehouseId}`)}
+                                        onClick={() => navigate(`/shivay/ViewProduct?id=${data?.productId}&warehouseId=${data?.warehouseId}`)}
                                         style={{ cursor: 'pointer' }} />
                                     </span>
                                   </div>

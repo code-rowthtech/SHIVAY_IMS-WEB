@@ -23,7 +23,7 @@ const AddStockIn = () => {
     const { handleSubmit, register, setValue, resetField, watch } = useForm()
     const [showModal, setShowModal] = useState(false);
     const store = useSelector((state) => state)
-    const [today, setToday] = useState(new Date().toISOString().split('T')[0]);
+    const [today, setToday] = useState(null);
     const [openingProducts, setOpeningProducts] = useState([])
     // const StockInData = store?.stockInListReducer?.stockInList?.response;
     // const [selectedStock, setSelectedStock] = useState(null);
@@ -379,7 +379,7 @@ const AddStockIn = () => {
                                         <Form.Group className="mb-1">
                                             <Form.Label className="mb-0">Invoice Number <span className='text-danger'>*</span></Form.Label>
                                             <Form.Control
-                                                type="number"
+                                                type="text"
                                                 placeholder="Enter Invoice Number"
                                                 {...register('invoiceNumber', { required: true })}
                                                 required

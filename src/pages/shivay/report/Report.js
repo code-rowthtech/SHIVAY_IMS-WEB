@@ -105,7 +105,7 @@ const Report = () => {
               value={selectedWarehouse}
               onChange={handleWarehouseChange}
               options={warehouseOptions}
-              placeholder="Select a warehouse"
+              placeholder="Select a Warehouse"
               noOptionsMessage={() => "No warehouse found..."}
               required
             />
