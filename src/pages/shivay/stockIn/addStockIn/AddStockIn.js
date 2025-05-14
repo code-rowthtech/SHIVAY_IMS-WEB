@@ -220,8 +220,11 @@ const AddStockIn = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(listingUsersActions());
-    }, [dispatch]);
+        if (selectedWarehouse?.value) {
+            dispatch(listingUsersActions({ warehouseId: selectedWarehouse.value }));
+        }
+    }, [dispatch, selectedWarehouse]);
+
 
     useEffect(() => {
         dispatch(listingSupplierActions());
@@ -345,6 +348,7 @@ const AddStockIn = () => {
                                             <Select
                                                 value={selectedUser}
                                                 onChange={handleUserChange}
+                                                className='text-capitalize'
                                                 options={usersOptions}
                                                 placeholder="Select a User"
                                                 isClearable
@@ -359,6 +363,7 @@ const AddStockIn = () => {
                                                 value={selectedSupplier}
                                                 onChange={handleSupplierChange}
                                                 options={supplierOptions}
+                                                className='text-capitalize'
                                                 placeholder="Select a Supplier"
                                                 isClearable
                                                 required

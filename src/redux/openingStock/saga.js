@@ -134,7 +134,7 @@ function* deleteStockProductFunction(data) {
         });
         const response = yield call(deleteStockProductApi, data);
         if (response?.status === 200) {
-            ToastContainer(response?.data?.message, 'danger')
+            ToastContainer(response?.data?.message, 'success')
             yield put({
                 type: StockActionTypes.DELETE_STOCK_PRODUCT_SUCCESS,
                 payload: response.data,
