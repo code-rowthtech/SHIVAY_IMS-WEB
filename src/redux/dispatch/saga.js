@@ -106,7 +106,7 @@ function* deleteDispatchFunction(data) {
         });
         const response = yield call(deleteDispatchApi, data);
         if (response?.status === 200) {
-            ToastContainer(response?.data?.message, 'danger')
+            ToastContainer(response?.data?.message, 'success')
             yield put({
                 type: DispatchActionTypes.DELETE_DISPATCH_SUCCESS,
                 payload: response.data,
@@ -199,7 +199,7 @@ function* deleteStockProductFunction(data) {
         });
         const response = yield call(deleteDispatchProductApi, data);
         if (response?.status === 200) {
-            ToastContainer(response?.data?.message, 'danger')
+            ToastContainer(response?.data?.message, 'success')
             yield put({
                 type: DispatchActionTypes.DELETE_DISPATCH_PRODUCT_SUCCESS,
                 payload: response.data,

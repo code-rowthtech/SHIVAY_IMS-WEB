@@ -51,7 +51,7 @@ const StockIn = () => {
     [totalRecords, pageSize]);
 
   const handleDelete = () => {
-    dispatch(deleteStockInActions({ _id: stockToDelete }));
+    dispatch(deleteStockInActions({ stockInId: stockToDelete }));
     setShowConfirm(false);
   };
 
