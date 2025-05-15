@@ -101,11 +101,11 @@ const Warehouse = () => {
                         <Card
                             style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
                         >
-                            <Card.Body className="text-center py-1">
+                            <Card.Body className=" py-1">
                                 <table className="table table-striped bg-white mb-0">
                                     <thead>
                                         <tr className="table_header">
-                                            <th scope="col"><i className="mdi mdi-merge"></i></th>
+                                            <th scope="col">#</th>
                                             <th scope="col">Warehouse Name</th>
                                             <th scope="col">Location</th>
                                         </tr>
@@ -126,12 +126,12 @@ const Warehouse = () => {
                                                 </tr>
                                             ) : (
                                                 warehouseData?.map((data, index) => (
-                                                    <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                                                        <th scope="row">{index + 1}</th>
-                                                        <td className="text-uppercase fw-bold ">
+                                                    <tr key={index} className="text-dark  text-nowrap highlight-row">
+                                                        <td scope="row" className='font_work'>{index + 1}</td>
+                                                        <td className="text-uppercase font_work ">
                                                             {data?.name || <span className="text-danger">-</span>}
                                                         </td>
-                                                        <td className="fw-bold">
+                                                        <td className="font_work">
                                                             {data?.locationId?.name || <span className="text-danger">-</span>}
                                                         </td>
                                                         <div className="icon-container d-flex  pb-0" >

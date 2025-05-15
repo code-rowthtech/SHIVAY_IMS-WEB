@@ -9,6 +9,8 @@ import { getStockListActions } from '../../../redux/actions';
 import Pagination from '../../../helpers/Pagination';
 import { Loading } from '../../../helpers/loader/Loading';
 import { useForm } from 'react-hook-form';
+import AddStockModal from './addStock/AddStockModal';
+import EditStockModal from './editStock/EditStockModal';
 
 const OpeningStock = () => {
 
@@ -23,7 +25,15 @@ const OpeningStock = () => {
   const store = useSelector((state) => state);
   const OpeningStockData = store?.stockListReducer?.stockList?.response
   const NoStockData = store?.stockListReducer?.stockList;
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   console.log(OpeningStockData, 'OpeningStockData')
+  const [editData, setEditData] = useState(null)
+  const createResponse = store?.createStockReducer?.createStock?.status;
+  const UpdateResponse = store?.updateStockReducer?.updateStock?.status;
+  const DeleteProductResponse = store?.deleteStockProductReducer?.deleteStockProduct?.status;
+  const CreateProductResponse = store?.createStockProductReducer?.createStockProduct?.status;
+  const UpdateProductResponse = store?.updateStockProductReducer?.updateStockProduct?.status;
 
   useEffect(() => {
     dispatch(getStockListActions({
@@ -32,6 +42,16 @@ const OpeningStock = () => {
       search: search,
     }));
   }, [dispatch, search, pageSize, pageIndex]);
+
+  useEffect(() => {
+    if (DeleteProductResponse === 200 || createResponse === 200 || UpdateResponse === 200 || CreateProductResponse === 200 || UpdateProductResponse === 200) {
+      dispatch(getStockListActions({
+        limit: pageSize,
+        page: pageIndex,
+        search: search,
+      }));
+    }
+  }, [DeleteProductResponse, createResponse, UpdateResponse, CreateProductResponse, UpdateProductResponse]);
 
   useEffect(() => {
     setTotalPages(Math.ceil(totalRecords / pageSize));
@@ -59,14 +79,20 @@ const OpeningStock = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Button className="mt-2 fw-bold custom-button"
+              <Button
+                className="mt-2 fw-bold custom-button me-2"
+                onClick={() => setShowAddModal(true)}
+              >
+                <IoIosAdd className="fs-3" />&nbsp;Add
+              </Button>
+              {/* <Button className="mt-2 fw-bold custom-button"
                 onClick={() => {
                   navigate('/shivay/addOpeningStock');
                   reset();
                 }}
               >
                 <IoIosAdd className="fs-3" />&nbsp;Opening Stock
-              </Button>
+              </Button> */}
             </div>
           </Col>
 
@@ -74,16 +100,16 @@ const OpeningStock = () => {
             <Card
               style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
             >
-              <Card.Body className="text-center py-1">
+              <Card.Body className=" py-1">
                 <table className="table table-striped bg-white mb-0">
                   <thead>
                     <tr className="table_header">
-                      <th scope="col"><i className="mdi mdi-merge"></i></th>
+                      <th scope="col">#</th>
                       <th scope="col">Warehouse</th>
                       {/* <th scope="col">Code</th> */}
                       <th scope="col">Date</th>
                       <th scope="col">Description</th>
-                      <th scope="col">Products</th>
+                      <th scope="col">No. of Products</th>
                     </tr>
                   </thead>
                   {store?.stockListReducer?.loading ? (
@@ -96,22 +122,22 @@ const OpeningStock = () => {
                     <tbody>
                       {OpeningStockData && OpeningStockData.length > 0 ? (
                         OpeningStockData.map((data, index) => (
-                          <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                            <th scope="row">{index + 1}</th>
-                            <td className="text-uppercase fw-bold">
+                          <tr key={index} className="text-dark  text-nowrap highlight-row">
+                            <td scope="row" className='font_work'>{index + 1}</td>
+                            <td className="text-uppercase font_work">
                               {data?.warehouseData?.name || <span className="text-black">-</span>}
                             </td>
-                            {/* <td className="fw-bold">
+                            {/* <td className="font_work">
                               {data?.productData?.code || <span className="text-black">-</span>}
                             </td> */}
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.date ? new Date(data.date).toLocaleDateString('en-GB') : <span className="text-black">-</span>}
                             </td>
 
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.description || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.totalStockProductCount || <span className="text-black">-</span>}
                             </td>
                             <td></td>
@@ -122,7 +148,9 @@ const OpeningStock = () => {
                                   className="fs-4 text-black"
                                   style={{ cursor: 'pointer' }}
                                   onClick={() => {
-                                    navigate(`/shivay/addOpeningStock?Id=${data?._id}`);
+                                    setShowEditModal(true)
+                                    setEditData(data?._id)
+                                    // navigate(`/shivay/addOpeningStock?Id=${data?._id}`);
                                   }}
                                 />
                               </span>
@@ -152,6 +180,16 @@ const OpeningStock = () => {
           </div>
         </Row>
       </Form>
+      <AddStockModal
+        show={showAddModal}
+        onHide={() => setShowAddModal(false)}
+      // stockId={OpeningStockData?._id}
+      />
+      <EditStockModal
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        stockId={editData}
+      />
     </div>
   )
 }

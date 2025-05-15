@@ -104,11 +104,11 @@ const Supplier = () => {
             <Card
               style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
             >
-              <Card.Body className="text-center py-1">
+              <Card.Body className=" py-1">
                 <table className="table table-striped bg-white mb-0">
                   <thead>
                     <tr className="table_header">
-                      <th scope="col"><i className="mdi mdi-merge"></i></th>
+                      <th scope="col">#</th>
                       <th scope="col">Supplier Name</th>
                       <th scope="col">Location</th>
                       <th scope="col">Address</th>
@@ -130,12 +130,12 @@ const Supplier = () => {
                         </tr>
                       ) : (
                         SupplierData?.map((data, index) => (
-                          <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                            <th scope="row">{index + 1}</th>
-                            <td className="text-uppercase fw-bold ">
+                          <tr key={index} className="text-dark  text-nowrap highlight-row">
+                            <td scope="row" className='font_work'>{index + 1}</td>
+                            <td className="text-uppercase font_work ">
                               {data?.name || <span className="text-black">-</span>}
                             </td>
-                            {/* <td className="fw-bold text-primary">
+                            {/* <td className="font_work text-primary">
                               {data?.email ? (
                                 <>
                                   <span>{data.email}</span>
@@ -154,7 +154,7 @@ const Supplier = () => {
                               )}
                             </td> */}
                             <td>{data?.location || <span className="text-black">-</span>}</td>
-                            <td className="fw-bold" title={data?.address}>
+                            <td className="font_work" title={data?.address}>
                               {data?.address
                                 ? `${data.address.slice(0, 30)}${data.address.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}

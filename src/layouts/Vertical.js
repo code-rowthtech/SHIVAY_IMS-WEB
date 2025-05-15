@@ -114,7 +114,8 @@ const VerticalLayout = ({ children }: VerticalLayoutProps, state: VerticalLayout
                 <div
                     className="content-page"
                     style={{
-                        backgroundImage: `url('https://img.freepik.com/free-vector/abstract-desktop-background-white-geometric-design-vector_53876-140225.jpg?t=st=1744281551~exp=1744285151~hmac=c0093f99f2070a2d12cf12eeac501d1a7c8853c7e66d99ef727682b8ccace2c1&w=996')`,
+                        backgroundColor:"white !important",
+                        // backgroundImage: `url('https://img.freepik.com/free-vector/abstract-desktop-background-white-geometric-design-vector_53876-140225.jpg?t=st=1744281551~exp=1744285151~hmac=c0093f99f2070a2d12cf12eeac501d1a7c8853c7e66d99ef727682b8ccace2c1&w=996')`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         backgroundAttachment: 'fixed' // ✅ This keeps the background still

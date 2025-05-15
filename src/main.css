@@ -10,3 +10,7 @@ body{
 .custom-select__option {
   text-transform: capitalize !important;
 }
+.font_work {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+}

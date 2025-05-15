@@ -91,23 +91,23 @@ const StockIn = () => {
             <Card
               style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
             >
-              <Card.Body className="text-center py-1">
+              <Card.Body className=" py-1">
                 <table className="table table-striped bg-white mb-0">
                   <thead>
                     <tr className="table_header">
-                      <th scope="col"><i className="mdi mdi-merge"></i></th>
+                      <th scope="col">#</th>
                       <th scope="col">Supplier</th>
                       <th scope="col">Control No.</th>
                       <th scope="col">Warehouse</th>
                       <th scope="col">Date</th>
-                      <th scope="col">Products</th>
+                      <th scope="col">No. of Products</th>
                       <th scope="col">Invoice Number</th>
                       {/* <th scope="col">Action</th> */}
                     </tr>
                   </thead>
                   {store?.stockInListReducer?.loading ? (
                     <tr>
-                      <td className='text-center' colSpan={6}>
+                      <td className='text-center' colSpan={8}>
                         <Loading />
                       </td>
                     </tr>
@@ -115,34 +115,34 @@ const StockIn = () => {
                     <tbody>
                       {StockInData?.length === 0 ? (
                         <tr>
-                          <td colSpan={6} className='text-center'>
+                          <td colSpan={8} className='text-center'>
                             <p className='my-5 py-5 '>No data found in Stock In.</p>
                           </td>
                         </tr>
                       ) : (
                         StockInData?.map((data, index) => (
-                          <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                            <th scope="row">{index + 1}</th>
-                            <td className="text-uppercase fw-bold ">
+                          <tr key={index} className="text-dark  text-nowrap highlight-row">
+                            <td scope="row" className='font_work'>{index + 1}</td>
+                            <td className="text-uppercase font_work ">
                               {data?.supplierData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.controlNumber || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.warehouseData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.createdAt ? (
                                 new Date(data?.createdAt).toLocaleDateString('en-GB')
                               ) : (
                                 <span className="text-black">-</span>
                               )}
                             </td>
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.totalStockInProductCount || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.invoiceNumber || <span className="text-black">-</span>}
                             </td>
                             <td></td>

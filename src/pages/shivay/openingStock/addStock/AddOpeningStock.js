@@ -118,21 +118,15 @@ const AddOpeningStock = () => {
     }, [CreateProductResponse, DeleteProductResponse, UpdateProductResponse]);
 
     const onSubmit = (data) => {
-        const cleanedProducts = openingProducts.map(({ product, ...rest }) => rest);
 
         const payload = {
 
-            ...(!stockId && { warehouseId: selectedWarehouse?.value, }),
-            ...(!stockId && { productStock: cleanedProducts }),
-            ...(stockId && { warehouseId: selectedWarehouse?.[0]?.value }),
+            warehouseId: selectedWarehouse?.[0]?.value,
             description: data?.description,
             date: data?.date
         };
-        if (stockId) {
-            dispatch(updateStockActions({ ...payload, stockId: stockId }));
-        } else {
-            dispatch(createStockActions(payload));
-        }
+
+        dispatch(updateStockActions({ payload, stockId: stockId }));
     };
 
     console.log(selectedWarehouse?.[0]?.value, 'selectedWarehouse123')

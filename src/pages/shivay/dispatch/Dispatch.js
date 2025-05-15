@@ -93,22 +93,22 @@ const Dispatch = () => {
                 boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset'
               }}
             >
-              <Card.Body className="text-center py-1">
+              <Card.Body className=" py-1">
                 <table className="table table-striped bg-white mb-0">
                   <thead>
                     <tr className="table_header">
-                      <th scope="col"><i className="mdi mdi-merge"></i></th>
+                      <th scope="col">#</th>
                       <th scope="col">Customer Name</th>
                       <th scope="col">GR Number</th>
                       <th scope="col">Warehouse</th>
                       <th scope="col">Location</th>
                       <th scope="col">Date</th>
-                      <th scope="col">Products</th>
+                      <th scope="col">No. of Products</th>
                     </tr>
                   </thead>
                   {store?.getDispatchDataReducer?.loading ? (
                     <tr>
-                      <td className='text-center' colSpan={6}>
+                      <td className='text-center' colSpan={8}>
                         <Loading />
                       </td>
                     </tr>
@@ -122,28 +122,28 @@ const Dispatch = () => {
                         </tr>
                       ) : (
                         DispatchData?.map((data, index) => (
-                          <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                            <th scope="row">{index + 1}</th>
-                            <td className="text-uppercase fw-bold ">
+                          <tr key={index} className="text-dark  text-nowrap highlight-row">
+                            <td scope="row" className='fs-5'>{index + 1}</td>
+                            <td className="text-uppercase font_work ">
                               {data?.customerData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold ">
+                            <td className="font_work ">
                               {data?.grNumber || <span className="text-black">-</span>}
                             </td>
-                            <td className="text-uppercase fw-bold ">
+                            <td className="text-uppercase font_work ">
                               {data?.warehouseData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.customerData?.[0]?.location || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.createdAt ? (
                                 new Date(data?.createdAt).toLocaleDateString('en-GB')
                               ) : (
                                 <span className="text-black">-</span>
                               )}
                             </td>
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.totalDispatchProductCount || <span className="text-black">-</span>}
                             </td>
                             <td></td>

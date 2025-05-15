@@ -143,7 +143,7 @@ const Report = () => {
             // minHeight: '60vh',
           }}
         >
-          <Card.Body className="text-center py-1">
+          <Card.Body className=" py-1">
             <table className="table table-striped bg-white">
               <thead>
                 <tr className="table_header">
@@ -157,18 +157,18 @@ const Report = () => {
               <tbody>
                 {ReportData && ReportData.length > 0 ? (
                   ReportData?.map((data, index) => (
-                    <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                      <th scope="row">{index + 1}</th>
-                      <td className="text-uppercase fw-bold">
+                    <tr key={index} className="text-dark  text-nowrap highlight-row">
+                      <td scope="row" className='font_work'>{index + 1}</td>
+                      <td className="text-uppercase font_work">
                         {data?.productName || <span className="text-black">-</span>}
                       </td>
-                      <td className="fw-bold">
+                      <td className="font_work">
                         {data?.modelName || <span className="text-black">-</span>}
                       </td>
-                      <td className="fw-bold">
+                      <td className="font_work">
                         {data?.code || <span className="text-black">-</span>}
                       </td>
-                      <td className="fw-bold">
+                      <td className="font_work">
                         {data?.quantity || <span className="text-black">-</span>}
                       </td>
 
