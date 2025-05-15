@@ -107,7 +107,7 @@ const StockIn = () => {
                   </thead>
                   {store?.stockInListReducer?.loading ? (
                     <tr>
-                      <td className='text-center' colSpan={6}>
+                      <td className='text-center' colSpan={8}>
                         <Loading />
                       </td>
                     </tr>
@@ -115,7 +115,7 @@ const StockIn = () => {
                     <tbody>
                       {StockInData?.length === 0 ? (
                         <tr>
-                          <td colSpan={6} className='text-center'>
+                          <td colSpan={8} className='text-center'>
                             <p className='my-5 py-5 '>No data found in Stock In.</p>
                           </td>
                         </tr>
