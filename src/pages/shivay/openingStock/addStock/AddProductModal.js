@@ -249,6 +249,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                                             </Form.Group>
                                         </Col>
                                     )}
+                                    
                                 </>
                             }
 

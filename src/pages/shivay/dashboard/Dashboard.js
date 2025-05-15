@@ -265,7 +265,7 @@ const Dashboard = () => {
                 // height: '40vh'
               }}
             >
-              <Card.Body className="text-center py-1">
+              <Card.Body className=" py-1">
 
                 {activeTab === 0 &&
                   <div>
@@ -296,21 +296,21 @@ const Dashboard = () => {
                             </tr>
                           ) : (
                             StockinData?.map((data, index) => (
-                              <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                                <th scope="row">{index + 1}</th>
-                                <td className="text-uppercase fw-bold">
+                              <tr key={index} className="text-dark  text-nowrap highlight-row">
+                                <td scope="row" className="fs-5">{index + 1}</td>
+                                <td className="text-uppercase fs-5 ">
                                   {data?.productName || <span className="text-black">-</span>}
                                 </td>
-                                <td className="text-uppercase fw-bold">
+                                <td className="text-uppercase fs-5 ">
                                   {data?.supplierName || <span className="text-black">-</span>}
                                 </td>
-                                <td className="text-uppercase fw-bold">
+                                <td className="text-uppercase fs-5 ">
                                   {data?.code || <span className="text-black">-</span>}
                                 </td>
-                                <td className="text-uppercase fw-bold">
+                                <td className="text-uppercase fs-5 ">
                                   {data?.stockIn || <span className="text-black">-</span>}
                                 </td>
-                                <td className="text-uppercase fw-bold ">
+                                <td className="text-uppercase fs-5  ">
                                   {data?.stock || <span className="text-black">-</span>}
                                 </td>
                                 <td></td> {/* maintain table structure */}

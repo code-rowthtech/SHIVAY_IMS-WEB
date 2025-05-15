@@ -91,7 +91,7 @@ const StockIn = () => {
             <Card
               style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
             >
-              <Card.Body className="text-center py-1">
+              <Card.Body className=" py-1">
                 <table className="table table-striped bg-white mb-0">
                   <thead>
                     <tr className="table_header">
@@ -100,7 +100,7 @@ const StockIn = () => {
                       <th scope="col">Control No.</th>
                       <th scope="col">Warehouse</th>
                       <th scope="col">Date</th>
-                      <th scope="col">Products</th>
+                      <th scope="col">No. of Products</th>
                       <th scope="col">Invoice Number</th>
                       {/* <th scope="col">Action</th> */}
                     </tr>
@@ -121,18 +121,18 @@ const StockIn = () => {
                         </tr>
                       ) : (
                         StockInData?.map((data, index) => (
-                          <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                            <th scope="row">{index + 1}</th>
-                            <td className="text-uppercase fw-bold ">
+                          <tr key={index} className="text-dark  text-nowrap highlight-row">
+                            <td scope="row" className='fs-5'>{index + 1}</td>
+                            <td className="text-uppercase fs-5 ">
                               {data?.supplierData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            <td className="fs-5">
                               {data?.controlNumber || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            <td className="fs-5">
                               {data?.warehouseData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
-                            <td className="fw-bold">
+                            <td className="fs-5">
                               {data?.createdAt ? (
                                 new Date(data?.createdAt).toLocaleDateString('en-GB')
                               ) : (

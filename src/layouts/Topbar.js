@@ -64,7 +64,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         '/shivay/report': 'Report',
         '/shivay/user': 'User',
         '/shivay/warehouse': 'Warehouse',
-        '/shivay/openingStock': 'OpeningStock',
+        '/shivay/openingStock': 'Opening Stock',
         '/shivay/stockIn': 'StockIn',
         '/shivay/dispatch': 'Dispatch',
         '/shivay/customer': 'Customer',
