@@ -143,24 +143,24 @@ const Dashboard = () => {
 
   return (
     <>
-      <PageTitle
+      {/* <PageTitle
         breadCrumbItems={[
           { label: "SHIVAY Dashboard", path: "/shivay/dashboard" },
           { label: "Dashboard", path: "/shivay/dashboard", active: true },
         ]}
         title={"Dashboard"}
-      />
+      /> */}
       {/* card section */}
       <Row className="g-4 mt-2">
         {Role === 'admin' ? (
-          <div>
-            <Row>
+          <div className="m-0 ">
+            <Row className="d-flex align-items-center">
               {dashboardItems?.map((item, index) => (
-                <Col key={index} md={6} lg={3}>
-                  <Link to={item.link} className="text-decoration-none">
+                <Col key={index} md={6} lg={3 } className="pt-3">
+                  <Link to={item.link} className="text-decoration-none ">
 
                     <Card
-                      className="border-0 text-white card-hover-effect cursor"
+                      className="border-0 text-white card-hover-effect cursor mt-0"
                       style={
                         item.background.startsWith("#")
                           ? { backgroundColor: item.background }
@@ -187,13 +187,13 @@ const Dashboard = () => {
           </div>
         ) : (
           <div>
-            <Row>
+            <Row className="d-flex align-items-center">
               {dashboardItemsUsers?.map((item, index) => (
-                <Col key={index} md={6} lg={3}>
+                <Col key={index} md={6} lg={3 } className="pt-3">
                   <Link to={item.link} className="text-decoration-none">
 
                     <Card
-                      className="border-0 text-white card-hover-effect cursor"
+                      className="border-0 text-white card-hover-effect cursor mt-0"
                       style={
                         item.background.startsWith("#")
                           ? { backgroundColor: item.background }
@@ -220,7 +220,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        <div>
+        <div className="mt-0">
 
           {/* List section */}
           <h4 className="text-black">Transaction List</h4>

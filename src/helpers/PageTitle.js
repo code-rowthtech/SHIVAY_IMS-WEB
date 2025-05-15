@@ -19,7 +19,7 @@ type PageTitleProps = {
 const PageTitle = (props: PageTitleProps): React$Element<any> => {
     return (
         <Row>
-            <Col>
+            {/* <Col>
                 <div className="page-title-box">
                     <div className="page-title-right">
                         <Breadcrumb listProps={{ className: 'm-0' }}>
@@ -40,7 +40,7 @@ const PageTitle = (props: PageTitleProps): React$Element<any> => {
                     </div>
                     <h4 className="page-title" style={{ color: '#000' }}>{props.title}</h4>
                 </div>
-            </Col>
+            </Col> */}
         </Row>
     );
 };

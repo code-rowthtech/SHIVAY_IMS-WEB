@@ -51,7 +51,8 @@
 // Dropdown Large (Custom)
 @media (min-width: 576px) {
     .dropdown-lg {
-        width: $dropdown-lg-width;
+        // width: $dropdown-lg-width;
+        width: 540px;
     }
 }
 

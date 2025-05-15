@@ -10,7 +10,8 @@ import moment from 'moment';
 
 const styles = {
     hidden: { maxHeight: '300px', display: 'none' },
-    visible: { maxHeight: '300px' },
+    visible: { maxHeight: '300px', overflowY: 'auto' },
+    fullView: { maxHeight: '600px', overflowY: 'auto' },
 };
 
 const NotificationDropdown = () => {
@@ -18,6 +19,7 @@ const NotificationDropdown = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [notifStyle, setNotifStyle] = useState(styles.hidden);
     const [expandedIndex, setExpandedIndex] = useState(null);
+    const [viewAll, setViewAll] = useState(false);
 
     const { notificationData } = useSelector((state) => state.getNotificationDataReducer || {});
     const NotificationData = notificationData?.response || [];
@@ -32,7 +34,11 @@ const NotificationDropdown = () => {
 
     const toggleDropdown = () => {
         setDropdownOpen((prev) => !prev);
-        setNotifStyle((prev) => (prev === styles.hidden ? styles.visible : styles.hidden));
+        if (!dropdownOpen) {
+            setNotifStyle(viewAll ? styles.fullView : styles.visible);
+        } else {
+            setNotifStyle(styles.hidden);
+        }
     };
 
     const groupedData = NotificationData.reduce((acc, item) => {
@@ -63,9 +69,10 @@ const NotificationDropdown = () => {
         setExpandedIndex(expandedIndex === index ? null : index);
     };
 
-    const getShortMessage = (msg) => {
-        if (msg.length <= 25) return msg;
-        return msg.slice(0, 25) + '...';
+    const handleViewAll = (e) => {
+        e.stopPropagation(); // Prevent dropdown from closing
+        setViewAll((prev) => !prev);
+        setNotifStyle((prev) => (prev === styles.visible ? styles.fullView : styles.visible));
     };
 
     return (
@@ -83,7 +90,7 @@ const NotificationDropdown = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu align="end" className="dropdown-menu-animated dropdown-lg">
-                <div onClick={toggleDropdown}>
+                <div>
                     <div className="dropdown-item noti-title px-3">
                         <h5 className="m-0">Notification</h5>
                     </div>
@@ -105,21 +112,17 @@ const NotificationDropdown = () => {
                                             onClick={() => handleToggleExpand(globalIndex)}
                                         >
                                             <Card.Body className="p-2">
-                                                <div className="d-flex align-items-start">
+                                                <div className="d-flex align-items-center">
                                                     <div className="flex-shrink-0">
-                                                        <div className={classNames('notify-icon')} style={{ backgroundColor: '#6655D9' }}>
+                                                        <div className="notify-icon" style={{ backgroundColor: '#6655D9' }}>
                                                             <i className={message.icon}></i>
                                                         </div>
                                                     </div>
                                                     <div className="flex-grow-1 ms-2">
-                                                        <h5 className="noti-item-title fw-semibold mb-1"
-                                                            style={{ whiteSpace: 'normal', wordWrap: 'break-word', marginBottom: '4px' }}
-                                                        >
-                                                            {isExpanded ? message.message : getShortMessage(message.message)}
+                                                        <h5 className="noti-item-title fw-semibold mb-1">
+                                                            {message.message}
                                                         </h5>
-                                                        <p
-                                                            className="noti-item-subtitle text-muted mb-1 font-12"
-                                                        >
+                                                        <p className="noti-item-subtitle text-muted mb-1 font-12">
                                                             {message.time}
                                                         </p>
                                                         <small className="text-muted d-block">{message.subText}</small>
@@ -135,8 +138,12 @@ const NotificationDropdown = () => {
                         )}
                     </SimpleBar>
 
-                    <Dropdown.Item className="text-center notify-item border-top border-light py-2 fw-bold" style={{ color: '#6655D9' }}>
-                        View All
+                    <Dropdown.Item
+                        className="text-center notify-item border-top border-light py-2 fw-bold"
+                        style={{ color: '#6655D9' }}
+                        onClick={handleViewAll}
+                    >
+                        {viewAll ? 'Show Less' : 'View All'}
                     </Dropdown.Item>
                 </div>
             </Dropdown.Menu>
