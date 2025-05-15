@@ -295,205 +295,157 @@ const AddStockIn = () => {
             />
             <Form onSubmit={handleSubmit(onSubmit)}>
 
-                <div className="accordion mb-2" id="accordionExample">
-                    <div className="accordion-item" style={{ border: '2px solid #6655D9' }}>
-                        <h2 className="accordion-header mt-0">
-                            <button
-                                className="accordion-button py-1 d-flex justify-content-between align-items-center w-100"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne"
-                                aria-expanded={isAccordionOpen ? "true" : "false"}
-                                aria-controls="collapseOne"
-                                onClick={handleAccordionToggle}  // Toggle the accordion open state
-                            >
-                                <div className="flex-grow-1 text-black fw-bold"> {stockId ? "Edit" : "Add"} Stock In Details</div>
-
-                                {/* Right-aligned buttons */}
-                                <div className="d-flex">
-                                    <Button
-                                        className="fw-bold custom-button me-2"
-                                        onClick={handleShow}
-                                    // disabled={!isAccordionOpen}
+                <Row>
+                    <Col sm={3}>
+                        <Form.Group className="mb-1">
+                            <Form.Label className='mb-0'>Warehouse <span className='text-danger'>*</span></Form.Label>
+                            <Select
+                                value={selectedWarehouse}
+                                onChange={handleWarehouseChange}
+                                options={warehouseOptions}
+                                placeholder="Select a Warehouse"
+                                isClearable
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col sm={3}>
+                        <Form.Group className="mb-1">
+                            <Form.Label className="mb-0">Received By <span className='text-danger'>*</span></Form.Label>
+                            <Select
+                                value={selectedUser}
+                                onChange={handleUserChange}
+                                className='text-capitalize'
+                                options={usersOptions}
+                                placeholder="Select a User"
+                                isClearable
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col sm={3}>
+                        <Form.Group className="mb-1">
+                            <Form.Label className="mb-0">Supplier <span className='text-danger'>*</span></Form.Label>
+                            <Select
+                                value={selectedSupplier}
+                                onChange={handleSupplierChange}
+                                options={supplierOptions}
+                                className='text-capitalize'
+                                placeholder="Select a Supplier"
+                                isClearable
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col sm={3}>
+                        <Form.Group className="mb-1">
+                            <Form.Label className='mb-0'>Date Range</Form.Label>
+                            <Form.Control
+                                type="date"
+                                value={today}
+                                {...register('date')}
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col sm={3}>
+                        <Form.Group className="mb-1">
+                            <Form.Label className="mb-0">Invoice Number <span className='text-danger'>*</span></Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter Invoice Number"
+                                {...register('invoiceNumber', { required: true })}
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col sm={3}>
+                        <Form.Group className="mb-1">
+                            <Form.Label className="mb-0">
+                                Attachment
+                                {attachmentType && (
+                                    <span className="text-capitalize"> ({attachmentType})</span>
+                                )}
+                                {stockInData?.[0]?.invoiceAttachment && (
+                                    <a
+                                        href={stockInData?.[0]?.invoiceAttachment}
+                                        target="_blank"
+                                        title='Download Attachment'
+                                        rel="noopener noreferrer"
+                                    // style={{position:'absolute', top:'20px'}}
                                     >
-                                        <IoIosAdd className="fs-3" />&nbsp;Product
-                                    </Button>
+                                        <HiOutlineFolderDownload className='ms-1 fs-4' />
+                                    </a>
+                                )}
+                                <span className="text-danger"> *</span>
+                            </Form.Label>
+
+                            {!attachmentType ? (
+                                <Form.Select
+                                    className="mb-0"
+                                    // defaultValue=""
+                                    value={attachmentType}
+                                    onChange={handleAttachmentTypeChange}
+                                    required
+                                >
+                                    <option value="">Select Attachment Type</option>
+                                    <option value="Invoice">Invoice</option>
+                                    <option value="Delivery Challan">Delivery Challan</option>
+                                </Form.Select>
+                            ) : (
+                                <div className="d-flex align-items-center gap-2">
+                                    <Form.Control
+                                        type="file"
+                                        accept=".pdf,.docx,.jpg,.jpeg,.png"
+                                        placeholder="Upload file"
+                                        {...register("invoiceAttachment")}
+                                    />
+
+                                    <CgCloseO
+                                        size={20}
+                                        className='text-danger'
+                                        style={{ cursor: "pointer" }}
+                                        onClick={resetAttachmentType}
+                                        title="Change attachment type"
+                                    />
                                 </div>
-                            </button>
-                        </h2>
+                            )}
+                        </Form.Group>
+                    </Col>
+                    <Col sm={3}>
+                        <Form.Group className="mb-1">
+                            <Form.Label className="mb-0">Invoice Value</Form.Label>
+                            <Form.Control
+                                type="text"
+                                {...register('invoiceValue')}
+                                placeholder="Enter Invoice Value"
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col sm={3}>
+                        <Form.Group className="mb-1">
+                            <Form.Label className="mb-0">Description</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={1}
+                                {...register('description')}
+                                placeholder="Enter Description"
+                            />
+                        </Form.Group>
+                    </Col>
 
-                        <div
-                            id="collapseOne"
-                            className={`accordion-collapse collapse ${isAccordionOpen ? "" : "show"}`}
-                            data-bs-parent="#accordionExample"
-                        >
-                            <div className="accordion-body py-1">
-                                <Row>
-                                    <Col sm={3}>
-                                        <Form.Group className="mb-1">
-                                            <Form.Label className='mb-0'>Warehouse <span className='text-danger'>*</span></Form.Label>
-                                            <Select
-                                                value={selectedWarehouse}
-                                                onChange={handleWarehouseChange}
-                                                options={warehouseOptions}
-                                                placeholder="Select a Warehouse"
-                                                isClearable
-                                                required
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col sm={3}>
-                                        <Form.Group className="mb-1">
-                                            <Form.Label className="mb-0">Received By <span className='text-danger'>*</span></Form.Label>
-                                            <Select
-                                                value={selectedUser}
-                                                onChange={handleUserChange}
-                                                className='text-capitalize'
-                                                options={usersOptions}
-                                                placeholder="Select a User"
-                                                isClearable
-                                                required
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col sm={3}>
-                                        <Form.Group className="mb-1">
-                                            <Form.Label className="mb-0">Supplier <span className='text-danger'>*</span></Form.Label>
-                                            <Select
-                                                value={selectedSupplier}
-                                                onChange={handleSupplierChange}
-                                                options={supplierOptions}
-                                                className='text-capitalize'
-                                                placeholder="Select a Supplier"
-                                                isClearable
-                                                required
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col sm={3}>
-                                        <Form.Group className="mb-1">
-                                            <Form.Label className='mb-0'>Date Range</Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                value={today}
-                                                {...register('date')}
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col sm={3}>
-                                        <Form.Group className="mb-1">
-                                            <Form.Label className="mb-0">Invoice Number <span className='text-danger'>*</span></Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Enter Invoice Number"
-                                                {...register('invoiceNumber', { required: true })}
-                                                required
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col sm={3}>
-                                        <Form.Group className="mb-1">
-                                            <Form.Label className="mb-0">
-                                                Attachment
-                                                {attachmentType && (
-                                                    <span className="text-capitalize"> ({attachmentType})</span>
-                                                )}
-                                                {stockInData?.[0]?.invoiceAttachment && (
-                                                    <a
-                                                        href={stockInData?.[0]?.invoiceAttachment}
-                                                        target="_blank"
-                                                        title='Download Attachment'
-                                                        rel="noopener noreferrer"
-                                                    // style={{position:'absolute', top:'20px'}}
-                                                    >
-                                                        <HiOutlineFolderDownload className='ms-1 fs-4' />
-                                                    </a>
-                                                )}
-                                                <span className="text-danger"> *</span>
-                                            </Form.Label>
-
-                                            {!attachmentType ? (
-                                                <Form.Select
-                                                    className="mb-0"
-                                                    // defaultValue=""
-                                                    value={attachmentType}
-                                                    onChange={handleAttachmentTypeChange}
-                                                    required
-                                                >
-                                                    <option value="">Select Attachment Type</option>
-                                                    <option value="Invoice">Invoice</option>
-                                                    <option value="Delivery Challan">Delivery Challan</option>
-                                                </Form.Select>
-                                            ) : (
-                                                <div className="d-flex align-items-center gap-2">
-                                                    <Form.Control
-                                                        type="file"
-                                                        accept=".pdf,.docx,.jpg,.jpeg,.png"
-                                                        placeholder="Upload file"
-                                                        {...register("invoiceAttachment")}
-                                                    />
-
-                                                    <CgCloseO
-                                                        size={20}
-                                                        className='text-danger'
-                                                        style={{ cursor: "pointer" }}
-                                                        onClick={resetAttachmentType}
-                                                        title="Change attachment type"
-                                                    />
-                                                </div>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                    <Col sm={3}>
-                                        <Form.Group className="mb-1">
-                                            <Form.Label className="mb-0">Invoice Value</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                {...register('invoiceValue')}
-                                                placeholder="Enter Invoice Value"
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col sm={3}>
-                                        <Form.Group className="mb-1">
-                                            <Form.Label className="mb-0">Description</Form.Label>
-                                            <Form.Control
-                                                as="textarea"
-                                                rows={1}
-                                                {...register('description')}
-                                                placeholder="Enter Description"
-                                            />
-                                        </Form.Group>
-                                    </Col>
-
-                                </Row>
-                            </div>
-                        </div>
-                    </div>
+                </Row>
+                <div className="d-flex justify-content-end mt-1">
+                    <Button
+                        variant="outline-primary"
+                        className="fw-bold me-2 py-1"
+                        style={{ borderRadius: '6px' }}
+                        onClick={handleShow}
+                    >
+                        <IoIosAdd className="fs-3 fw-bold" />&nbsp;Add
+                    </Button>
                 </div>
 
-                {stockId &&
-                    <div className="text-end">
-                        {/* <Button
-                            className="fw-bold cancel-button me-2"
-                            onClick={() => navigate("/shivay/stockIn")}
-                        >
-                            Cancel
-                        </Button> */}
-
-                        {/* <Button className="fw-bold custom-button" type='submit'>{stockId ? 'Update' : "Submit"}</Button> */}
-                        <Button
-                            type="submit"
-                            className="custom-button fw-bold"
-                            disabled={store?.updateStockInReducer?.loading}
-                            style={{ width: '100px' }}
-                        >
-                            {store?.updateStockInReducer?.loading ? (
-                                <ButtonLoading color="white" />
-                            ) : 'Update'}
-                        </Button>
-                    </div>
-                }
+              
                 <div className='mt-2'>
                     <Card
                         style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
@@ -600,6 +552,20 @@ const AddStockIn = () => {
                                 {store?.createStockInReducer?.loading ? (
                                     <ButtonLoading color="white" />
                                 ) : 'Submit'}
+                            </Button>
+                        </div>
+                    }
+                    {stockId &&
+                        <div className="text-end">
+                            <Button
+                                type="submit"
+                                className="custom-button fw-bold"
+                                disabled={store?.updateStockInReducer?.loading}
+                                style={{ width: '100px' }}
+                            >
+                                {store?.updateStockInReducer?.loading ? (
+                                    <ButtonLoading color="white" />
+                                ) : 'Update'}
                             </Button>
                         </div>
                     }

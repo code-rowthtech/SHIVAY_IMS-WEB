@@ -108,7 +108,7 @@ const Dispatch = () => {
                   </thead>
                   {store?.getDispatchDataReducer?.loading ? (
                     <tr>
-                      <td className='text-center' colSpan={6}>
+                      <td className='text-center' colSpan={8}>
                         <Loading />
                       </td>
                     </tr>

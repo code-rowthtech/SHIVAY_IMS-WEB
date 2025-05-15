@@ -318,6 +318,7 @@ function AddStockModal({ show, onHide }) {
                                     {rows.length > 1 && (
                                         <Button
                                             variant="outline-danger"
+                                            title='Delete'
                                             onClick={() => handleDeleteRow(index)}
                                             className="p-1 mb-1"
                                         >
