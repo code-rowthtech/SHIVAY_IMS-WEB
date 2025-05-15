@@ -265,14 +265,14 @@ const AddDispatch = () => {
     };
 
     return (
-        <div>
-            <PageTitle
+        <div className='mt-3'>
+            {/* <PageTitle
                 breadCrumbItems={[
                     { label: "SHIVAY Dispatch List", path: "/shivay/dispatch" },
                     { label: stockId ? "Edit Dispatch" : "Add Dispatch", path: "/shivay/dispatch", active: true },
                 ]}
                 title={stockId ? "Edit Dispatch" : "Add Dispatch"}
-            />
+            /> */}
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form>
                     <Row>
@@ -467,11 +467,11 @@ const AddDispatch = () => {
                     <Card
                         style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
                     >
-                        <Card.Body className="text-center py-1">
+                        <Card.Body className=" py-1">
                             <table className="table table-striped bg-white">
                                 <thead>
                                     <tr className="table_header">
-                                        <th scope="col"><i className="mdi mdi-merge"></i></th>
+                                        <th scope="col">#</th>
                                         <th scope="col">Product Name</th>
                                         <th scope="col">Model Name</th>
                                         <th scope="col">Code</th>
@@ -482,18 +482,18 @@ const AddDispatch = () => {
                                     <tbody>
                                         {openingProducts && openingProducts.length > 0 ? (
                                             openingProducts.map((data, index) => (
-                                                <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                                                    <th scope="row">{index + 1}</th>
-                                                    <td className="text-uppercase fw-bold">
+                                                <tr key={index} className="text-dark  text-nowrap highlight-row">
+                                                    <td scope="row" className='font_work'>{index + 1}</td>
+                                                    <td className="text-uppercase font_work">
                                                         {data?.product?.name || <span className="text-danger">N/A</span>}
                                                     </td>
-                                                    <td className="fw-bold">
+                                                    <td className="font_work">
                                                         {data?.product?.modelId?.name || <span className="text-danger">N/A</span>}
                                                     </td>
-                                                    <td className="fw-bold">
+                                                    <td className="font_work">
                                                         {data?.product?.code || <span className="text-danger">N/A</span>}
                                                     </td>
-                                                    <td className="fw-bold">
+                                                    <td className="font_work">
                                                         {data?.quantity || <span className="text-danger">N/A</span>}
                                                     </td>
                                                     <td></td>
@@ -520,12 +520,12 @@ const AddDispatch = () => {
                                 {stockId &&
                                     <tbody>
                                         {DispatchProductData?.[0]?.dispatchProducts?.map((data, index) => (
-                                            <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                                                <td>{index + 1}</td>
-                                                <td>{data?.productData?.name}</td>
-                                                <td>{data?.productData?.modelData?.[0]?.name || '-'}</td>
-                                                <td>{data?.productData?.code || '-'}</td>
-                                                <td className="fw-bold">
+                                            <tr key={index} className="text-dark  text-nowrap highlight-row">
+                                                <td className='font_work'>{index + 1}</td>
+                                                <td className='font_work'>{data?.productData?.name}</td>
+                                                <td className='font_work'>{data?.productData?.modelData?.[0]?.name || '-'}</td>
+                                                <td className='font_work'>{data?.productData?.code || '-'}</td>
+                                                <td className="font_work">
                                                     {data?.quantity || <span className="text-black">-</span>}
                                                 </td>
                                                 {/* <td>{data?.stockOutQty}</td> */}

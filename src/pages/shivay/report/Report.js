@@ -158,17 +158,17 @@ const Report = () => {
                 {ReportData && ReportData.length > 0 ? (
                   ReportData?.map((data, index) => (
                     <tr key={index} className="text-dark  text-nowrap highlight-row">
-                      <td scope="row" className='fs-5'>{index + 1}</td>
-                      <td className="text-uppercase fs-5">
+                      <td scope="row" className='font_work'>{index + 1}</td>
+                      <td className="text-uppercase font_work">
                         {data?.productName || <span className="text-black">-</span>}
                       </td>
-                      <td className="fs-5">
+                      <td className="font_work">
                         {data?.modelName || <span className="text-black">-</span>}
                       </td>
-                      <td className="fs-5">
+                      <td className="font_work">
                         {data?.code || <span className="text-black">-</span>}
                       </td>
-                      <td className="fs-5">
+                      <td className="font_work">
                         {data?.quantity || <span className="text-black">-</span>}
                       </td>
 

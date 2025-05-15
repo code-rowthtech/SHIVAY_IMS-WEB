@@ -105,7 +105,7 @@ const Warehouse = () => {
                                 <table className="table table-striped bg-white mb-0">
                                     <thead>
                                         <tr className="table_header">
-                                            <th scope="col"><i className="mdi mdi-merge"></i></th>
+                                            <th scope="col">#</th>
                                             <th scope="col">Warehouse Name</th>
                                             <th scope="col">Location</th>
                                         </tr>
@@ -127,11 +127,11 @@ const Warehouse = () => {
                                             ) : (
                                                 warehouseData?.map((data, index) => (
                                                     <tr key={index} className="text-dark  text-nowrap highlight-row">
-                                                        <td scope="row" className='fs-5'>{index + 1}</td>
-                                                        <td className="text-uppercase fs-5 ">
+                                                        <td scope="row" className='font_work'>{index + 1}</td>
+                                                        <td className="text-uppercase font_work ">
                                                             {data?.name || <span className="text-danger">-</span>}
                                                         </td>
-                                                        <td className="fs-5">
+                                                        <td className="font_work">
                                                             {data?.locationId?.name || <span className="text-danger">-</span>}
                                                         </td>
                                                         <div className="icon-container d-flex  pb-0" >

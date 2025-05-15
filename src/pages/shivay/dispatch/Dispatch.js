@@ -97,7 +97,7 @@ const Dispatch = () => {
                 <table className="table table-striped bg-white mb-0">
                   <thead>
                     <tr className="table_header">
-                      <th scope="col"><i className="mdi mdi-merge"></i></th>
+                      <th scope="col">#</th>
                       <th scope="col">Customer Name</th>
                       <th scope="col">GR Number</th>
                       <th scope="col">Warehouse</th>
@@ -124,26 +124,26 @@ const Dispatch = () => {
                         DispatchData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
                             <td scope="row" className='fs-5'>{index + 1}</td>
-                            <td className="text-uppercase fs-5 ">
+                            <td className="text-uppercase font_work ">
                               {data?.customerData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
-                            <td className="fs-5 ">
+                            <td className="font_work ">
                               {data?.grNumber || <span className="text-black">-</span>}
                             </td>
-                            <td className="text-uppercase fs-5 ">
+                            <td className="text-uppercase font_work ">
                               {data?.warehouseData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
-                            <td className="fs-5">
+                            <td className="font_work">
                               {data?.customerData?.[0]?.location || <span className="text-black">-</span>}
                             </td>
-                            <td className="fs-5">
+                            <td className="font_work">
                               {data?.createdAt ? (
                                 new Date(data?.createdAt).toLocaleDateString('en-GB')
                               ) : (
                                 <span className="text-black">-</span>
                               )}
                             </td>
-                            <td className="fw-bold">
+                            <td className="font_work">
                               {data?.totalDispatchProductCount || <span className="text-black">-</span>}
                             </td>
                             <td></td>

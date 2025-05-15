@@ -106,7 +106,7 @@ const User = () => {
                                 <table className="table table-striped bg-white mb-0">
                                     <thead>
                                         <tr className="table_header">
-                                            <th scope="col"><i className="mdi mdi-merge"></i></th>
+                                            <th scope="col">#</th>
                                             <th scope="col">User Name</th>
                                             <th scope="col">Email Id</th>
                                             <th scope="col">Password</th>
@@ -130,14 +130,14 @@ const User = () => {
                                             ) : (
                                                 UserData?.map((data, index) => (
                                                     <tr key={index} className="text-dark  text-nowrap highlight-row">
-                                                        <td scope="row" className='fs-5'>{index + 1}</td>
-                                                        <td className="text-uppercase fs-5 ">
+                                                        <td scope="row" className='font_work'>{index + 1}</td>
+                                                        <td className="text-uppercase font_work ">
                                                             {data?.name || <span className="text-black">-</span>}
                                                         </td>
-                                                        <td className="fs-5">
+                                                        <td className="font_work">
                                                             {data?.email || <span className="text-black">-</span>}
                                                         </td>
-                                                        <td className=" fs-5">
+                                                        <td className=" font_work">
                                                             {data?.password || <span className="text-black">-</span>}
                                                         </td>
                                                         <td></td>

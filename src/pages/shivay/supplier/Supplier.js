@@ -108,7 +108,7 @@ const Supplier = () => {
                 <table className="table table-striped bg-white mb-0">
                   <thead>
                     <tr className="table_header">
-                      <th scope="col"><i className="mdi mdi-merge"></i></th>
+                      <th scope="col">#</th>
                       <th scope="col">Supplier Name</th>
                       <th scope="col">Location</th>
                       <th scope="col">Address</th>
@@ -131,11 +131,11 @@ const Supplier = () => {
                       ) : (
                         SupplierData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
-                            <td scope="row" className='fs-5'>{index + 1}</td>
-                            <td className="text-uppercase fs-5 ">
+                            <td scope="row" className='font_work'>{index + 1}</td>
+                            <td className="text-uppercase font_work ">
                               {data?.name || <span className="text-black">-</span>}
                             </td>
-                            {/* <td className="fs-5 text-primary">
+                            {/* <td className="font_work text-primary">
                               {data?.email ? (
                                 <>
                                   <span>{data.email}</span>
@@ -154,7 +154,7 @@ const Supplier = () => {
                               )}
                             </td> */}
                             <td>{data?.location || <span className="text-black">-</span>}</td>
-                            <td className="fs-5" title={data?.address}>
+                            <td className="font_work" title={data?.address}>
                               {data?.address
                                 ? `${data.address.slice(0, 30)}${data.address.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}

@@ -104,7 +104,7 @@ const OpeningStock = () => {
                 <table className="table table-striped bg-white mb-0">
                   <thead>
                     <tr className="table_header">
-                      <th scope="col"><i className="mdi mdi-merge"></i></th>
+                      <th scope="col">#</th>
                       <th scope="col">Warehouse</th>
                       {/* <th scope="col">Code</th> */}
                       <th scope="col">Date</th>
@@ -123,21 +123,21 @@ const OpeningStock = () => {
                       {OpeningStockData && OpeningStockData.length > 0 ? (
                         OpeningStockData.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
-                            <td scope="row" className='fs-5'>{index + 1}</td>
-                            <td className="text-uppercase fs-5">
+                            <td scope="row" className='font_work'>{index + 1}</td>
+                            <td className="text-uppercase font_work">
                               {data?.warehouseData?.name || <span className="text-black">-</span>}
                             </td>
-                            {/* <td className="fs-5">
+                            {/* <td className="font_work">
                               {data?.productData?.code || <span className="text-black">-</span>}
                             </td> */}
-                            <td className="fs-5">
+                            <td className="font_work">
                               {data?.date ? new Date(data.date).toLocaleDateString('en-GB') : <span className="text-black">-</span>}
                             </td>
 
-                            <td className="fs-5">
+                            <td className="font_work">
                               {data?.description || <span className="text-black">-</span>}
                             </td>
-                            <td className="fs-5">
+                            <td className="font_work">
                               {data?.totalStockProductCount || <span className="text-black">-</span>}
                             </td>
                             <td></td>
