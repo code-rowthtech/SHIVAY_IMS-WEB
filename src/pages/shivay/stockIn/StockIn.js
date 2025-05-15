@@ -100,7 +100,7 @@ const StockIn = () => {
                       <th scope="col">Control No.</th>
                       <th scope="col">Warehouse</th>
                       <th scope="col">Date</th>
-                      <th scope="col">Products</th>
+                      <th scope="col">No. of Products</th>
                       <th scope="col">Invoice Number</th>
                       {/* <th scope="col">Action</th> */}
                     </tr>

@@ -103,7 +103,7 @@ const Dispatch = () => {
                       <th scope="col">Warehouse</th>
                       <th scope="col">Location</th>
                       <th scope="col">Date</th>
-                      <th scope="col">Products</th>
+                      <th scope="col">No. of Products</th>
                     </tr>
                   </thead>
                   {store?.getDispatchDataReducer?.loading ? (
