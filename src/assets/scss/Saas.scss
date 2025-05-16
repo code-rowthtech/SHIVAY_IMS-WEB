@@ -123,6 +123,13 @@ tbody tr:hover {
   z-index: 1;
 }
 
+.outline-custom-button {
+  border-radius: 6px!important;
+  color: #6655D9!important;
+  background-color: transparent!important;
+  border-color: #6655D9!important;
+}
+
 // table header color
 .table_header {
   color: #6655D9;
@@ -151,10 +158,11 @@ tbody tr:hover {
 }
 
 .textLeftSidebar {
-    color: #6c757d !important;
-    // font-size: 0.9375rem !important;
+  color: #6c757d !important;
+  // font-size: 0.9375rem !important;
 }
+
 .textLeftSidebar:hover span {
-    color: #6655D9 !important;
-    // transition-duration: 0.5s !important;
+  color: #6655D9 !important;
+  // transition-duration: 0.5s !important;
 }

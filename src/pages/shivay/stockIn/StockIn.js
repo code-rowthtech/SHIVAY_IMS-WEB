@@ -10,6 +10,8 @@ import { deleteStockInActions, getStockInListActions } from '../../../redux/acti
 import { MdDeleteOutline } from 'react-icons/md';
 import Pagination from '../../../helpers/Pagination';
 import { Loading } from '../../../helpers/loader/Loading';
+import AddStockinModal from './addStockIn/AddStockinModal';
+import EditStockinModal from './editStockin/EditStockInModal';
 
 const StockIn = () => {
 
@@ -23,6 +25,10 @@ const StockIn = () => {
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / pageSize));
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState(null);
 
   const StockInData = store?.stockInListReducer?.stockInList?.response;
   const deleteResponse = store?.deleteStockInReducer?.deleteStockIn?.status;
@@ -76,15 +82,22 @@ const StockIn = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Button className="mt-2 fw-bold custom-button"
+              <Button
+                className="mt-2 fw-bold custom-button me-2"
+                onClick={() => setShowAddModal(true)}
+              >
+                <IoIosAdd className="fs-3" />&nbsp;Add
+              </Button>
+              {/* <Button className="mt-2 fw-bold custom-button"
                 // onClick={handleShow}
                 onClick={() => {
                   navigate('/shivay/addStockIn')
                 }}
               >
                 <IoIosAdd className="fs-3" />&nbsp;Stock In
-              </Button>
+              </Button> */}
             </div>
+
           </Col>
 
           <div className='mt-2'>
@@ -151,9 +164,31 @@ const StockIn = () => {
                               {/* <span className="icon-wrapper" title="View">
                             <PiEye className="fs-4 text-black" style={{ cursor: 'pointer' }} />
                           </span> */}
-                              <span className="icon-wrapper" title="Edit">
-                                <AiOutlineEdit onClick={() => navigate(`/shivay/addStockIn?id=${data?._id}`)} className="fs-4 text-black" style={{ cursor: 'pointer' }} />
-                              </span>
+                              {/* <span
+                                className="icon-wrapper me-4"
+                                title="Edit"
+                                onClick={() => {
+                                  setShowEditModal(true);
+                                  setEditData(data?._id);
+                                }}
+                              >
+                                <AiOutlineEdit
+                                  className="fs-4 text-black"
+                                  style={{ cursor: 'pointer' }}
+                                />
+                              </span> */}
+                              <span
+                                className="icon-wrapper"
+                                title="Edit"
+                                onClick={() => {
+                                  setShowEditModal(true);
+                                  setEditData(data?._id);
+                                }}
+                              >
+                                <AiOutlineEdit
+                                  className="fs-4 text-black"
+                                  style={{ cursor: 'pointer' }}
+                                />                              </span>
                               <span className="icon-wrapper" title="Delete" onClick={() => { setStockToDelete(data?._id); setShowConfirm(true); }}>
                                 <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
                               </span>
@@ -175,6 +210,16 @@ const StockIn = () => {
           </div>
         </Row>
       </Form>
+      <AddStockinModal
+        show={showAddModal}
+        onHide={() => setShowAddModal(false)}
+      />
+
+      <EditStockinModal
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        stockId={editData}
+      />
 
       {/* delete modal */}
       <Modal show={showConfirm} onHide={() => setShowConfirm(false)} >

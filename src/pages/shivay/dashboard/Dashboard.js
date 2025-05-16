@@ -370,26 +370,26 @@ const Dashboard = () => {
                               </tr>
                             ) : (
                               DispatchData?.map((data, index) => (
-                                <tr key={index} className="text-dark fw-bold text-nowrap highlight-row">
-                                  <th scope="row">{index + 1}</th>
-                                  <td className="text-uppercase fw-bold ">
+                                <tr key={index} className="text-dark text-nowrap highlight-row">
+                                  <td scope="row"  className="font_work">{index + 1}</td>
+                                  <td className="text-uppercase font_work ">
                                     {data?.productName || <span className="text-black">-</span>}
                                   </td>
-                                  <td className="fw-bold ">
+                                  <td className="font_work ">
                                     {data?.code || <span className="text-black">-</span>}
                                   </td>
-                                  <td className="text-uppercase fw-bold ">
+                                  <td className="text-uppercase font_work ">
                                     {data?.stockOut !== undefined ? data.stockOut : <span className="text-black">-</span>}
                                   </td>
-                                  <td className="fw-bold ">
+                                  <td className="font_work ">
                                     {data?.customerName || <span className="text-black">-</span>}
                                   </td>
-                                  <td className="text-uppercase fw-bold ">
+                                  <td className="text-uppercase font_work ">
                                     {data?.stock !== null && data?.stock !== undefined
                                       ? data.stock
                                       : <span className="text-black">-</span>}
                                   </td>
-                                  <td className="text-uppercase fw-bold ">
+                                  <td className="text-uppercase font_work ">
                                     {data?.date
                                       ? new Date(data.date).toLocaleDateString('en-GB') // dd/mm/yyyy
                                       : <span className="text-black">-</span>}

@@ -171,7 +171,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
                                         <Form.Label className="mb-0" >Model </Form.Label>
-                                        <Form.Control type='text' placeholder="Modal Name" value={Product?.product?.model?.name} readOnly />
+                                        <Form.Control type='text' placeholder="Model Name" value={Product?.product?.model?.name} readOnly />
                                     </Form.Group>
                                 </Col>
                                 <Col sm={6}>
@@ -210,7 +210,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                                                     onChange={handleModalChange}
                                                     onInputChange={(inputValue) => setSearchTerm(inputValue)}
                                                     options={modalOptions}
-                                                    placeholder="Search Modal"
+                                                    placeholder="Search Model"
                                                     isClearable
                                                     isSearchable
                                                     isLoading={store?.searchProductReducer?.loading}
@@ -245,7 +245,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                                         <Col sm={6}>
                                             <Form.Group className="mb-3">
                                                 <Form.Label className="mb-0" >Model Name</Form.Label>
-                                                <Form.Control type='text' placeholder="Modal Name" value={selectedModal?.label} />
+                                                <Form.Control type='text' placeholder="Model Name" value={selectedModal?.label} />
                                             </Form.Group>
                                         </Col>
                                     )}

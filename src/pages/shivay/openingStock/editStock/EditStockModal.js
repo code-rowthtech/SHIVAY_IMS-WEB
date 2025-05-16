@@ -320,7 +320,7 @@ function EditStockModal({ show, onHide, stockId }) {
                                             isClearable
                                             isSearchable
                                             isLoading={productLoading}
-                                            inputValue={row.searchTerm}
+                                            // inputValue={row.searchTerm}
                                             filterOption={() => true}
                                         />
                                     </Form.Group>
