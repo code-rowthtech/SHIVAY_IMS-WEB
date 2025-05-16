@@ -152,9 +152,10 @@ function* createStockCheckFunction(data) {
             });
         }
     } catch (error) {
+         ToastContainer(error, 'danger')
         yield put({
             type: DispatchActionTypes.CREATE_STOCK_CHECK_ERROR,
-            payload: { error, status: 400 },
+            payload: error,
         });
     }
 }

@@ -218,7 +218,7 @@ const AddOpeningStock = () => {
                     </Col>
                     <Col sm={3}>
                         <Form.Group className="mb-1">
-                            <Form.Label className='mb-0'>Date Range <span className='text-danger'>*</span></Form.Label>
+                            <Form.Label className='mb-0'>Date <span className='text-danger'>*</span></Form.Label>
                             <Form.Control
                                 type="date"
                                 value={today}

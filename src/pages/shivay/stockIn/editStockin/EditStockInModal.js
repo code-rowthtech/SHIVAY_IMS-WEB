@@ -1,0 +1,584 @@
+import { useEffect, useMemo, useCallback, useState, useRef } from 'react';
+import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import Select from 'react-select';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { CgCloseO } from "react-icons/cg";
+import {
+  createStockActions,
+  createStockInActions,
+  getWarehouseListActions,
+  listingSupplierActions,
+  listingUsersActions,
+  searchProductActions,
+  updateStockInActions,
+  deleteStockInProductActions,
+  getStockInByIdActions,
+  createStockCheckActions,
+  createStockInProductActions,
+  updateStockInProductActions
+} from '../../../../redux/actions';
+import { HiOutlineFolderDownload } from "react-icons/hi";
+import { IoIosAdd } from 'react-icons/io';
+import { MdDelete, MdSave } from 'react-icons/md';
+import { Loading } from '../../../../helpers/loader/Loading';
+
+function EditStockinModal({ show, onHide, stockId }) {
+  const dispatch = useDispatch();
+  const { handleSubmit, register, setValue, reset, resetField, formState: { errors } } = useForm();
+  const store = useSelector((state) => state)
+
+  const [today, setToday] = useState(new Date().toISOString().split('T')[0]);
+  const [rows, setRows] = useState([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+  const [editedQuantity, setEditedQuantity] = useState('');
+  const [productId, setProductId] = useState('');
+
+  const {
+    searchProductReducer: {
+      searchProduct: { response: ProductSearch = [], loading: productLoading },
+      error: productError
+    },
+    getWarehouseListReducer: {
+      searchWarehouse: { response: Warehouse = [] },
+      error: warehouseError
+    },
+    createStockReducer: { createStock: { status: createResponse, loading: createLoading } = {} }
+  } = useSelector(state => state);
+
+  const UsersList = store?.listingUsersReducer?.listingUsers?.response;
+  const SupplierList = store?.listingSupplierReducer?.listingSupplier?.response;
+  const stockInData = store?.stockInByIdReducer?.stockInById?.response;
+  const CreateProductResponse = store?.createStockInProductReducer?.createStockInProduct?.status;
+  const DeleteProductResponse = store?.deleteStockInProductReducer?.deleteStockInProduct?.status;
+  const UpdateProductResponse = store?.updateStockInProductReducer?.updateStockInProduct?.status;
+  const detailsLoading = store?.stockInByIdReducer?.loading;
+
+  useEffect(() => {
+    if (createResponse === 200) {
+      onHide();
+      reset();
+      setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+    }
+  }, [createResponse, onHide, reset]);
+
+
+  useEffect(() => {
+    dispatch(getWarehouseListActions());
+    dispatch(listingSupplierActions());
+
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (productError) toast.error(productError.message || 'Failed to search products');
+    if (warehouseError) toast.error(warehouseError.message || 'Failed to load warehouses');
+  }, [productError, warehouseError]);
+
+  const warehouseOptions = useMemo(() => (
+    Warehouse?.map(({ _id, name }) => ({ value: _id, label: name }))
+  ), [Warehouse]);
+
+  const productOptions = useMemo(() => (
+    ProductSearch?.map(product => ({
+      value: product._id,
+      label: product.modelId?.name,
+      code: product.code,
+      name: product.name,
+      data: product
+    })) || []
+  ), [ProductSearch]);
+
+  const handleSearch = useCallback((term, type) => {
+    if (!term || term.length < 2) return;
+    dispatch(searchProductActions(type === 'modelName' ? { modelName: term } : { code: term }));
+  }, [dispatch]);
+
+  const handleAddRow = useCallback(() => {
+    setRows(prev => [...prev, { searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+  }, []);
+
+  const handleDeleteRow = useCallback((index) => {
+    if (rows.length <= 1) return;
+    setRows(prev => prev.filter((_, i) => i !== index));
+  }, [rows.length]);
+
+  const handleProductChange = useCallback((selected, index) => {
+    setRows(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], selectedProduct: selected, searchTerm: selected?.label || '' };
+      return updated;
+    });
+  }, []);
+
+  const handleQuantityChange = useCallback((e, index) => {
+    const value = Math.max(1, parseInt(e.target.value) || '');
+    setRows(prev => {
+      const updated = [...prev];
+      updated[index].quantity = value;
+      return updated;
+    });
+  }, []);
+
+
+  const onSubmit = (data) => {
+
+    const formData = new FormData();
+
+    if (data?.invoiceAttachment?.[0] instanceof File) {
+      formData.append('invoiceAttachment', data.invoiceAttachment?.[0]);
+    }
+    formData.append('warehouseId', selectedWarehouse?.value)
+    formData.append('receivedBy', selectedUser?.value);
+    formData.append('supplierId', selectedSupplier?.value);
+    formData.append('description', data?.description);
+    formData.append('invoiceNumber', data?.invoiceNumber);
+    formData.append('fright', data?.invoiceValue);
+    formData.append('invoiceAttachmentType', attachmentType);
+    formData.append('newProductArr', JSON.stringify([]));
+    formData.append('productDetailsArr', JSON.stringify([]));
+    formData.append('stockInId', stockId);
+
+    // formData.append('date', data?.date);
+
+
+    dispatch(updateStockInActions(formData));
+  };
+  // ======-=-=-=-
+
+  const usersOptions = UsersList?.map((users) => ({
+    value: users._id,
+    label: users.name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' '),
+  }));
+
+
+  const supplierOptions = SupplierList?.map((users) => ({
+    value: users._id,
+    label: users.name,
+  }));
+
+  const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [attachmentType, setAttachmentType] = useState("");
+  const [stateDelete, setStateDelete] = useState(false)
+
+  const handleWarehouseChange = (selectedOption) => {
+    console.log({ selectedOption })
+    setSelectedWarehouse(selectedOption);
+  };
+
+  const handleUserChange = (selectedUser) => {
+    setSelectedUser(selectedUser);
+  };
+
+  const handleSupplierChange = (selectedSupplier) => {
+    setSelectedSupplier(selectedSupplier);
+  };
+
+  const fileInputRef = useRef();
+
+  const handleAttachmentTypeChange = (e) => {
+    const type = e.target.value;
+    setAttachmentType(type);
+    setValue("invoiceAttachmentType", type);
+  };
+  const resetAttachmentType = () => {
+    setAttachmentType("");
+    setValue("invoiceAttachmentType", "");
+    resetField("invoiceAttachment");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+
+  useEffect(() => {
+    if (selectedWarehouse?.value) {
+      dispatch(listingUsersActions({ warehouseId: selectedWarehouse.value }));
+    }
+  }, [dispatch, selectedWarehouse]);
+
+  useEffect(() => {
+    if (CreateProductResponse === 200 || DeleteProductResponse === 200 || UpdateProductResponse === 200) {
+      dispatch(getStockInByIdActions(stockId));
+    }
+  }, [CreateProductResponse, DeleteProductResponse, UpdateProductResponse]);
+
+  useEffect(() => {
+    if (stockId) {
+      dispatch(getStockInByIdActions(stockId));
+    }
+  }, [dispatch, stockId]);
+
+  useEffect(() => {
+    if (stockId && stockInData) {
+      console.log(stockInData, '2345432')
+      const initialRows = stockInData?.[0]?.stockInProducts?.map(item => {
+        const product = item?.productData || {};
+        console.log({ product }, product.code, 'productproduct')
+        const modelName = product.modelData?.[0]?.name || '';
+        const code = product?.code || '';
+        const name = product?.name || '';
+
+        return {
+          _id: item._id,
+          searchType: 'modelName',
+          selectedProduct: {
+            value: item.productId,
+            label: modelName || name,
+            code,
+            name,
+            data: item
+          },
+          quantity: item.quantity,
+          searchTerm: modelName || name
+        };
+      }) || [];
+
+      setRows(initialRows);
+
+      setToday(stockInData?.[0]?.createdAt ? new Date(stockInData?.[0]?.createdAt).toISOString().split('T')[0] : '')
+      const updateWarehouses = stockInData?.[0]?.warehouseData
+        ? { value: stockInData?.[0].warehouseId, label: stockInData?.[0].warehouseData?.find((ele) => ele?._id === stockInData?.[0]?.warehouseId)?.name }
+        : {};
+      setSelectedWarehouse(updateWarehouses)
+
+      const updatedUser = stockInData?.[0]?.receivedByData ? { value: stockInData?.[0]?.receivedBy, label: stockInData?.[0].receivedByData?.find((ele) => ele?._id === stockInData?.[0]?.receivedBy)?.name }
+        : {}
+      setSelectedUser(updatedUser)
+
+      const updatedSupplier = stockInData?.[0]?.supplierId ? { value: stockInData?.[0]?.supplierId, label: stockInData?.[0].supplierData?.find((ele) => ele?._id === stockInData?.[0]?.supplierId)?.name }
+        : {}
+      setSelectedSupplier(updatedSupplier)
+
+      setValue('invoiceNumber', stockInData?.[0]?.invoiceNumber || '');
+      setValue('description', stockInData?.[0]?.description || '');
+      setValue('invoiceValue', stockInData?.[0]?.fright || '');
+      setValue('invoiceAttachment', stockInData?.[0]?.invoiceAttachment || '');
+      setAttachmentType(stockInData?.[0]?.invoiceAttachmentType || '');
+      setEditedQuantity(stockInData?.[0]?.stockInProducts?.quantity || '');
+      setProductId(stockInData?.[0]?.productData?._id)
+    }
+
+  }, [stockId, stockInData])
+
+  const handleSaveRow = (row, rowId) => {
+    console.log(row, 'adsfg');
+
+    const quantity = row?.quantity;
+    // const selectedProductId = selectedModal?.value;
+    const selectedWarehouseId = selectedWarehouse?.value;
+
+    if (rowId) {
+      const updateData = {
+        stockInProductId: row?._id,
+        quantity: quantity
+      };
+      dispatch(updateStockInProductActions(updateData));
+    } else {
+      const createData = {
+        stockInId: stockId,
+        productId: row?.selectedProduct?.data?._id,
+        quantity: quantity,
+        warehouseId: selectedWarehouseId,
+      };
+      dispatch(createStockInProductActions(createData));
+    }
+  };
+
+  if (detailsLoading && !stateDelete) {
+    return (
+      <Modal show={show} onHide={onHide} size='xl' centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Stock</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <Loading />
+        </Modal.Body>
+      </Modal>
+    );
+  }
+  return (
+    <Modal show={show} onHide={onHide} size='xl' centered>
+      <Modal.Header className='py-1' closeButton>
+        <Modal.Title>Edit Stock in</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className='pt-1'>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+
+          <Row>
+            <Col sm={3}>
+              <Form.Group className="mb-1">
+                <Form.Label className='mb-0'>Warehouse <span className='text-danger'>*</span></Form.Label>
+                <Select
+                  value={selectedWarehouse}
+                  onChange={handleWarehouseChange}
+                  options={warehouseOptions}
+                  placeholder="Select a Warehouse"
+                  isClearable
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col sm={3}>
+              <Form.Group className="mb-1">
+                <Form.Label className="mb-0">Received By <span className='text-danger'>*</span></Form.Label>
+                <Select
+                  value={selectedUser}
+                  onChange={handleUserChange}
+                  className='text-capitalize'
+                  options={usersOptions}
+                  placeholder="Select a User"
+                  isClearable
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col sm={3}>
+              <Form.Group className="mb-1">
+                <Form.Label className="mb-0">Supplier <span className='text-danger'>*</span></Form.Label>
+                <Select
+                  value={selectedSupplier}
+                  onChange={handleSupplierChange}
+                  options={supplierOptions}
+                  className='text-capitalize'
+                  placeholder="Select a Supplier"
+                  isClearable
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col sm={3}>
+              <Form.Group className="mb-1">
+                <Form.Label className='mb-0'>Date Range</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={today}
+                  {...register('date')}
+                />
+              </Form.Group>
+            </Col>
+            <Col sm={3}>
+              <Form.Group className="mb-1">
+                <Form.Label className="mb-0">Invoice Number <span className='text-danger'>*</span></Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Invoice Number"
+                  {...register('invoiceNumber', { required: true })}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col sm={3}>
+              <Form.Group className="mb-1">
+                <Form.Label className="mb-0">
+                  Attachment
+                  {attachmentType && (
+                    <span className="text-capitalize"> ({attachmentType})</span>
+                  )}
+                  {stockInData?.[0]?.invoiceAttachment && (
+                    <a
+                      href={stockInData?.[0]?.invoiceAttachment}
+                      target="_blank"
+                      title='Download Attachment'
+                      rel="noopener noreferrer"
+                    // style={{position:'absolute', top:'20px'}}
+                    >
+                      <HiOutlineFolderDownload className='ms-1 fs-4' />
+                    </a>
+                  )}
+                  <span className="text-danger"> *</span>
+                </Form.Label>
+
+                {!attachmentType ? (
+                  <Form.Select
+                    className="mb-0"
+                    // defaultValue=""
+                    value={attachmentType}
+                    onChange={handleAttachmentTypeChange}
+                    required
+                  >
+                    <option value="">Select Attachment Type</option>
+                    <option value="Invoice">Invoice</option>
+                    <option value="Delivery Challan">Delivery Challan</option>
+                  </Form.Select>
+                ) : (
+                  <div className="d-flex align-items-center gap-2">
+                    <Form.Control
+                      type="file"
+                      accept=".pdf,.docx,.jpg,.jpeg,.png"
+                      placeholder="Upload file"
+                      {...register("invoiceAttachment")}
+                    />
+
+                    <CgCloseO
+                      size={20}
+                      className='text-danger'
+                      style={{ cursor: "pointer" }}
+                      onClick={resetAttachmentType}
+                      title="Change attachment type"
+                    />
+                  </div>
+                )}
+              </Form.Group>
+            </Col>
+            <Col sm={3}>
+              <Form.Group className="mb-1">
+                <Form.Label className="mb-0">Invoice Value</Form.Label>
+                <Form.Control
+                  type="text"
+                  {...register('invoiceValue')}
+                  placeholder="Enter Invoice Value"
+                />
+              </Form.Group>
+            </Col>
+            <Col sm={3}>
+              <Form.Group className="mb-1">
+                <Form.Label className="mb-0">Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={1}
+                  {...register('description')}
+                  placeholder="Enter Description"
+                />
+              </Form.Group>
+            </Col>
+
+          </Row>
+
+          <hr className='mt-2 mb-1' />
+          <div style={{ maxHeight: rows?.length >= 3 ? '51vh' : 'auto', overflowY: rows?.length >= 3 ? 'auto' : 'visible', padding: '15px' }}>
+            {rows?.map((row, index) => (
+              <Row key={index} className="align-items-end">
+                <Col sm={3}>
+                  <Form.Group className='mb-1'>
+                    <Form.Label className="mb-0">Search By</Form.Label>
+                    <Form.Select
+                      value={row?.searchType}
+                      onChange={(e) => setRows(prev => {
+                        const updated = [...prev];
+                        updated[index] = { ...updated[index], searchType: e.target.value, selectedProduct: null, searchTerm: '' };
+                        return updated;
+                      })}
+                    >
+                      <option value="modelName">Model Name</option>
+                      <option value="code">Product Code</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+
+                <Col sm={3}>
+                  <Form.Group className='mb-1'>
+                    <Form.Label className="mb-0">{row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}</Form.Label>
+                    <Select
+                      value={row?.selectedProduct}
+                      onChange={(selected) => handleProductChange(selected, index)}
+                      onInputChange={(inputValue) => {
+                        setRows(prev => {
+                          const updated = [...prev];
+                          updated[index].searchTerm = inputValue;
+                          return updated;
+                        });
+                        handleSearch(inputValue, row.searchType);
+                      }}
+                      options={productOptions}
+                      placeholder={`Search by ${row.searchType === 'modelName' ? 'model' : 'code'}`}
+                      isClearable
+                      isSearchable
+                      isLoading={productLoading}
+                      filterOption={() => true}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col sm={3}>
+                  <Form.Group className='mb-1'>
+                    <Form.Label className="mb-0">{row.searchType === 'modelName' ? 'Code' : 'Model '}</Form.Label>
+                    <Form.Control
+                      type='text'
+                      value={row.searchType === 'modelName' ? row.selectedProduct?.code : row.selectedProduct?.data?.modelId?.name || ''}
+                      placeholder={row.searchType === 'modelName' ? 'Code' : 'Model'}
+                      readOnly
+                    />
+                  </Form.Group>
+                </Col>
+
+                <Col sm={3}>
+                  <Form.Group className='mb-1'>
+                    <Form.Label className="mb-0">Product Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={row.selectedProduct?.name || ''}
+                      readOnly
+                      placeholder="Product name"
+                    />
+                  </Form.Group>
+                </Col>
+
+                <Col sm={3}>
+                  <Form.Group className='mb-1'>
+                    <Form.Label className="mb-0">Quantity</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="1"
+                      value={row.quantity}
+                      onChange={(e) => handleQuantityChange(e, index)}
+                      placeholder="Enter quantity"
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+
+                <Col sm={9} className="d-flex justify-content-end">
+                  <div className='mb-1'>
+                    <Button
+                      variant="outline-success"
+                      title='Update'
+                      onClick={() => handleSaveRow(row, row._id)}
+                      className="p-1 me-2"
+                    // disabled={updateLoading}
+                    >
+                      <MdSave className="fs-5" />
+                    </Button>
+
+                    <Button
+                      variant="outline-danger"
+                      title='Delete'
+                      onClick={() => {
+                        setStateDelete(true)
+                        dispatch(deleteStockInProductActions({
+                          stockInProductId: row?._id,
+                          action: 'delete'
+                        }));
+                      }}
+                      // disabled={rows?.length <= 1}
+                      className="p-1"
+                    >
+                      <MdDelete className="fs-5" />
+                    </Button>
+                  </div>
+                </Col>
+                <hr className='mt-2 mb-1' />
+              </Row>
+            ))}
+          </div>
+
+          <div className="d-flex justify-content-between mt-3">
+            <Button className='outline-custom-button' onClick={handleAddRow}>
+              <IoIosAdd className="me-1" /> Add Row
+            </Button>
+
+            <div>
+              <Button onClick={onHide} className="cancel-button me-2">Cancel</Button>
+              <Button type="submit" className='custom-button' >
+                Update
+              </Button>
+            </div>
+          </div>
+        </Form>
+      </Modal.Body>
+    </Modal>
+  );
+}
+
+export default EditStockinModal;

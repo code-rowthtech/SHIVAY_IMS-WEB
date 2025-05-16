@@ -15,7 +15,6 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
     const store = useSelector((state) => state)
     const ProductSearch = store?.searchProductReducer?.searchProduct?.response;
     const StockCheck = store?.createStockCheckReducer?.createStockCheck;
-    console.log(StockCheck, 'nbhjikopklp')
     const StockChecking = store?.createStockCheckReducer;
     console.log(StockChecking, 'StockChecking')
     const Product = productData?.productData
@@ -168,7 +167,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
         setProductName(Product?.name)
     }, [Product?._id]);
 
-    console.log(StockCheck, 'StockCheck123')
+    console.log(StockCheck, 'StockCheckError')
 
     return (
         <div>
@@ -193,7 +192,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
                                         <Form.Label className="mb-0" >Model Name</Form.Label>
-                                        <Form.Control type='text' placeholder="Modal Name" value={Product?.modelData?.[0]?.name} readOnly />
+                                        <Form.Control type='text' placeholder="Model Name" value={Product?.modelData?.[0]?.name} readOnly />
                                     </Form.Group>
                                 </Col>
                                 <Col sm={6}>
@@ -232,7 +231,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                                                         onChange={handleModalChange}
                                                         onInputChange={(inputValue) => setSearchTerm(inputValue)}
                                                         options={modalOptions}
-                                                        placeholder="Search Modal"
+                                                        placeholder="Search Model"
                                                         isClearable
                                                         isSearchable
                                                         isLoading={store?.searchProductReducer?.loading}
@@ -266,7 +265,7 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                                             <Col sm={6}>
                                                 <Form.Group className="mb-3">
                                                     <Form.Label className="mb-0" >Model Name</Form.Label>
-                                                    <Form.Control type='text' placeholder="Modal Name" value={selectedModal?.label} />
+                                                    <Form.Control type='text' placeholder="Model Name" value={selectedModal?.label} />
                                                 </Form.Group>
                                             </Col>
                                         </>
@@ -309,19 +308,13 @@ const AddProductModal = ({ showModal, handleClose, openingProducts, setOpeningPr
                             </Col>
 
                         </Row>
-                        <Row className="px-2">
+                        {/* <Row className="px-2">
                             {StockCheck?.error && StockCheck?.error.trim() !== '' || 'Server Error' && (
                                 <div className="py-1 text-center border border-primary rounded bg-light text-primary">
                                     {StockCheck.error}
                                 </div>
                             )}
-                        </Row>
-                        {/* {StockCheck?.status == 400 && location.pathname === '/shivay/addDispatch' ? (
-                            
-                        ) : (
-                            <></>
-                        )} */}
-
+                        </Row> */}
                     </Modal.Body>
                     <Modal.Footer>
                         <Button

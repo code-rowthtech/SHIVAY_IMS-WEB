@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PageTitle from '../../../../helpers/PageTitle'
-import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap'
+import { Button, Card, Col, Form, Modal, OverlayTrigger, Row, Tooltip } from 'react-bootstrap'
 import Select from 'react-select';
 import { IoIosAdd } from 'react-icons/io';
 import { AiOutlineEdit } from 'react-icons/ai';
@@ -332,7 +332,7 @@ const AddDispatch = () => {
                         </Col>
                         <Col sm={3}>
                             <Form.Group className="mb-1">
-                                <Form.Label className='mb-0'>Date Range</Form.Label>
+                                <Form.Label className='mb-0'>Date</Form.Label>
                                 <Form.Control
                                     type="date"
                                     defaultValue={today}
@@ -452,15 +452,21 @@ const AddDispatch = () => {
                 </Form>
 
                 <div className="d-flex justify-content-end mt-1">
-                    <Button
-                        variant="outline-primary"
-                        className="fw-bold me-2 py-1"
-                        style={{ borderRadius: '6px' }}
-                        onClick={handleShow}
-                        disabled={!selectedWarehouse}
-                    >
-                        <IoIosAdd className="fs-3 fw-bold" />&nbsp;Add
-                    </Button>
+
+                    <OverlayTrigger
+                        placement="left"
+                        overlay={<Tooltip>Please select a warehouse first</Tooltip>}
+                        show={!selectedWarehouse ? undefined : false}>
+                        <div className="">
+                            <Button
+                                className="fw-bold me-2 py-1 outline-custom-button"
+                                onClick={handleShow}
+                                disabled={!selectedWarehouse}
+                            >
+                                <IoIosAdd className="fs-3 fw-bold" />&nbsp;Add
+                            </Button>
+                        </div>
+                    </OverlayTrigger>
                 </div>
 
                 <div className='mt-2'>

@@ -108,7 +108,7 @@ function* deleteCustomerFunction(data) {
         });
         const response = yield call(deleteCustomerApi, data);
         if (response?.status === 200) {
-            ToastContainer(response?.data?.message, 'danger')
+            ToastContainer(response?.data?.message, 'success')
             yield put({
                 type: CustomerActionTypes.DELETE_CUSTOMER_SUCCESS,
                 payload: response.data,

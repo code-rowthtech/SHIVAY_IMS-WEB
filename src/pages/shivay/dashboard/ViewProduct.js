@@ -3,14 +3,16 @@ import PageTitle from '../../../helpers/PageTitle'
 import { Card, Form } from 'react-bootstrap'
 import DatePicker from 'react-datepicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { viewProductActions } from '../../../redux/actions';
 import { Loading } from '../../../helpers/loader/Loading';
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 
 const ViewProduct = () => {
 
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     const store = useSelector((state) => state)
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
@@ -23,12 +25,24 @@ const ViewProduct = () => {
     console.log(ProductData, 'ProductData')
 
     useEffect(() => {
+        const formatDate = (date) => {
+            if (!date) return undefined;
+            return date.toISOString().split('T')[0]; // Gets YYYY-MM-DD
+        };
+
         dispatch(viewProductActions({
             warehouseId: warehouseId,
             productId: productId,
-        }));
-    }, [dispatch, warehouseId, productId]);
 
+            startDate: formatDate(startDate) || '',
+            endDate: formatDate(endDate) || '',
+
+        }));
+    }, [dispatch, warehouseId, productId, startDate, endDate]);
+
+    const handleGoBack = () => {
+        navigate(-1); // This will go back to the previous page in history
+    };
 
     return (
         <div>
@@ -39,15 +53,29 @@ const ViewProduct = () => {
                 ]}
                 title={"View Product"}
             />
-            <div>
+          
+            <div className='mt-2'>
+
                 <Card className="p-3"
                     style={{
                         boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset',
                         height: '75vh'
                     }}
                 >
-                    <div className='d-flex justify-content-between'>
-                        <h5 className="mb-3 text-black">Warehouse: <span className="fw-normal ms-1">{ProductData?.product?.warehouseName}</span></h5>
+                    <div className='d-flex justify-content-between '>
+                        <div className='d-flex'>
+                            <div
+                                className='mt-1'
+                                onClick={handleGoBack}
+                                style={{ cursor: 'pointer' }} // Add pointer cursor to indicate clickable
+                            >
+                                <MdOutlineKeyboardBackspace
+                                    className='fs-3 text-black bg-secondary rounded-circle p-1'
+                                    title='Back'
+                                />
+                            </div>
+                            <h5 className="text-black ms-2">Warehouse: <span className="fw-normal ms-1">{ProductData?.product?.warehouseName}</span></h5>
+                        </div>
 
                         <Form.Group className="mb-3 w-100" style={{ maxWidth: 250 }}>
                             {/* <Form.Label className="mb-1">Date Range</Form.Label> */}
@@ -79,6 +107,8 @@ const ViewProduct = () => {
                                 <div><strong className='text-black'>Total Out:</strong> <span className='ms-1'>{ProductData?.totalStockOut}</span></div>
                             </div>
                         </div>
+
+                        <hr className='mb-0' />
                         <div className="row px-2 text-center">
                             <table className="table table-striped bg-white mb-0">
                                 <thead>
