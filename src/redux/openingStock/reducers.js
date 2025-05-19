@@ -78,6 +78,11 @@ const updateStockReducer = (state = UPDATE_STOCK_INITIAL_STATE, action) => {
                 updateStock: action.payload,
                 loading: false
             }
+        case StockActionTypes.UPDATE_STOCK_RESET:
+            return {
+                updateStock: [],
+                loading: false,
+            };
         case StockActionTypes.UPDATE_STOCK_ERROR:
             return {
                 updateStock: action.payload,

@@ -6,8 +6,6 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { CgCloseO } from "react-icons/cg";
 import {
-  createStockActions,
-  createStockInActions,
   getWarehouseListActions,
   listingSupplierActions,
   listingUsersActions,
@@ -15,7 +13,6 @@ import {
   updateStockInActions,
   deleteStockInProductActions,
   getStockInByIdActions,
-  createStockCheckActions,
   createStockInProductActions,
   updateStockInProductActions
 } from '../../../../redux/actions';
@@ -52,15 +49,16 @@ function EditStockinModal({ show, onHide, stockId }) {
   const CreateProductResponse = store?.createStockInProductReducer?.createStockInProduct?.status;
   const DeleteProductResponse = store?.deleteStockInProductReducer?.deleteStockInProduct?.status;
   const UpdateProductResponse = store?.updateStockInProductReducer?.updateStockInProduct?.status;
+  const UpdateResponse = store?.updateStockInReducer?.updateStockIn?.status;
   const detailsLoading = store?.stockInByIdReducer?.loading;
 
   useEffect(() => {
-    if (createResponse === 200) {
+    if (UpdateResponse === 200) {
       onHide();
       reset();
       setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
     }
-  }, [createResponse, onHide, reset]);
+  }, [UpdateResponse, onHide, reset]);
 
 
   useEffect(() => {
@@ -138,12 +136,8 @@ function EditStockinModal({ show, onHide, stockId }) {
     formData.append('productDetailsArr', JSON.stringify([]));
     formData.append('stockInId', stockId);
 
-    // formData.append('date', data?.date);
-
-
     dispatch(updateStockInActions(formData));
   };
-  // ======-=-=-=-
 
   const usersOptions = UsersList?.map((users) => ({
     value: users._id,

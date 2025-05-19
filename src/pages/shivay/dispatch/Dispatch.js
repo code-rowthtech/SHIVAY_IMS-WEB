@@ -10,6 +10,8 @@ import { deleteDispatchActions, getDispatchListActions } from '../../../redux/ac
 import { MdDeleteOutline } from 'react-icons/md'
 import Pagination from '../../../helpers/Pagination'
 import { Loading } from '../../../helpers/loader/Loading'
+import AddDispatchModal from './addDispatch/AddDispatchModal'
+import EditDispatchModal from './editDispatch/EditDispatchModal'
 
 const Dispatch = () => {
 
@@ -23,6 +25,9 @@ const Dispatch = () => {
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / pageSize));
   const store = useSelector((state) => state)
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState(null);
 
   const DispatchData = store?.getDispatchDataReducer?.dispatchList?.response;
   const deleteResponse = store?.deleteDispatchReducer?.deleteDispatch?.status;
@@ -55,7 +60,7 @@ const Dispatch = () => {
   },
     [totalRecords, pageSize]);
 
-    console.log(DispatchData,'DispatchData')
+  console.log(DispatchData, 'DispatchData')
   return (
     <div>
       <PageTitle
@@ -77,12 +82,18 @@ const Dispatch = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Button className="mt-2 fw-bold custom-button"
+              {/* <Button className="mt-2 fw-bold custom-button"
                 onClick={() => {
                   navigate('/shivay/addDispatch')
                 }}
               >
                 <IoIosAdd className="fs-3" />&nbsp;Dispatch
+              </Button> */}
+              <Button
+                className="mt-2 fw-bold custom-button"
+                onClick={() => setShowAddModal(true)}
+              >
+                <IoIosAdd className="fs-3" />&nbsp;Add
               </Button>
             </div>
           </Col>
@@ -99,6 +110,7 @@ const Dispatch = () => {
                     <tr className="table_header">
                       <th scope="col">#</th>
                       <th scope="col">Customer Name</th>
+                      <th scope="col">Dispatch by</th>
                       <th scope="col">GR Number</th>
                       <th scope="col">Warehouse</th>
                       <th scope="col">Location</th>
@@ -116,7 +128,7 @@ const Dispatch = () => {
                     <tbody>
                       {DispatchData?.length === 0 ? (
                         <tr>
-                          <td colSpan={7} className='text-center'>
+                          <td colSpan={8} className='text-center'>
                             <p className='my-5 py-5 '>No data found in dispatch.</p>
                           </td>
                         </tr>
@@ -124,8 +136,21 @@ const Dispatch = () => {
                         DispatchData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
                             <td scope="row" className='fs-5'>{index + 1}</td>
+                            <td
+                              className="text-uppercase font_work"
+                              title={data?.customerData?.[0]?.name || ""}
+                            >
+                              {data?.customerData?.[0]?.name ? (
+                                data.customerData[0].name.length > 25
+                                  ? `${data.customerData[0].name.slice(0, 25)}...`
+                                  : data.customerData[0].name
+                              ) : (
+                                <span className="text-black">-</span>
+                              )}
+                            </td>
+
                             <td className="text-uppercase font_work ">
-                              {data?.customerData?.[0]?.name || <span className="text-black">-</span>}
+                              {data?.dispatchByData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
                             <td className="font_work ">
                               {data?.grNumber || <span className="text-black">-</span>}
@@ -149,9 +174,22 @@ const Dispatch = () => {
                             <td></td>
                             <td></td>
                             <div className="icon-container d-flex pb-0" >
-                              <span className="icon-wrapper" title="Edit">
-                                <AiOutlineEdit onClick={()=>navigate(`/shivay/addDispatch?id=${data?._id}`)} className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                              <span
+                                className="icon-wrapper "
+                                title="Edit"
+                                onClick={() => {
+                                  setShowEditModal(true);
+                                  setEditData(data?._id);
+                                }}
+                              >
+                                <AiOutlineEdit
+                                  className="fs-4 text-black"
+                                  style={{ cursor: 'pointer' }}
+                                />
                               </span>
+                              {/* <span className="icon-wrapper" title="Edit">
+                                <AiOutlineEdit onClick={() => navigate(`/shivay/addDispatch?id=${data?._id}`)} className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                              </span> */}
                               <span className="icon-wrapper" title="Delete" onClick={() => { setDispatchToDelete(data?._id); setShowConfirm(true); }}>
                                 <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
                               </span>
@@ -192,6 +230,21 @@ const Dispatch = () => {
           </div>
         </Modal.Body>
       </Modal>
+
+      {/* Add Dispatch Modal */}
+
+      <AddDispatchModal
+        show={showAddModal}
+        onHide={() => setShowAddModal(false)}
+      />
+
+      {/* Edit Dispatch modal */}
+      <EditDispatchModal
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        stockId={editData}
+      />
+
     </div>
   )
 }
