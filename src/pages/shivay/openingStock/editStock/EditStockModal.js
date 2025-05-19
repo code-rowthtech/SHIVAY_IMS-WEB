@@ -31,6 +31,7 @@ function EditStockModal({ show, onHide, stockId }) {
     const UpdateResponse = store?.updateStockReducer?.updateStock?.status
 
     const [stateDelete, setStateDelete] = useState(false)
+    
     useEffect(() => {
         if (show && stockId) {
             dispatch(getStockByIdActions(stockId));

@@ -79,6 +79,10 @@ function* updateStockFunction(data) {
                 type: StockActionTypes.UPDATE_STOCK_SUCCESS,
                 payload: response.data,
             });
+            yield put({
+                type: StockActionTypes.UPDATE_STOCK_RESET,
+                payload: {},
+            });
         } else {
             yield put({
                 type: StockActionTypes.UPDATE_STOCK_ERROR,

@@ -32,6 +32,8 @@ const StockIn = () => {
 
   const StockInData = store?.stockInListReducer?.stockInList?.response;
   const deleteResponse = store?.deleteStockInReducer?.deleteStockIn?.status;
+  const UpdateResponse = store?.updateStockInReducer?.updateStockIn?.status;
+
   console.log(StockInData, 'StockInDataStockInDataStockInData')
   useEffect(() => {
     dispatch(getStockInListActions({
@@ -42,14 +44,14 @@ const StockIn = () => {
   }, [dispatch, search, pageSize, pageIndex]);
 
   useEffect(() => {
-    if (deleteResponse === 200) {
+    if (deleteResponse === 200 || UpdateResponse === 200) {
       dispatch(getStockInListActions({
         limit: pageSize,
         page: pageIndex,
         search: search,
       }));
     }
-  }, [deleteResponse]);
+  }, [deleteResponse, UpdateResponse]);
 
   useEffect(() => {
     setTotalPages(Math.ceil(totalRecords / pageSize));

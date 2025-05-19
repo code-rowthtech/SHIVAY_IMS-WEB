@@ -1,0 +1,625 @@
+// src/pages/dispatch/editDispatch/EditDispatchModal.jsx
+
+import { useEffect, useMemo, useCallback, useState, useRef } from 'react';
+import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import Select from 'react-select';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    getDispatchByIdActions,
+    updateDispatchActions,
+    deleteDispatchProductActions,
+    updateDispatchProductActions,
+    createDispatchProductActions,
+    getWarehouseListActions,
+    searchProductActions,
+    listingCustomerActions,
+    listingUsersActions,
+    createStockCheckActions
+} from '../../../../redux/actions';
+import { IoIosAdd } from 'react-icons/io';
+import { MdDelete, MdSave } from 'react-icons/md';
+import { HiOutlineFolderDownload } from 'react-icons/hi';
+import { CgCloseO } from 'react-icons/cg';
+import { Loading } from '../../../../helpers/loader/Loading';
+
+function EditDispatchModal({ show, onHide, stockId }) {
+    const dispatch = useDispatch();
+    const { handleSubmit, register, setValue, reset, resetField, formState: { errors } } = useForm();
+
+    const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [attachmentType, setAttachmentType] = useState("");
+    const fileInputRef = useRef();
+    const [rows, setRows] = useState([]);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+    const store = useSelector((state) => state);
+    const [today] = useState('');
+
+    // Redux state selectors
+    const {
+        searchProductReducer: {
+            searchProduct: { response: ProductSearch = [], loading: productLoading },
+            error: productError
+        },
+        getWarehouseListReducer: {
+            searchWarehouse: { response: Warehouse = [] },
+            error: warehouseError
+        },
+        updateDispatchReducer: { updateDispatch: { status: updateResponse, loading: updateLoading } = {} },
+        deleteDispatchProductReducer: { deleteDispatchProduct: { status: deleteResponse } = {} },
+        createDispatchProductReducer: { createDispatchProduct: { status: createResponse } = {} }
+    } = useSelector(state => state);
+
+    const UsersList = store?.listingUsersReducer?.listingUsers?.response;
+    const CustomerList = store?.listingCustomerReducer?.listingCustomer?.response;
+    const DispatchDetails = store?.dispatchByIdReducer?.dispatchById?.response;
+    const DispatchLoading = store?.dispatchByIdReducer?.loading
+    console.log(DispatchDetails, 'DispatchDetails')
+    // Load data when modal opens
+    useEffect(() => {
+        if (show && stockId) {
+            dispatch(getDispatchByIdActions(stockId));
+            dispatch(getWarehouseListActions());
+            dispatch(listingCustomerActions());
+        }
+    }, [show, stockId, dispatch]);
+
+    // Handle successful API responses
+    useEffect(() => {
+        if (deleteResponse === 200 || createResponse === 200) {
+            dispatch(getDispatchByIdActions(stockId));
+        }
+    }, [deleteResponse, createResponse, dispatch, stockId]);
+
+    useEffect(() => {
+        if (updateResponse === 200) {
+            onHide();
+        }
+    }, [updateResponse, onHide]);
+
+    // Initialize form with dispatch details
+    useEffect(() => {
+        if (DispatchDetails?.[0]) {
+            console.log(DispatchDetails, 'dispatchdetais8789')
+            // Set products rows
+            const initialRows = DispatchDetails?.[0]?.dispatchProducts?.map(item => {
+                const product = item?.productData || {};
+                const modelName = product?.modelData?.[0]?.name || '';
+                const code = product.code || '';
+
+                const name = product.name || '';
+
+                return {
+                    _id: item._id,
+                    searchType: 'modelName',
+                    selectedProduct: {
+                        value: product._id,
+                        label: modelName,
+                        code,
+                        name,
+                        data: item
+                    },
+                    quantity: item.quantity,
+                    searchTerm: modelName || name
+                };
+            }) || [];
+
+            setRows(initialRows);
+            setIsInitialLoad(false);
+
+            // Set form values
+            setValue('date', DispatchDetails?.[0]?.date ? new Date(DispatchDetails?.[0]?.date).toISOString().split('T')[0] : today);
+            setValue('grNumber', DispatchDetails?.[0]?.grNumber);
+            setValue('description', DispatchDetails?.[0]?.description);
+            setValue('invoiceAttachmentType', DispatchDetails?.[0]?.invoiceAttachmentType);
+
+            const updateWarehouses = DispatchDetails?.[0]?.warehouseData
+                ? { value: DispatchDetails?.[0].warehouseId, label: DispatchDetails?.[0].warehouseData?.find((ele) => ele?._id === DispatchDetails?.[0]?.warehouseId)?.name }
+                : {};
+            setSelectedWarehouse(updateWarehouses)
+
+            const updatedUser = DispatchDetails?.[0]?.dispatchByData
+                ? { value: DispatchDetails?.[0]?.dispatchBy, label: DispatchDetails?.[0].dispatchByData?.find((ele) => ele?._id === DispatchDetails?.[0]?.dispatchBy)?.name }
+                : {};
+            setSelectedUser(updatedUser)
+
+            const updatedCustomer = DispatchDetails?.[0]?.customerData
+                ? { value: DispatchDetails?.[0]?.customerId, label: DispatchDetails?.[0].customerData?.find((ele) => ele?._id === DispatchDetails?.[0]?.customerId)?.name }
+                : {};
+            setSelectedCustomer(updatedCustomer)
+
+            setAttachmentType(DispatchDetails?.[0]?.invoiceAttachmentType || "");
+        }
+    }, [DispatchDetails, setValue, today, isInitialLoad]);
+
+    // Load users when warehouse changes
+    useEffect(() => {
+        if (selectedWarehouse?.value) {
+            dispatch(listingUsersActions({ warehouseId: selectedWarehouse.value }));
+        }
+    }, [selectedWarehouse, dispatch]);
+
+    // Error handling
+    useEffect(() => {
+        if (productError) toast.error(productError.message || 'Failed to search products');
+        if (warehouseError) toast.error(warehouseError.message || 'Failed to load warehouses');
+    }, [productError, warehouseError]);
+
+    // Memoized options
+    const warehouseOptions = useMemo(() => (
+        Warehouse?.map(({ _id, name }) => ({ value: _id, label: name }))
+    ), [Warehouse]);
+
+    const usersOptions = UsersList?.map((user) => ({
+        value: user._id,
+        label: user.name,
+    }));
+
+    const customerOptions = CustomerList?.map((customer) => ({
+        value: customer._id,
+        label: customer.name,
+    }));
+
+    const productOptions = useMemo(() => (
+        ProductSearch?.map(product => ({
+            value: product._id,
+            label: product.modelId?.name,
+            code: product.code,
+            name: product.name,
+            data: product
+        })) || []
+    ), [ProductSearch]);
+
+    // Handlers
+    const handleAttachmentTypeChange = (e) => {
+        const type = e.target.value;
+        setAttachmentType(type);
+        setValue("invoiceAttachmentType", type);
+    };
+
+    const resetAttachmentType = () => {
+        setAttachmentType("");
+        setValue("invoiceAttachmentType", "");
+        resetField("invoiceAttachment");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+    };
+
+    const handleSearch = useCallback((term, type) => {
+        if (!term || term.length < 2) return;
+        dispatch(searchProductActions(type === 'modelName' ? { modelName: term } : { code: term }));
+    }, [dispatch]);
+
+    const handleAddRow = useCallback(() => {
+        setRows(prev => [...prev, { searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+    }, []);
+
+    const handleDeleteRow = useCallback((index, rowId) => {
+        if (rowId) {
+            dispatch(deleteDispatchProductActions({
+                dispatchProductId: rowId,
+                action: 'delete'
+            }));
+        } else {
+            if (rows.length <= 1) return;
+            setRows(prev => prev.filter((_, i) => i !== index));
+        }
+    }, [dispatch, rows.length]);
+
+    const handleProductChange = useCallback((selected, index) => {
+        setRows(prev => {
+            const updated = [...prev];
+            updated[index] = {
+                ...updated[index],
+                selectedProduct: selected,
+                searchTerm: selected?.label || ''
+            };
+            return updated;
+        });
+
+        // Call stock check when product is selected
+        if (selected?.value && selectedWarehouse?.value) {
+            dispatch(createStockCheckActions({
+                warehouseId: selectedWarehouse.value,
+                productId: selected.value,
+                qty: rows[index].quantity || 1,
+                oldQty: ''
+            }));
+        }
+    }, [selectedWarehouse, dispatch, rows]);
+
+    const handleWarehouseChange = (selectedOption) => {
+        setSelectedWarehouse(selectedOption);
+        setValue('warehouseId', selectedOption?.value);
+    };
+
+    const handleUserChange = (selectedUser) => {
+        setSelectedUser(selectedUser);
+        setValue('dispatchBy', selectedUser?.value);
+    };
+
+    const handleCustomerChange = (selectedCustomer) => {
+        setSelectedCustomer(selectedCustomer);
+        setValue('customerId', selectedCustomer?.value);
+    };
+
+    const handleQuantityChange = useCallback((e, index) => {
+        const value = Math.max(1, parseInt(e.target.value) || '');
+        setRows(prev => {
+            const updated = [...prev];
+            updated[index].quantity = value;
+            return updated;
+        });
+
+        // Call stock check when quantity changes
+        if (rows[index]?.selectedProduct?.value && selectedWarehouse?.value) {
+            dispatch(createStockCheckActions({
+                warehouseId: selectedWarehouse.value,
+                productId: rows[index].selectedProduct.value,
+                qty: value,
+                oldQty: ''
+            }));
+        }
+    }, [selectedWarehouse, dispatch, rows]);
+
+    const handleSaveRow = useCallback((row, rowId) => {
+        if (!row.selectedProduct) {
+            toast.error('Please select a product');
+            return;
+        }
+        if (!row.quantity) {
+            toast.error('Please enter quantity');
+            return;
+        }
+
+        if (rowId) {
+            // Update existing product
+            dispatch(updateDispatchProductActions({
+                dispatchProductId: rowId,
+                quantity: row.quantity
+            }));
+        } else {
+            // Add new product
+            dispatch(createDispatchProductActions({
+                dispatchId: stockId,
+                productId: row.selectedProduct.value,
+                quantity: row.quantity,
+                warehouseId: selectedWarehouse?.value
+            }));
+        }
+    }, [dispatch, stockId, selectedWarehouse]);
+
+    const onSubmit = (data) => {
+        const formData = new FormData();
+
+        // Append file attachments if they exist
+        if (data?.attachmentGRfile?.[0] instanceof File) {
+            formData.append('attachmentGRfile', data.attachmentGRfile[0]);
+        }
+        if (data?.invoiceAttachment?.[0] instanceof File) {
+            formData.append('invoiceAttachment', data.invoiceAttachment[0]);
+        }
+
+        // Append other fields
+        formData.append('warehouseId', selectedWarehouse?.value);
+        formData.append('dispatchBy', selectedUser?.value);
+        formData.append('customerId', selectedCustomer?.value);
+        formData.append('description', data.description);
+        formData.append('date', data.date);
+        formData.append('grNumber', data.grNumber);
+        formData.append('invoiceAttachmentType', attachmentType);
+
+        formData.append('newProductArr', JSON.stringify([]));
+        formData.append('dispatchId', stockId);
+
+        dispatch(updateDispatchActions(formData));
+    };
+
+    if (DispatchLoading) {
+        return (
+            <Modal show={show} onHide={onHide} size='xl' centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Dispatch</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center">
+                    <Loading />
+                </Modal.Body>
+            </Modal>
+        );
+    }
+
+    return (
+        <Modal show={show} onHide={onHide} size='xl' centered>
+            <Modal.Header className='py-1' closeButton>
+                <Modal.Title>Edit Dispatch</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className='pt-1'>
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                    <Row className="mb-1">
+                        <Col sm={3}>
+                            <Form.Group className="mb-1">
+                                <Form.Label className='mb-0'>Warehouse <span className='text-danger'>*</span></Form.Label>
+                                <Select
+                                    value={selectedWarehouse}
+                                    onChange={handleWarehouseChange}
+                                    options={warehouseOptions}
+                                    placeholder="Select a Warehouse"
+                                    isClearable
+                                    required
+                                />
+                            </Form.Group>
+                        </Col>
+
+                        <Col sm={3}>
+                            <Form.Group className="mb-1">
+                                <Form.Label className="mb-0">Customer <span className='text-danger'>*</span></Form.Label>
+                                <Select
+                                    value={selectedCustomer}
+                                    onChange={handleCustomerChange}
+                                    options={customerOptions}
+                                    placeholder="Select a Customer"
+                                    isClearable
+                                    required
+                                />
+                            </Form.Group>
+                        </Col>
+
+                        <Col sm={3}>
+                            <Form.Group className="mb-1">
+                                <Form.Label className="mb-0">Dispatch By <span className='text-danger'>*</span></Form.Label>
+                                <Select
+                                    value={selectedUser}
+                                    onChange={handleUserChange}
+                                    className='text-capitalize'
+                                    options={usersOptions}
+                                    placeholder="Select a User"
+                                    isClearable
+                                    required
+                                />
+                            </Form.Group>
+                        </Col>
+
+                        <Col sm={3}>
+                            <Form.Group className="mb-1">
+                                <Form.Label className='mb-0'>Date</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    defaultValue={today}
+                                    {...register('date')}
+                                />
+                            </Form.Group>
+                        </Col>
+
+                        <Col sm={3}>
+                            <Form.Group className="mb-1">
+                                <Form.Label className="mb-0">GR Number</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Enter GR Number"
+                                    {...register('grNumber')}
+                                    onKeyDown={(e) => {
+                                        if (e.key === ' ') e.preventDefault();
+                                    }}
+                                    onPaste={(e) => {
+                                        const pasted = e.clipboardData.getData('text');
+                                        if (/\s/.test(pasted)) e.preventDefault();
+                                    }}
+                                />
+                            </Form.Group>
+                        </Col>
+
+                        <Col sm={3}>
+                            <Form.Group className="mb-1">
+                                <Form.Label className="mb-0">Attach GR File <span className='text-danger'>*</span>
+                                    {DispatchDetails?.[0]?.attachmentGRfile && (
+                                        <a
+                                            href={DispatchDetails?.[0]?.attachmentGRfile}
+                                            target="_blank"
+                                            title='Download GR File'
+                                            rel="noopener noreferrer"
+                                        >
+                                            <HiOutlineFolderDownload className='ms-1 fs-4' />
+                                        </a>
+                                    )}
+                                </Form.Label>
+                                <Form.Control
+                                    type="file"
+                                    placeholder="Upload file"
+                                    {...register('attachmentGRfile')}
+                                />
+                            </Form.Group>
+                        </Col>
+
+                        <Col sm={3}>
+                            <Form.Group className="mb-1">
+                                <Form.Label className="mb-0">
+                                    Attachment
+                                    {attachmentType && (
+                                        <span className="text-capitalize"> ({attachmentType})</span>
+                                    )}
+                                    {DispatchDetails?.[0]?.invoiceAttachment && (
+                                        <a
+                                            href={DispatchDetails?.[0]?.invoiceAttachment}
+                                            target="_blank"
+                                            title='Download Attachment'
+                                            rel="noopener noreferrer"
+                                        >
+                                            <HiOutlineFolderDownload className='ms-1 fs-4' />
+                                        </a>
+                                    )}
+                                </Form.Label>
+
+                                {!attachmentType ? (
+                                    <Form.Select
+                                        className="mb-0"
+                                        value={attachmentType}
+                                        onChange={handleAttachmentTypeChange}
+                                    >
+                                        <option value="">Select Attachment Type</option>
+                                        <option value="Invoice">Invoice</option>
+                                        <option value="Delivery Challan">Delivery Challan</option>
+                                    </Form.Select>
+                                ) : (
+                                    <div className="d-flex align-items-center gap-2">
+                                        <Form.Control
+                                            type="file"
+                                            placeholder="Upload file"
+                                            {...register("invoiceAttachment")}
+                                        />
+                                        <CgCloseO
+                                            size={20}
+                                            className='text-danger'
+                                            style={{ cursor: "pointer" }}
+                                            onClick={resetAttachmentType}
+                                            title="Change attachment type"
+                                        />
+                                    </div>
+                                )}
+                            </Form.Group>
+                        </Col>
+
+                        <Col sm={3}>
+                            <Form.Group className="mb-1">
+                                <Form.Label className="mb-0">Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={1}
+                                    placeholder="Enter Description"
+                                    {...register('description')}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+
+                    <hr className='mt-2 mb-0' />
+
+                    <div style={{ maxHeight: rows?.length >= 3 ? '51vh' : 'auto', overflowY: rows?.length >= 3 ? 'auto' : 'visible', padding: '15px' }}>
+                        {rows?.map((row, index) => (
+                            <Row key={index} className="align-items-end">
+                                <Col sm={3}>
+                                    <Form.Group className='mb-1'>
+                                        <Form.Label className="mb-0">Search By</Form.Label>
+                                        <Form.Select
+                                            value={row?.searchType}
+                                            onChange={(e) => setRows(prev => {
+                                                const updated = [...prev];
+                                                updated[index] = { ...updated[index], searchType: e.target.value, selectedProduct: null, searchTerm: '' };
+                                                return updated;
+                                            })}
+                                        >
+                                            <option value="modelName">Model Name</option>
+                                            <option value="code">Product Code</option>
+                                        </Form.Select>
+                                    </Form.Group>
+                                </Col>
+
+                                <Col sm={3}>
+                                    <Form.Group className='mb-1'>
+                                        <Form.Label className="mb-0">{row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}</Form.Label>
+                                        <Select
+                                            value={row?.selectedProduct}
+                                            onChange={(selected) => handleProductChange(selected, index)}
+                                            onInputChange={(inputValue) => {
+                                                setRows(prev => {
+                                                    const updated = [...prev];
+                                                    updated[index].searchTerm = inputValue;
+                                                    return updated;
+                                                });
+                                                handleSearch(inputValue, row.searchType);
+                                            }}
+                                            options={productOptions}
+                                            placeholder={`Search by ${row.searchType === 'modelName' ? 'model' : 'code'}`}
+                                            isClearable
+                                            isSearchable
+                                            isLoading={productLoading}
+                                            filterOption={() => true}
+                                        />
+                                    </Form.Group>
+                                </Col>
+
+                                <Col sm={3}>
+                                    <Form.Group className='mb-1'>
+                                        <Form.Label className="mb-0">{row.searchType === 'modelName' ? 'Code' : 'Model '}</Form.Label>
+                                        <Form.Control
+                                            type='text'
+                                            value={row.searchType === 'modelName' ? row.selectedProduct?.code : row.selectedProduct?.data?.modelId?.name || ''}
+                                            placeholder={row.searchType === 'modelName' ? 'Code' : 'Model'}
+                                            readOnly
+                                        />
+                                    </Form.Group>
+                                </Col>
+
+                                <Col sm={3}>
+                                    <Form.Group className='mb-1'>
+                                        <Form.Label className="mb-0">Product Name</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            value={row.selectedProduct?.name || ''}
+                                            readOnly
+                                            placeholder="Product name"
+                                        />
+                                    </Form.Group>
+                                </Col>
+
+                                <Col sm={3}>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label className="mb-0">Quantity</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            placeholder="Enter Number"
+                                            value={row.quantity}
+                                            onChange={(e) => handleQuantityChange(e, index)}
+                                            required
+                                            min={0}
+                                        />
+                                    </Form.Group>
+                                </Col>
+
+                                <Col sm={9} className="d-flex justify-content-end">
+                                    <div className='mb-1'>
+                                        <Button
+                                            variant="outline-success"
+                                            title='Save'
+                                            onClick={() => handleSaveRow(row, row._id)}
+                                            className="p-1 me-2"
+                                        >
+                                            <MdSave className="fs-5" />
+                                        </Button>
+
+                                        <Button
+                                            variant="outline-danger"
+                                            title='Delete'
+                                            onClick={() => handleDeleteRow(index, row._id)}
+                                            className="p-1"
+                                        >
+                                            <MdDelete className="fs-5" />
+                                        </Button>
+                                    </div>
+                                </Col>
+                                <hr className='mt-2 mb-1' />
+                            </Row>
+                        ))}
+                    </div>
+
+                    <div className="d-flex justify-content-between mt-3">
+                        <Button className='outline-custom-button' onClick={handleAddRow}>
+                            <IoIosAdd className="me-1" /> Add Row
+                        </Button>
+
+                        <div>
+                            <Button onClick={onHide} className="cancel-button me-2">Cancel</Button>
+                            <Button type="submit" className='custom-button' disabled={updateLoading}>
+                                {updateLoading ? 'Updating...' : 'Update'}
+                            </Button>
+                        </div>
+                    </div>
+                </Form>
+            </Modal.Body>
+        </Modal>
+    );
+}
+
+export default EditDispatchModal;
