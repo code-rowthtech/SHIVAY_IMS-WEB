@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+import { Button, Card, Col, Form, OverlayTrigger, Row, Tooltip } from 'react-bootstrap'
 import Select from 'react-select';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBinLine } from 'react-icons/ri';
@@ -97,10 +97,10 @@ const Report = () => {
         title={"Report List"}
       />
       {/* <Form> */}
-      <Row>
+      <Row className='mt-3'>
         <Col sm={3}>
           <Form.Group className="mb-1">
-            <Form.Label className='mb-0'>Warehouse</Form.Label>
+            <Form.Label className='mb-0'>Warehouse <span className="text-danger">*</span></Form.Label>
             <Select
               value={selectedWarehouse}
               onChange={handleWarehouseChange}
@@ -125,13 +125,38 @@ const Report = () => {
         </Col>
 
 
-        <Col sm={6} className='text-end' style={{ marginTop: '10px' }}>
-          <Button onClick={handleSendMail} disabled={ReportData?.length === 0} className="mt-2 fw-bold custom-button me-2">
-            Send Mail
-          </Button>
-          <Button onClick={handleProductsSearch} disabled={!selectedWarehouse} className="mt-2 fw-bold custom-button">
-            Search
-          </Button>
+        <Col sm={6} className='d-flex justify-content-end gap-2' style={{ marginTop: '10px' }}>
+
+          <OverlayTrigger
+            placement="left"
+            overlay={<Tooltip>Please search report data to send mail...</Tooltip>}
+            show={ReportData?.length === 0 ? undefined : false}
+          >
+            <div>
+              <Button
+                onClick={handleSendMail}
+                disabled={ReportData?.length === 0}
+                className="mt-2 fw-bold custom-button"
+              >
+                Send Mail
+              </Button>
+            </div>
+          </OverlayTrigger>
+
+          <OverlayTrigger
+            placement="left"
+            overlay={<Tooltip>Please select a warehouse first...</Tooltip>}
+            show={!selectedWarehouse ? undefined : false}>
+            <div className="">
+              <Button
+                className="mt-2 fw-bold custom-button"
+                onClick={handleProductsSearch}
+                disabled={!selectedWarehouse}
+              >
+                Search
+              </Button>
+            </div>
+          </OverlayTrigger>
         </Col>
       </Row>
       {/* </Form> */}

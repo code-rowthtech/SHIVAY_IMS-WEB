@@ -53,8 +53,8 @@ const ViewProduct = () => {
                 ]}
                 title={"View Product"}
             />
-          
-            <div className='mt-2'>
+
+            <div className='mt-3'>
 
                 <Card className="p-3"
                     style={{
@@ -95,20 +95,21 @@ const ViewProduct = () => {
                     <div className="mt-1">
                         <div className="row mb-2">
                             <div className="col-md-3 d-flex justify-content-center">
-                                <div><strong className='text-black'>Product Name:</strong> <span className='ms-1 text-capitalize'>{ProductData?.product?.name}</span></div>
+                                <div><strong className='text-black'>Product Name:</strong> <span className='ms-1 text-capitalize fw-semibold'>{ProductData?.product?.name}</span></div>
                             </div>
                             <div className="col-md-3 d-flex justify-content-center">
-                                <div><strong className='text-black'>Available Stock:</strong> <span className='ms-1'>{ProductData?.totalStock}</span></div>
+                                <div><strong className='text-black'>Available Stock:</strong> <span className='ms-1 fw-semibold'>{ProductData?.totalStock}</span></div>
                             </div>
                             <div className="col-md-3 d-flex justify-content-center">
-                                <div><strong className='text-black'>Total In:</strong> <span className='ms-1'>{ProductData?.totalStockIn}</span></div>
+                                <div><strong className='text-black'>Total In:</strong> <span className='ms-1 fw-semibold'>{ProductData?.totalStockIn}</span></div>
                             </div>
                             <div className="col-md-3 d-flex justify-content-center">
-                                <div><strong className='text-black'>Total Out:</strong> <span className='ms-1'>{ProductData?.totalStockOut}</span></div>
+                                <div><strong className='text-black'>Total Out:</strong> <span className='ms-1 fw-semibold'>{ProductData?.totalStockOut}</span></div>
                             </div>
                         </div>
 
                         <hr className='mb-0' />
+
                         <div className="row px-2 text-center">
                             <table className="table table-striped bg-white mb-0">
                                 <thead>

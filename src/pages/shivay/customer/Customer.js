@@ -135,8 +135,10 @@ const Customer = () => {
                         CustomerData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
                             <td scope="row" className='font_work'>{index + 1}</td>
-                            <td className="text-uppercase font_work ">
-                              {data?.name || <span className="text-black">-</span>}
+                            <td className="text-uppercase font_work " title={data?.name}>
+                                {data?.name
+                                ? `${data.name.slice(0, 30)}${data.name.length > 30 ? '...' : ''}`
+                                : <span className="text-black">-</span>}
                             </td>
                             {/* <td className="font_work text-primary">
                               {data?.email ? (
@@ -166,8 +168,6 @@ const Customer = () => {
                             {/* <td className="fs-5">
                           {data?.location || <span className="text-black">-</span>}
                         </td> */}
-                            <td></td>
-                            <td></td>
                             <div className="icon-container d-flex  pb-0" >
                               {/* <span className="icon-wrapper" title="View">
                             <PiEye className="fs-4 text-black" style={{ cursor: 'pointer' }} />

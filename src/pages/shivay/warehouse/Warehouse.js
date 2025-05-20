@@ -108,6 +108,8 @@ const Warehouse = () => {
                                             <th scope="col">#</th>
                                             <th scope="col">Warehouse Name</th>
                                             <th scope="col">Location</th>
+                                            <th scope="col">Address</th>
+
                                         </tr>
                                     </thead>
                                     {store?.getWarehouseReducer?.loading ? (
@@ -133,6 +135,11 @@ const Warehouse = () => {
                                                         </td>
                                                         <td className="font_work">
                                                             {data?.locationId?.name || <span className="text-danger">-</span>}
+                                                        </td>
+                                                        <td className="text-uppercase font_work" title={data.address}>
+                                                            {data?.address
+                                                                ? `${data.address.slice(0, 25)}${data.address.length > 25 ? '...' : ''}`
+                                                                : <span className="text-danger">-</span>}
                                                         </td>
                                                         <div className="icon-container d-flex  pb-0" >
                                                             <span className="icon-wrapper" title="Edit">

@@ -1,28 +1,38 @@
-import React, { useEffect, useState } from 'react'
-import { Modal, Button, Row, Col, Form, Spinner } from 'react-bootstrap';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { createProductActions, updateProductActions } from '../../../../redux/actions';
+import { createProductActions, searchProductNameActions, updateProductActions } from '../../../../redux/actions';
 import { ButtonLoading } from '../../../../helpers/loader/Loading';
+import Select from 'react-select';
 
 const AddProductModal = ({ showModal, handleClose, ProductData }) => {
 
     const { type } = ProductData;
     const dispatch = useDispatch();
+
     const {
         handleSubmit,
         register,
         setValue,
         reset,
         formState: { errors },
-        watch,
-        trigger,
     } = useForm();
     const [threshold, setThreshold] = useState(100);
+    const [productName, setProductName] = useState(null);
+    const [modelName, setModelName] = useState(null);
+    const [searchInput, setSearchInput] = useState('');
+    const [productType, setProductType] = useState('existing');
+    const [modelType, setModelType] = useState('existing');
+    const [newProductName, setNewProductName] = useState('');
+    const [newModelName, setNewModelName] = useState('');
     const store = useSelector((state) => state)
+
     const closeModal = () => {
         reset();
         handleClose();
+        setModelName();
+        setProductName();
     };
 
     useEffect(() => {
@@ -32,13 +42,14 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
             setValue('code', ProductData.data?.code);
             setValue('description', ProductData.data?.description);
             setThreshold(Number(ProductData?.data?.lowestStock));
+            // setModelName(ProductData?.data?.modelData?.value)
         }
     }, [ProductData, setValue]);
 
     const onSubmit = (data) => {
         const payload = {
-            name: data?.name,
-            modelName: data?.model,
+            name: data?.name || productName?.label,
+            modelName: data?.model || modelName?.label,
             code: data?.code,
             description: data?.description,
             lowestStock: threshold,
@@ -53,9 +64,9 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
         } else {
             dispatch(createProductActions(payload));
         }
+        console.log(payload, 'payload')
+
     };
-    const modelValue = watch("model");
-    const codeValue = watch("code");
 
     const createResponse = store?.createProductReducer?.createProduct?.status;
 
@@ -65,6 +76,32 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
         }
     }, [createResponse]);
 
+    const searchProductName = useSelector(state =>
+        state?.searchProductNameReducer?.searchProductName?.response || []
+    );
+    console.log(searchProductName, 'searchProductName')
+
+    // Debounced search function
+    const handleSearch = useCallback((inputValue, field) => {
+        const payload = {
+            productName: field === 'product' ? inputValue : productName?.value || '',
+            modelName: field === 'model' ? inputValue : modelName?.value || '',
+        };
+        dispatch(searchProductNameActions(payload));
+    }, [dispatch, productName, modelName]);
+
+
+    const productOptions = searchProductName.map(product => ({
+        label: product.isNew ? `${product.name} (new)` : product.name,
+        value: product.name,
+        data: product
+    }));
+    const modelOptions = searchProductName.map(model => ({
+        label: model.isNew ? `${model.name} (new)` : model.name,
+        value: model.name,
+        data: model
+    }));
+
     return (
         <div>
             <Modal show={showModal} centered size='lg' onHide={closeModal} backdrop="static" keyboard={false}>
@@ -73,75 +110,169 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
                         <Modal.Title className='text-black'>{type} Product</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        {/* Your form or content here */}
                         <Row>
-                            <Col sm={6}>
-                                <Form.Group className="mb-2">
-                                    <Form.Label className="mb-0">
-                                        Product Name <span className="text-danger">*</span>
-                                    </Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Enter Product Name"
-                                        {...register('name', {
-                                            required: 'Product Name is required',
-                                            validate: value =>
-                                                value?.trim() !== '' || 'Product Name cannot be only spaces',
-                                        })}
-                                    />
-                                    {errors.name && (
-                                        <small className="text-danger">{errors.name.message}</small>
-                                    )}
-                                </Form.Group>
+                            <>
+                                {/* Product Name Section */}
+                                <Col sm={6}>
+                                    <Form.Group className="mb-3">
+                                        <div className="d-flex align-items-center mb-2">
+                                            <Form.Label className="mb-0 me-2 fw-semibold">Product Name <span className="text-danger">*</span></Form.Label>
+                                            <div className="form-check form-check-inline">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    id="productExisting"
+                                                    checked={productType === 'existing'}
+                                                    onChange={() => setProductType('existing')}
+                                                />
+                                                <label className="form-check-label small" htmlFor="productExisting">
+                                                    Existing
+                                                </label>
+                                            </div>
+                                            <div className="form-check form-check-inline">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    id="productNew"
+                                                    checked={productType === 'new'}
+                                                    onChange={() => setProductType('new')}
+                                                />
+                                                <label className="form-check-label small" htmlFor="productNew">
+                                                    New
+                                                </label>
+                                            </div>
+                                        </div>
 
-                            </Col>
-                            <Col sm={6}>
-                                <Form.Group className="mb-2">
-                                    <Form.Label className='mb-0'>Model</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Enter Model"
-                                        {...register("model", {
-                                            validate: (value) => {
-                                                if (!value?.trim() && !codeValue?.trim()) {
-                                                    return "Either Model or Code is required";
-                                                }
-                                                return true;
-                                            }
-                                        })}
-                                        onKeyUp={() => {
-                                            trigger("code"); // revalidate code when model is typed
-                                        }}
-                                    />
-                                    {errors.model && !codeValue && (
-                                        <small className="text-danger">{errors.model.message}</small>
-                                    )}
-                                </Form.Group>
-                            </Col>
+                                        {productType === 'existing' ? (
+                                            <Select
+                                                options={productOptions}
+                                                placeholder="Search product..."
+                                                onChange={(selectedOption) => {
+                                                    setProductName(selectedOption);
+                                                    setModelName(null);
+                                                }}
+                                                onInputChange={(inputValue) => {
+                                                    setSearchInput(inputValue);
+                                                    handleSearch(inputValue, 'product');
+                                                }}
+                                                value={productName}
+                                                isSearchable
+                                                required
+                                                isLoading={store?.searchProductNameReducer?.loading}
+                                                noOptionsMessage={() => (
+                                                    <div className="p-2 text-muted">
+                                                        No products found. <br />
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-link p-0 text-primary"
+                                                            onClick={() => setProductType('new')}
+                                                        >
+                                                            Add new product
+                                                        </button>
+                                                    </div>
+                                                )}
+                                                filterOption={() => true}
+                                            />
+                                        ) : (
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Enter new product name"
+                                                {...register("name")}
+                                                onChange={(e) => setNewProductName(e.target.value)}
+                                                required
+                                            />
+                                        )}
+                                    </Form.Group>
+                                </Col>
+
+                                {/* Model Section */}
+                                <Col sm={6}>
+                                    <Form.Group className="mb-3">
+                                        <div className="d-flex align-items-center mb-2">
+                                            <Form.Label className="mb-0 me-2 fw-semibold">Model</Form.Label>
+                                            <div className="form-check form-check-inline">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    id="modelExisting"
+                                                    checked={modelType === 'existing'}
+                                                    onChange={() => setModelType('existing')}
+                                                />
+                                                <label className="form-check-label small" htmlFor="modelExisting">
+                                                    Existing
+                                                </label>
+                                            </div>
+                                            <div className="form-check form-check-inline">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    id="modelNew"
+                                                    checked={modelType === 'new'}
+                                                    onChange={() => setModelType('new')}
+                                                />
+                                                <label className="form-check-label small" htmlFor="modelNew">
+                                                    New
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        {modelType === 'existing' ? (
+                                            <Select
+                                                options={modelOptions}
+                                                placeholder="Search model..."
+                                                onChange={(selectedOption) => {
+                                                    setModelName(selectedOption);
+                                                    setValue('model', selectedOption?.value);
+                                                }}
+                                                onInputChange={(inputValue) => {
+                                                    setSearchInput(inputValue);
+                                                    handleSearch(inputValue, 'model');
+                                                }}
+                                                value={modelName}
+                                                isSearchable
+                                                isLoading={store?.searchProductNameReducer?.loading}
+                                                noOptionsMessage={() => (
+                                                    <div className="p-2 text-muted">
+                                                        No models found. <br />
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-link p-0 text-primary"
+                                                            onClick={() => setModelType('new')}
+                                                        >
+                                                            Add new model
+                                                        </button>
+                                                    </div>
+                                                )}
+                                                filterOption={() => true}
+                                            />
+                                        ) : (
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Enter new model name"
+                                                {...register("model")}
+                                                onChange={(e) => setNewModelName(e.target.value)}
+                                            />
+                                        )}
+                                    </Form.Group>
+                                </Col>
+                            </>
 
                             <Col sm={6}>
                                 <Form.Group className="mb-2">
-                                    <Form.Label className='mb-0'>Code</Form.Label>
+                                    <Form.Label className='mb-0'>Code <span className="text-danger">*</span></Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Enter Code"
                                         {...register("code", {
-                                            validate: (value) => {
-                                                if (!value?.trim() && !modelValue?.trim()) {
-                                                    return "Either Code or Model is required";
-                                                }
-                                                return true;
-                                            }
+                                            required: "Code is required"
                                         })}
-                                        onKeyUp={() => {
-                                            trigger("model"); // revalidate model when code is typed
-                                        }}
                                     />
-                                    {errors.code && !modelValue && (
+                                    {errors.code && (
                                         <small className="text-danger">{errors.code.message}</small>
                                     )}
                                 </Form.Group>
                             </Col>
+
                             <Col sm={6}>
                                 <Form.Group className="mb-2">
                                     <Form.Label className=''>Low Stock Threshold</Form.Label>
@@ -151,12 +282,12 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
                                             type="range"
                                             className="w-75"
                                             min="0"
-                                            max="1000"
+                                            max="2000"
                                             step="100"
                                             defaultValue="100"
                                             onChange={(e) => setThreshold(Number(e.target.value))}
                                         />
-                                        <span>1000</span>
+                                        <span>2000</span>
                                     </div>
                                     {/* Display the current value */}
                                     <div className="text-center mt-2">
@@ -191,7 +322,7 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
                             className="custom-button"
                             disabled={store?.createProductReducer?.loading}
                             style={{ width: '70px !important' }}
-                            >
+                        >
                             {store?.createProductReducer?.loading ? (
                                 <ButtonLoading color="white" />
                             ) : type === 'Add' ? (

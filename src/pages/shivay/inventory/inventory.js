@@ -10,6 +10,7 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import { MdDeleteOutline } from 'react-icons/md';
 import Pagination from '../../../helpers/Pagination';
 import { Loading } from '../../../helpers/loader/Loading';
+import EditProductModal from './modal/EditProductModal';
 
 const Inventory = () => {
 
@@ -61,6 +62,12 @@ const Inventory = () => {
         status: false
     })
 
+    const [showEditProductModal, setShowEditProductModal] = useState({
+        data: null,
+        type: null,
+        status: false
+    })
+
     useEffect(() => {
         setTotalPages(Math.ceil(totalRecords / pageSize));
     },
@@ -69,8 +76,18 @@ const Inventory = () => {
     const handleUserModal = (productDetails, modalType, modalStatus) => {
         setShowProductModal({ ...showProductModal, data: productDetails, type: modalType, status: modalStatus })
     }
+
+    const handleEditModal = (productDetails, modalType, modalStatus) => {
+        setShowEditProductModal({ ...showEditProductModal, data: productDetails, type: modalType, status: modalStatus })
+    }
+
     const handleClose = () => {
         setShowProductModal({ ...showProductModal, data: null, status: false })
+    }
+
+
+    const handleEditClose = () => {
+        setShowEditProductModal({ ...showEditProductModal, data: null, status: false })
     }
 
     return (
@@ -112,6 +129,7 @@ const Inventory = () => {
                                             <th scope="col">Product Name</th>
                                             <th scope="col">Model</th>
                                             <th scope="col">Code</th>
+                                            <th scope="col">Description</th>
                                             <th scope="col">Qty</th>
                                         </tr>
                                     </thead>
@@ -143,6 +161,9 @@ const Inventory = () => {
                                                             {data?.code || <span className="text-black">-</span>}
                                                         </td>
                                                         <td className="text-uppercase font_work ">
+                                                            {data?.description || <span className="text-black">-</span>}
+                                                        </td>
+                                                        <td className="text-uppercase font_work ">
                                                             {data?.quantity !== undefined ? data?.quantity : <span className="text-black">-</span>}
                                                         </td>
                                                         <td ></td>
@@ -151,7 +172,7 @@ const Inventory = () => {
                                                                 <AiOutlineEdit
                                                                     className="fs-4 text-black"
                                                                     style={{ cursor: 'pointer' }}
-                                                                    onClick={() => handleUserModal(data, 'Edit', true)}
+                                                                    onClick={() => handleEditModal(data, 'Edit', true)}
                                                                 />
                                                             </span>
                                                             <span className="icon-wrapper" title="Delete" onClick={() => { setProductToDelete(data?._id); setShowConfirm(true); }}>
@@ -177,6 +198,8 @@ const Inventory = () => {
             </Form>
 
             <AddProductModal showModal={showProductModal?.status} handleClose={handleClose} ProductData={showProductModal} />
+            {/* Edit modal  */}
+            <EditProductModal showModal={showEditProductModal?.status} handleEditClose={handleEditClose} ProductData={showEditProductModal} />
 
             {/* delete modal */}
             <Modal show={showConfirm} onHide={() => setShowConfirm(false)} >

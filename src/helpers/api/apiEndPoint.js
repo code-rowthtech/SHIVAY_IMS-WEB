@@ -23,6 +23,7 @@ export const UPDATE_PRODUCT = '/api/product/edit'
 export const DELETE_PRODUCT = '/api/product/delete'
 export const SEARCH_PRODUCT = '/api/product/search'
 export const VIEW_PRODUCT = '/api/product/view'
+export const SEARCH_PRODUCT_NAME = '/api/product/search-name'
 
 // location 
 export const GET_LOCATION = '/api/location/get'

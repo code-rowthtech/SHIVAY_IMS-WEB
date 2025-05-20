@@ -29,9 +29,15 @@ function searchProductApi(params) {
     const { data } = params
     return api.create(URL.SEARCH_PRODUCT, data);
 }
+
 function viewProductApi(params) {
     const { warehouseId,productId, startDate, endDate} = params?.data
     return api.get(`${URL.VIEW_PRODUCT}?warehouseId=${warehouseId}&productId=${productId}&startDate=${startDate}&endDate=${endDate}`);
+}
+
+function searchProductNameApi(params) {
+    const { data } = params
+    return api.create(URL.SEARCH_PRODUCT_NAME, data);
 }
 
 export {
@@ -41,4 +47,5 @@ export {
     deleteProductApi,
     searchProductApi,
     viewProductApi,
+    searchProductNameApi,
 };
