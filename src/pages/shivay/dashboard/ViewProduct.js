@@ -17,12 +17,8 @@ const ViewProduct = () => {
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
     const productId = searchParams.get('id')
-    // console.log(productId, 'productId')
     const warehouseId = searchParams.get('warehouseId')
-    // console.log(warehouseId, 'warehouseId')
-
     const ProductData = store?.viewProductReducer?.viewProduct;
-    console.log(ProductData, 'ProductData')
 
     useEffect(() => {
         const formatDate = (date) => {

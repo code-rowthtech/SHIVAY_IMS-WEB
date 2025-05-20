@@ -160,7 +160,6 @@ function EditStockinModal({ show, onHide, stockId }) {
   const [stateDelete, setStateDelete] = useState(false)
 
   const handleWarehouseChange = (selectedOption) => {
-    console.log({ selectedOption })
     setSelectedWarehouse(selectedOption);
   };
 
@@ -207,10 +206,8 @@ function EditStockinModal({ show, onHide, stockId }) {
 
   useEffect(() => {
     if (stockId && stockInData) {
-      console.log(stockInData, '2345432')
       const initialRows = stockInData?.[0]?.stockInProducts?.map(item => {
         const product = item?.productData || {};
-        console.log({ product }, product.code, 'productproduct')
         const modelName = product.modelData?.[0]?.name || '';
         const code = product?.code || '';
         const name = product?.name || '';
@@ -258,10 +255,8 @@ function EditStockinModal({ show, onHide, stockId }) {
   }, [stockId, stockInData])
 
   const handleSaveRow = (row, rowId) => {
-    console.log(row, 'adsfg');
 
     const quantity = row?.quantity;
-    // const selectedProductId = selectedModal?.value;
     const selectedWarehouseId = selectedWarehouse?.value;
 
     if (rowId) {

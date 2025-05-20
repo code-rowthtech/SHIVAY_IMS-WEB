@@ -32,26 +32,14 @@ const Report = React.lazy(() => import('../pages/shivay/report/Report'))
 const User = React.lazy(() => import('../pages/shivay/user/User'))
 const Warehouse = React.lazy(() => import('../pages/shivay/warehouse/Warehouse'))
 const OpeningStock = React.lazy(() => import('../pages/shivay/openingStock/OpeningStock'))
-const AddOpeningStock = React.lazy(() => import('../pages/shivay/openingStock/addStock/AddOpeningStock'))
 const StockIn = React.lazy(() => import('../pages/shivay/stockIn/StockIn'))
-const AddStockIn = React.lazy(() => import('../pages/shivay/stockIn/addStockIn/AddStockIn'))
 const Dispatch = React.lazy(() => import('../pages/shivay/dispatch/Dispatch'))
-const AddDispatch = React.lazy(() => import('../pages/shivay/dispatch/addDispatch/AddDispatch'))
 
 const Customer = React.lazy(() => import('../pages/shivay/customer/Customer'))
 const Supplier = React.lazy(() => import('../pages/shivay/supplier/Supplier'))
 const Setting = React.lazy(() => import('../pages/shivay/setting/Setting'))
 
-//BMG pages
-// const AuctionLead=React.lazy(()=>import('../pages/bmg/auctionLead/AuctionLead'))
-// const Category=React.lazy(()=>import('../pages/bmg/categories/Categories'))
-// const Products=React.lazy(()=>import('../pages/bmg/products/Products'))
-// const Buyer_Seller=React.lazy(()=>import('../pages/bmg/buyer-seller/Buyer_Seller'))
-// const Faq=React.lazy(()=>import('../pages/bmg/faq/Faq'))
-// const Orders=React.lazy(()=>import('../pages/bmg/orders/Orders'))
-// const Enquiry=React.lazy(()=>import('../pages/bmg/enquiry/Enquiry'))
-// const Notification=React.lazy(()=>import('../pages/bmg/notification/Notification'))
-// error handlers
+
 const ErrorPageNotFound = React.lazy(() => import('../pages/error/PageNotFound'));
 const ErrorPageNotFoundAlt = React.lazy(() => import('../pages/error/PageNotFoundAlt'));
 const ServerError = React.lazy(() => import('../pages/error/ServerError'));
@@ -164,24 +152,12 @@ const AllRoutes = () => {
                             element: <LoadComponent component={OpeningStock} />,
                         },
                         {
-                            path: 'addOpeningStock',
-                            element: <LoadComponent component={AddOpeningStock} />
-                        },
-                        {
                             path: 'stockIn',
                             element: <LoadComponent component={StockIn} />,
                         },
                         {
-                            path: 'addStockIn',
-                            element: <LoadComponent component={AddStockIn} />,
-                        },
-                        {
                             path: 'dispatch',
                             element: <LoadComponent component={Dispatch} />,
-                        },
-                        {
-                            path: 'addDispatch',
-                            element: <LoadComponent component={AddDispatch} />,
                         },
                         {
                             path: 'customer',

@@ -24,16 +24,13 @@ const Login = (): React$Element<any> => {
     const { rolesList } = useSelector((state) => state.rolesListReducer || {});
     const RolesData = rolesList?.response || [];
 
-    const { loading, userLoggedIn, user, error } = useSelector((state) => ({
+    const { loading, userLoggedIn, user } = useSelector((state) => ({
         loading: state.Auth.loading,
         user: state.Auth.user,
         error: state.Auth.error,
         userLoggedIn: state.Auth.userLoggedIn,
     }));
 
-    console.log(userLoggedIn,'userLoggedIn')
-    console.log(user,'user')
-    
     useEffect(() => {
         dispatch(getRolesListActions());
     }, [dispatch]);
@@ -57,7 +54,6 @@ const Login = (): React$Element<any> => {
     });
 
     const onSubmit = (data) => {
-        console.log('Submitted:', data);
         const payload = {
             ...data,
             fireBaseId: ''
@@ -76,12 +72,6 @@ const Login = (): React$Element<any> => {
                         {t('Enter your email address and password to access admin panel.')}
                     </p>
                 </div>
-
-                {/* {error && (
-                    <Alert variant="danger" className="my-2">
-                        {error}
-                    </Alert>
-                )} */}
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Form.Group className="mb-3" controlId="role">

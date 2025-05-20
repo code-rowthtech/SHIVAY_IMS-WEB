@@ -14,7 +14,6 @@ function* getRolesListFunction(data) {
             payload: {},
         });
         const response = yield call(getRolesListApi, data);
-        console.log({response})
         if (response?.status === 200) {
             yield put({
                 type: RoleActionTypes.ROLES_LIST_SUCCESS,

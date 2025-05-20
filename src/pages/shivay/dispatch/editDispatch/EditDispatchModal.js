@@ -58,7 +58,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
     const CustomerList = store?.listingCustomerReducer?.listingCustomer?.response;
     const DispatchDetails = store?.dispatchByIdReducer?.dispatchById?.response;
     const DispatchLoading = store?.dispatchByIdReducer?.loading
-    console.log(DispatchDetails, 'DispatchDetails')
     // Load data when modal opens
     useEffect(() => {
         if (show && stockId) {
@@ -84,8 +83,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
     // Initialize form with dispatch details
     useEffect(() => {
         if (DispatchDetails?.[0]) {
-            console.log(DispatchDetails, 'dispatchdetais8789')
-            // Set products rows
             const initialRows = DispatchDetails?.[0]?.dispatchProducts?.map(item => {
                 const product = item?.productData || {};
                 const modelName = product?.modelData?.[0]?.name || '';
@@ -220,7 +217,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
             return updated;
         });
 
-        // Call stock check when product is selected
         if (selected?.value && selectedWarehouse?.value) {
             dispatch(createStockCheckActions({
                 warehouseId: selectedWarehouse.value,
@@ -254,7 +250,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
             return updated;
         });
 
-        // Call stock check when quantity changes
         if (rows[index]?.selectedProduct?.value && selectedWarehouse?.value) {
             dispatch(createStockCheckActions({
                 warehouseId: selectedWarehouse.value,
@@ -276,13 +271,11 @@ function EditDispatchModal({ show, onHide, stockId }) {
         }
 
         if (rowId) {
-            // Update existing product
             dispatch(updateDispatchProductActions({
                 dispatchProductId: rowId,
                 quantity: row.quantity
             }));
         } else {
-            // Add new product
             dispatch(createDispatchProductActions({
                 dispatchId: stockId,
                 productId: row.selectedProduct.value,
@@ -295,7 +288,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
     const onSubmit = (data) => {
         const formData = new FormData();
 
-        // Append file attachments if they exist
         if (data?.attachmentGRfile?.[0] instanceof File) {
             formData.append('attachmentGRfile', data.attachmentGRfile[0]);
         }
@@ -303,7 +295,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
             formData.append('invoiceAttachment', data.invoiceAttachment[0]);
         }
 
-        // Append other fields
         formData.append('warehouseId', selectedWarehouse?.value);
         formData.append('dispatchBy', selectedUser?.value);
         formData.append('customerId', selectedCustomer?.value);
@@ -311,7 +302,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
         formData.append('date', data.date);
         formData.append('grNumber', data.grNumber);
         formData.append('invoiceAttachmentType', attachmentType);
-
         formData.append('newProductArr', JSON.stringify([]));
         formData.append('dispatchId', stockId);
 

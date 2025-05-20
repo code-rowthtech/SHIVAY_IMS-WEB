@@ -22,12 +22,11 @@ const AddUserModal = ({ showModal, handleClose, UserData }) => {
 
     const [selectedWarehouse, setSelectedWarehouse] = useState([]);
     const [locationSelected, setLocationSelected] = useState(null);
-    // console.log(selectedWarehouse, 'selectedWarehouseselectedWarehouse')
     const { location } = useSelector((state) => state?.locationReducer || {});
     const locationData = location?.response || [];
     const WarehouseData = useSelector((state) => state?.getWarehouseListReducer?.searchWarehouse?.response || []);
 
-    
+
     useEffect(() => {
         dispatch(getLocationActions());
         dispatch(getWarehouseListActions({
@@ -93,7 +92,6 @@ const AddUserModal = ({ showModal, handleClose, UserData }) => {
         } else {
             dispatch(createUsersActions(payload));
         }
-        // console.log(payload,'payload')
         closeModal();
     };
 
@@ -232,7 +230,6 @@ const AddUserModal = ({ showModal, handleClose, UserData }) => {
                                     }))}
                                     placeholder="Select Location"
                                     onChange={(selectedOption) => {
-                                        console.log(selectedOption, 'gfxdcghbjk')
                                         setLocationSelected(selectedOption);
                                         setValue('location', selectedOption?.value);
                                     }}

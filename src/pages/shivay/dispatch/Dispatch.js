@@ -60,7 +60,6 @@ const Dispatch = () => {
   },
     [totalRecords, pageSize]);
 
-  console.log(DispatchData, 'DispatchData')
   return (
     <div>
       <PageTitle

@@ -14,8 +14,6 @@ const NotificationModal = ({ show, hide, notificationData }) => {
     const loading = store?.createNotificationDataReducer?.loading || store?.updateNotificationDataReducer?.loading
     const createStatus = store?.createNotificationDataReducer?.notificationData?.status
     const updateStatus = store?.updateNotificationDataReducer?.notificationData?.status
-    console.log({ notificationData })
-    // State to manage form data
     const [notification, setNotification] = useState({
         type: "",
         message: "",

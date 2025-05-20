@@ -11,7 +11,6 @@ const Notification = () => {
   const { getNotificationDataReducer } = useSelector((state) => state);
 
   const NotificationData = getNotificationDataReducer?.notificationData?.data || [];
-  console.log({ NotificationData })
   const TotalRecords = getNotificationDataReducer?.notificationData?.totalRecords || 0;
   const NotificationLoading = getNotificationDataReducer?.loading;
 

@@ -42,7 +42,6 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
             setValue('code', ProductData.data?.code);
             setValue('description', ProductData.data?.description);
             setThreshold(Number(ProductData?.data?.lowestStock));
-            // setModelName(ProductData?.data?.modelData?.value)
         }
     }, [ProductData, setValue]);
 
@@ -64,7 +63,6 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
         } else {
             dispatch(createProductActions(payload));
         }
-        console.log(payload, 'payload')
 
     };
 
@@ -79,7 +77,6 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
     const searchProductName = useSelector(state =>
         state?.searchProductNameReducer?.searchProductName?.response || []
     );
-    console.log(searchProductName, 'searchProductName')
 
     // Debounced search function
     const handleSearch = useCallback((inputValue, field) => {

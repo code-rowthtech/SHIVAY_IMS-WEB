@@ -7,7 +7,6 @@ import Select from 'react-select';
 import InputGroupText from 'react-bootstrap/esm/InputGroupText';
 
 const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
-    console.log(CustomerData, 'CustomerData')
     const { type } = CustomerData;
     const {
         handleSubmit,
@@ -78,7 +77,6 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
             dispatch(updateCustomerActions(updatedData));
         } else {
             dispatch(createCustomerActions(payload));
-            // console.log(payload, 'payload')
         }
         closeModal();
     };
@@ -178,7 +176,6 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
                                         }))}
                                         placeholder="Select Location"
                                         onChange={(selectedOption) => {
-                                            console.log(selectedOption, 'gfxdcghbjk')
                                             setLocationSelected(selectedOption);
                                             setValue('location', selectedOption?.value);
                                         }}

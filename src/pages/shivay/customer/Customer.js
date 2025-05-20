@@ -7,7 +7,6 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import AddCustomerModal from './modal/AddCustomerModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCustomerActions, getCustomerListActions } from '../../../redux/actions';
-import { FaRegCopy } from 'react-icons/fa';
 import { MdDeleteOutline } from 'react-icons/md';
 import Pagination from '../../../helpers/Pagination';
 import { Loading } from '../../../helpers/loader/Loading';
@@ -134,7 +133,7 @@ const Customer = () => {
                       ) : (
                         CustomerData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
-                            <td scope="row" className='font_work'>{index + 1}</td>
+                            <td className='font_work'>{index + 1}</td>
                             <td className="text-uppercase font_work " title={data?.name}>
                                 {data?.name
                                 ? `${data.name.slice(0, 30)}${data.name.length > 30 ? '...' : ''}`
