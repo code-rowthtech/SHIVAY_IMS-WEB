@@ -27,7 +27,6 @@ function deleteStockInApi(params) {
 
 function getStockInByIdApi(params) {
     const { data } = params
-    console.log(data,"====api")
     return api.get(`${URL.GET_STOCKIN_BY_ID}/${data}`);
 }
 

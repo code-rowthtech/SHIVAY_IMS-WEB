@@ -20,7 +20,6 @@ function* createWarehouseFunction(data) {
         const response = yield call(createWarehouseApi, data);
 
         if (response?.status === 200) {
-            console.log(response, 'toastresponse')
             ToastContainer(response?.data?.message, 'success')
             yield put({
                 type: WarehouseActionTypes.CREATE_WAREHOUSE_SUCCESS,

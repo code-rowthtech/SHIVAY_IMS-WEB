@@ -13,7 +13,6 @@ function EditStockModal({ show, onHide, stockId }) {
     const dispatch = useDispatch();
     const { handleSubmit, register, setValue, formState: { errors } } = useForm();
     const [rows, setRows] = useState([]);
-    console.log(rows, 'rowsrowsrows')
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
 
     const {
@@ -146,7 +145,6 @@ function EditStockModal({ show, onHide, stockId }) {
     }, []);
 
     const handleSaveRow = (row, rowId) => {
-        console.log(row, 'adsfg');
 
         const quantity = row?.quantity;
         // const selectedProductId = selectedModal?.value;
@@ -402,7 +400,7 @@ function EditStockModal({ show, onHide, stockId }) {
                     </div>
 
                     <div className="d-flex justify-content-between mt-3">
-                        <Button variant="outline-primary" onClick={handleAddRow}>
+                        <Button className='outline-custom-button' onClick={handleAddRow}>
                             <IoIosAdd className="me-1" /> Add Row
                         </Button>
 

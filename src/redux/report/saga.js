@@ -14,7 +14,6 @@ function* getReportFunction(data) {
             payload: {},
         });
         const response = yield call(getReportApi, data);
-        // console.log({response})
         if (response?.status === 200) {
             yield put({
                 type: ReportActionTypes.REPORT_SUCCESS,

@@ -65,7 +65,6 @@ const AddSupplierModal = ({ showModal, handleClose, SupplierData }) => {
         } else {
             dispatch(createSupplierActions(payload));
         }
-        console.log(payload, 'payload')
         closeModal();
     };
 

@@ -21,10 +21,8 @@ const Filter = () => {
   const ChartData = store?.stockReportReducer?.stockReport?.chartData;
   const TopSelling = store?.recentTransactionReducer?.recentTransaction?.getTopSellingProduct;
   const RecentTransaction = store?.recentTransactionReducer?.recentTransaction?.recentTransaction;
-  // console.log(RecentTransaction, 'RecentTransaction')
   const TodaysDispatch = store?.lowStockReducer?.lowStock;
   const LowStock = store?.lowStockReducer?.lowStock?.response;
-  // console.log(LowStock,'LowStock')
   const Warehouse = store?.getWarehouseListReducer?.searchWarehouse?.response;
 
 

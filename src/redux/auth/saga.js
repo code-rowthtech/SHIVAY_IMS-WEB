@@ -25,7 +25,6 @@ function* login({ payload: data }) {
     try {
         const response = yield call(loginApi, data);
         const user = response?.data;
-        console.log({ user })
         let userData = {
            user:user?.response,
             token: user?.token,

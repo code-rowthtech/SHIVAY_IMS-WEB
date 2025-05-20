@@ -15,7 +15,6 @@ function* getCustomerListFunction(data) {
             payload: {},
         });
         const response = yield call(getCustomerListApi, data);
-        console.log(response, 'User response')
         if (response?.status === 200) {
             yield put({
                 type: CustomerActionTypes.CUSTOMER_LIST_SUCCESS,

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Row, Col, Card, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import PageTitle from "../../../helpers/PageTitle";
 import { getDashboardActions, getDispatchActions, getStockinActions } from "../../../redux/actions";
 import { FaLayerGroup, FaUsers, } from "react-icons/fa";
 import { MdOutlineSell } from "react-icons/md";
@@ -143,13 +142,6 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* <PageTitle
-        breadCrumbItems={[
-          { label: "SHIVAY Dashboard", path: "/shivay/dashboard" },
-          { label: "Dashboard", path: "/shivay/dashboard", active: true },
-        ]}
-        title={"Dashboard"}
-      /> */}
       {/* card section */}
       <Row className="g-4 mt-2">
         {Role === 'admin' ? (
@@ -207,7 +199,6 @@ const Dashboard = () => {
                       <Card.Body className="d-flex align-items-center justify-content-between card-body-zoom">
                         <div>
                           <h4 className="fw-bold">{item.title}</h4>
-                          {/* <h2 className="fw-bold">{item.value}</h2> */}
                         </div>
                         <div className="fs-1">{item.icon}</div>
                       </Card.Body>
@@ -262,7 +253,6 @@ const Dashboard = () => {
             <Card
               style={{
                 boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset',
-                // height: '40vh'
               }}
             >
               <Card.Body className=" py-1">
@@ -299,7 +289,7 @@ const Dashboard = () => {
                           ) : (
                             StockinData?.map((data, index) => (
                               <tr key={index} className="text-dark  text-nowrap highlight-row">
-                                <td scope="row" className="font_work">{index + 1}</td>
+                                <td className="font_work">{index + 1}</td>
                                 <td className="text-uppercase font_work ">
                                   {data?.productName || <span className="text-black">-</span>}
                                 </td>
@@ -320,13 +310,11 @@ const Dashboard = () => {
                                 </td>
                                 <td className="text-uppercase font_work ">
                                   {data?.date
-                                    ? new Date(data.date).toLocaleDateString('en-GB') // dd/mm/yyyy
+                                    ? new Date(data.date).toLocaleDateString('en-GB')
                                     : <span className="text-black">-</span>}
-
                                 </td>
-                                <td></td> {/* maintain table structure */}
                                 <td></td>
-                                {/* Horizontally centered icons */}
+                                <td></td>
                                 <div className="icon-container d-flex  pb-0" >
                                   <span className="icon-wrapper me-4" title="View">
                                     <PiEye
@@ -382,7 +370,7 @@ const Dashboard = () => {
                             ) : (
                               DispatchData?.map((data, index) => (
                                 <tr key={index} className="text-dark text-nowrap highlight-row">
-                                  <td scope="row" className="font_work">{index + 1}</td>
+                                  <td className="font_work">{index + 1}</td>
                                   <td className="text-uppercase font_work ">
                                     {data?.productName || <span className="text-black">-</span>}
                                   </td>

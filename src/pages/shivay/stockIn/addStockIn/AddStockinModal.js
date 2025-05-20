@@ -6,13 +6,11 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { CgCloseO } from "react-icons/cg";
 import {
-    createStockActions,
     createStockInActions,
     getWarehouseListActions,
     listingSupplierActions,
     listingUsersActions,
     searchProductActions,
-    updateStockInActions
 } from '../../../../redux/actions';
 import { HiOutlineFolderDownload } from "react-icons/hi";
 
@@ -134,30 +132,11 @@ function AddStockinModal({ show, onHide }) {
         formData.append('invoiceNumber', data?.invoiceNumber);
         formData.append('fright', data?.invoiceValue);
         formData.append('invoiceAttachmentType', attachmentType);
-
         formData.append('date', data?.date);
-
-
-        //   if (stockId) {
-        //       formData.append('stockInId', stockId);
-        //   }
-
-        //   if (stockId) {
-        //       formData.append('productDetailsArr', JSON.stringify([]));
-        //   }
-
-        //   if (stockId) {
-        //       formData.append('newProductArr', JSON.stringify([]));
-        //   }
-
         formData.append('stockInQty', JSON.stringify(productStock));
 
-
         dispatch(createStockInActions(formData));
-        // console.log(formData, 'formData');
-
     };
-    // ======-=-=-=-
 
     const usersOptions = UsersList?.map((users) => ({
         value: users._id,
@@ -166,7 +145,6 @@ function AddStockinModal({ show, onHide }) {
             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join(' '),
     }));
-
 
     const supplierOptions = SupplierList?.map((users) => ({
         value: users._id,
@@ -177,11 +155,8 @@ function AddStockinModal({ show, onHide }) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedSupplier, setSelectedSupplier] = useState(null);
     const [attachmentType, setAttachmentType] = useState("");
-    const [openingProducts, setOpeningProducts] = useState([])
-    const [editedQuantity, setEditedQuantity] = useState('');
 
     const handleWarehouseChange = (selectedOption) => {
-        console.log({ selectedOption })
         setSelectedWarehouse(selectedOption);
     };
 
@@ -207,12 +182,12 @@ function AddStockinModal({ show, onHide }) {
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
-
     useEffect(() => {
         if (selectedWarehouse?.value) {
             dispatch(listingUsersActions({ warehouseId: selectedWarehouse.value }));
         }
     }, [dispatch, selectedWarehouse]);
+    
     return (
         <Modal show={show} onHide={onHide} size='xl' centered>
             <Modal.Header className='py-1' closeButton>

@@ -5,7 +5,10 @@ import { Card } from 'react-bootstrap';
 import CardTitle from './CardTitle';
 
 const PerformanceChart = ({ chartData = [] }): React$Element<any> => {
-    const categories = chartData?.map(item => item?.date);
+    const categories = chartData?.map(item => {
+        const dateParts = item?.date?.split('-'); // ['yyyy', 'mm', 'dd']
+        return `${dateParts[2]}-${dateParts[1]}`;  // 'dd-mm'
+    });
     const stockInSeries = chartData?.map(item => item?.totalStockInQty);
     const stockOutSeries = chartData?.map(item => item?.totalStockOutQty);
 

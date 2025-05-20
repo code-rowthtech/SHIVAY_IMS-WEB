@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Button, Row, Col, Form, Spinner } from 'react-bootstrap';
+import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createProductActions, updateProductActions } from '../../../../redux/actions';

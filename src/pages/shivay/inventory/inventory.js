@@ -15,7 +15,6 @@ import EditProductModal from './modal/EditProductModal';
 const Inventory = () => {
 
     const dispatch = useDispatch();
-    const [showModal, setShowModal] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [productToDelete, setProductToDelete] = useState(null);
     const totalRecords = '0';
@@ -23,10 +22,8 @@ const Inventory = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / pageSize));
     const [search, setSearch] = useState('')
-    const handleShow = () => setShowModal(true);
     const store = useSelector((state) => state)
     const ProductData = store?.productListReducer?.productList?.response;
-    console.log(ProductData, 'ProductData')
     const createResponse = store?.createProductReducer?.createProduct?.status;
     const updateResponse = store?.updateProductReducer?.updateProduct?.status;
     const deleteResponse = store?.deleteProductReducer?.deleteProduct?.status;
@@ -150,7 +147,7 @@ const Inventory = () => {
                                             ) : (
                                                 ProductData?.map((data, index) => (
                                                     <tr key={index} className="text-dark  text-nowrap highlight-row">
-                                                        <td scope="row" className='font_work'>{index + 1}</td>
+                                                        <td className='font_work'>{index + 1}</td>
                                                         <td className="text-uppercase font_work ">
                                                             {data?.name || <span className="text-black">-</span>}
                                                         </td>
@@ -160,9 +157,12 @@ const Inventory = () => {
                                                         <td className="text-uppercase font_work ">
                                                             {data?.code || <span className="text-black">-</span>}
                                                         </td>
-                                                        <td className="text-uppercase font_work ">
-                                                            {data?.description || <span className="text-black">-</span>}
+                                                        <td className="text-uppercase font_work" title={data.description}>
+                                                            {data?.description
+                                                                ? `${data.description.slice(0, 25)}${data.description.length > 25 ? '...' : ''}`
+                                                                : <span className="text-black">-</span>}
                                                         </td>
+
                                                         <td className="text-uppercase font_work ">
                                                             {data?.quantity !== undefined ? data?.quantity : <span className="text-black">-</span>}
                                                         </td>
@@ -197,12 +197,14 @@ const Inventory = () => {
                 </Row>
             </Form>
 
+            {/* Add modal  */}
             <AddProductModal showModal={showProductModal?.status} handleClose={handleClose} ProductData={showProductModal} />
+
             {/* Edit modal  */}
             <EditProductModal showModal={showEditProductModal?.status} handleEditClose={handleEditClose} ProductData={showEditProductModal} />
 
             {/* delete modal */}
-            <Modal show={showConfirm} onHide={() => setShowConfirm(false)} >
+            <Modal show={showConfirm} onHide={() => setShowConfirm(false)}>
                 <Modal.Body className='text-center'>
                     <h4 className='text-black'>Confirm Deletion</h4>
                     <p className='mt-2 mb-3'> Are you sure you want to delete this User?</p>
@@ -219,6 +221,7 @@ const Inventory = () => {
                     </div>
                 </Modal.Body>
             </Modal>
+
         </div>
     )
 }

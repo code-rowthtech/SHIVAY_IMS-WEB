@@ -34,7 +34,6 @@ const StockIn = () => {
   const deleteResponse = store?.deleteStockInReducer?.deleteStockIn?.status;
   const UpdateResponse = store?.updateStockInReducer?.updateStockIn?.status;
 
-  console.log(StockInData, 'StockInDataStockInDataStockInData')
   useEffect(() => {
     dispatch(getStockInListActions({
       limit: pageSize,
@@ -90,14 +89,6 @@ const StockIn = () => {
               >
                 <IoIosAdd className="fs-3" />&nbsp;Add
               </Button>
-              {/* <Button className="mt-2 fw-bold custom-button"
-                // onClick={handleShow}
-                onClick={() => {
-                  navigate('/shivay/addStockIn')
-                }}
-              >
-                <IoIosAdd className="fs-3" />&nbsp;Stock In
-              </Button> */}
             </div>
 
           </Col>
@@ -117,7 +108,6 @@ const StockIn = () => {
                       <th scope="col">Date</th>
                       <th scope="col">No. of Products</th>
                       <th scope="col">Invoice Number</th>
-                      {/* <th scope="col">Action</th> */}
                     </tr>
                   </thead>
                   {store?.stockInListReducer?.loading ? (
@@ -163,22 +153,6 @@ const StockIn = () => {
                             <td></td>
                             <td></td>
                             <div className="icon-container d-flex  pb-0" >
-                              {/* <span className="icon-wrapper" title="View">
-                            <PiEye className="fs-4 text-black" style={{ cursor: 'pointer' }} />
-                          </span> */}
-                              {/* <span
-                                className="icon-wrapper me-4"
-                                title="Edit"
-                                onClick={() => {
-                                  setShowEditModal(true);
-                                  setEditData(data?._id);
-                                }}
-                              >
-                                <AiOutlineEdit
-                                  className="fs-4 text-black"
-                                  style={{ cursor: 'pointer' }}
-                                />
-                              </span> */}
                               <span
                                 className="icon-wrapper"
                                 title="Edit"

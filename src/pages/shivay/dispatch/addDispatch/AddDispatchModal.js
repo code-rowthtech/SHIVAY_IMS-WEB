@@ -11,7 +11,6 @@ import {
     createDispatchActions,
     getWarehouseListActions,
     searchProductActions,
-    getCustomerListActions,
     listingCustomerActions,
     listingUsersActions,
     createStockCheckActions
@@ -19,7 +18,6 @@ import {
 
 import { IoIosAdd } from 'react-icons/io';
 import { MdDelete } from 'react-icons/md';
-import { HiOutlineFolderDownload } from 'react-icons/hi';
 import { CgCloseO } from 'react-icons/cg';
 
 function AddDispatchModal({ show, onHide }) {
@@ -31,14 +29,11 @@ function AddDispatchModal({ show, onHide }) {
     const store = useSelector((state) => state)
     const [attachmentType, setAttachmentType] = useState("");
     const fileInputRef = useRef();
-    const [quantity, setQuantity] = useState()
-
     const [today] = useState(new Date().toISOString().split('T')[0]);
     const [rows, setRows] = useState([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
     const UsersList = store?.listingUsersReducer?.listingUsers?.response;
     const CustomerList = store?.listingCustomerReducer?.listingCustomer?.response;
     const DispatchProductData = store?.dispatchByIdReducer?.dispatchById?.response;
-    const StockChecking = store?.createStockCheckReducer;
 
     const {
         searchProductReducer: {
@@ -143,12 +138,11 @@ function AddDispatchModal({ show, onHide }) {
             return updated;
         });
 
-        // Call stock check when product is selected
         if (selected?.value && selectedWarehouse?.value) {
             dispatch(createStockCheckActions({
                 warehouseId: selectedWarehouse.value,
                 productId: selected.value,
-                qty: rows[index]?.quantity || 1, // Use current quantity or default to 1
+                qty: rows[index]?.quantity || 1, 
                 oldQty: ''
             }));
         }
@@ -175,7 +169,6 @@ function AddDispatchModal({ show, onHide }) {
             return updated;
         });
 
-        // Call stock check when quantity changes
         if (rows[index]?.selectedProduct?.value && selectedWarehouse?.value) {
             dispatch(createStockCheckActions({
                 warehouseId: selectedWarehouse.value,
@@ -217,12 +210,6 @@ function AddDispatchModal({ show, onHide }) {
         formData.append('grNumber', data?.grNumber);
         formData.append('invoiceAttachmentType', attachmentType);
         formData.append('productDispatchQty', JSON.stringify(productStock));
-
-        // if (stockId) {
-        //     formData.append('newProductArr', JSON.stringify([]));
-        //     formData.append('dispatchId', stockId);
-
-        // }
 
         dispatch(createDispatchActions(formData));
     };

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, Form, OverlayTrigger, Row, Tooltip } from 'react-bootstrap'
 import Select from 'react-select';
-import { AiOutlineEdit } from 'react-icons/ai';
-import { RiDeleteBinLine } from 'react-icons/ri';
 import PageTitle from '../../../helpers/PageTitle';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReportActions, getWarehouseListActions } from '../../../redux/actions';
@@ -22,7 +20,6 @@ const Report = () => {
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
   const [ReportData, setReportData] = useState([])
   const [stockType, setStockType] = useState('')
-  console.log(stockType, selectedWarehouse, 'dbhujiuhyfghuj')
   const handleWarehouseChange = (selectedOption) => {
     setSelectedWarehouse(selectedOption);
   };
@@ -32,7 +29,6 @@ const Report = () => {
   }, [dispatch]);
 
   const resp = store?.reportReducer?.report?.status;
-  console.log(resp, 'response')
   useEffect(() => {
     if (resp === 200 && selectedWarehouse !== null) {
       setReportData(store?.reportReducer?.report?.response)
