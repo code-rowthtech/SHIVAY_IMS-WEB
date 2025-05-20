@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Row, Col, Form, InputGroup } from 'react-bootstrap';
 import Select from 'react-select';
-import { createUsersActions, getLocationActions, getWarehouseActions, updateUsersActions } from '../../../../redux/actions';
+import { createUsersActions, getLocationActions, getWarehouseListActions, updateUsersActions } from '../../../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { Controller } from "react-hook-form";
 import InputGroupText from 'react-bootstrap/esm/InputGroupText';
 
 const AddUserModal = ({ showModal, handleClose, UserData }) => {
@@ -26,11 +25,12 @@ const AddUserModal = ({ showModal, handleClose, UserData }) => {
     // console.log(selectedWarehouse, 'selectedWarehouseselectedWarehouse')
     const { location } = useSelector((state) => state?.locationReducer || {});
     const locationData = location?.response || [];
-    const WarehouseData = useSelector((state) => state?.getWarehouseReducer?.warehouseList?.response || []);
+    const WarehouseData = useSelector((state) => state?.getWarehouseListReducer?.searchWarehouse?.response || []);
 
+    
     useEffect(() => {
         dispatch(getLocationActions());
-        dispatch(getWarehouseActions({
+        dispatch(getWarehouseListActions({
             limit: '',
             page: '',
             search: '',

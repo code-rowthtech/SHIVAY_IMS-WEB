@@ -9,7 +9,7 @@ import { dashboardDataReducer, dispatchListReducer, lowStockReducer, recentTrans
 import { rolesListReducer } from './roles/reducers';
 import { createWarehouseReducer, deleteWarehouseReducer, getWarehouseListReducer, getWarehouseReducer, updateWarehouseReducer } from './warehouse/reducers';
 import { locationReducer } from './location/reducers';
-import { createProductReducer, deleteProductReducer, productListReducer, searchProductReducer, updateProductReducer, viewProductReducer } from './inventory/reducers';
+import { createProductReducer, deleteProductReducer, productListReducer, searchProductNameReducer, searchProductReducer, updateProductReducer, viewProductReducer } from './inventory/reducers';
 import { createUsersReducer, deleteUsersReducer, listingUsersReducer, updateUsersReducer, userListReducer } from './users/reducers';
 import { createCustomerReducer, customerListReducer, deleteCustomerReducer, listingCustomerReducer, updateCustomerReducer } from './customer/reducers';
 import { createSupplierReducer, deleteSupplierReducer, listingSupplierReducer, supplierListReducer, updateSupplierReducer } from './supplier/reducers';
@@ -29,7 +29,7 @@ export default (combineReducers({
   // warehouse 
   createWarehouseReducer, getWarehouseReducer, updateWarehouseReducer, deleteWarehouseReducer, getWarehouseListReducer,
   // inventory 
-  productListReducer, createProductReducer, updateProductReducer, deleteProductReducer, searchProductReducer, viewProductReducer,
+  productListReducer, createProductReducer, updateProductReducer, deleteProductReducer, searchProductReducer, viewProductReducer, searchProductNameReducer,
   // location
   locationReducer,
   // users 

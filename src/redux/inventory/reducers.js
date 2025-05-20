@@ -178,6 +178,32 @@ const viewProductReducer = (state = VIEW_PRODUCT_INITIAL_STATE, action) => {
     }
 }
 
+const SEARCH_PRODUCT_NAME_INITIAL_STATE = {
+    searchProductName: [],
+    loading: false
+}
+
+const searchProductNameReducer = (state = SEARCH_PRODUCT_NAME_INITIAL_STATE, action) => {
+
+    switch (action.type) {
+        case InventoryActionTypes.SEARCH_PRODUCT_NAME_LOADING:
+            return {
+                searchProductName: state.searchProductName,
+                loading: true
+            }
+        case InventoryActionTypes.SEARCH_PRODUCT_NAME_SUCCESS:
+            return {
+                searchProductName: action.payload,
+                loading: false
+            }
+        case InventoryActionTypes.SEARCH_PRODUCT_NAME_ERROR:
+            return {
+                searchProductName: action.payload,
+                loading: false
+            }
+        default: return state
+    }
+}
 export {
     productListReducer,
     createProductReducer,
@@ -185,4 +211,5 @@ export {
     deleteProductReducer,
     searchProductReducer,
     viewProductReducer,
+    searchProductNameReducer,
 }

@@ -156,7 +156,7 @@ const Dashboard = () => {
           <div className="m-0 ">
             <Row className="d-flex align-items-center">
               {dashboardItems?.map((item, index) => (
-                <Col key={index} md={6} lg={3 } className="pt-3">
+                <Col key={index} md={6} lg={3} className="pt-3">
                   <Link to={item.link} className="text-decoration-none ">
 
                     <Card
@@ -189,7 +189,7 @@ const Dashboard = () => {
           <div>
             <Row className="d-flex align-items-center">
               {dashboardItemsUsers?.map((item, index) => (
-                <Col key={index} md={6} lg={3 } className="pt-3">
+                <Col key={index} md={6} lg={3} className="pt-3">
                   <Link to={item.link} className="text-decoration-none">
 
                     <Card
@@ -275,14 +275,16 @@ const Dashboard = () => {
                           <th scope="col">#</th>
                           <th scope="col">Product Name</th>
                           <th scope="col">Supplier Name</th>
+                          <th scope="col">Received by</th>
                           <th scope="col">Code</th>
                           <th scope="col">Stock In</th>
                           <th scope="col">Stock</th>
+                          <th scope="col">Date</th>
                         </tr>
                       </thead>
                       {store?.stockinTransListReducer?.loading ? (
                         <tr>
-                          <td className='text-center' colSpan={6}>
+                          <td className='text-center' colSpan={8}>
                             <DashboardLoading />
                           </td>
                         </tr>
@@ -290,7 +292,7 @@ const Dashboard = () => {
                         <tbody>
                           {StockinData?.length === 0 ? (
                             <tr>
-                              <td colSpan={6} className='text-center'>
+                              <td colSpan={8} className='text-center'>
                                 <p className='my-4 py-5'>No stock-in data to show.</p>
                               </td>
                             </tr>
@@ -305,6 +307,9 @@ const Dashboard = () => {
                                   {data?.supplierName || <span className="text-black">-</span>}
                                 </td>
                                 <td className="text-uppercase font_work ">
+                                  {data?.receivedBy || <span className="text-black">-</span>}
+                                </td>
+                                <td className="text-uppercase font_work ">
                                   {data?.code || <span className="text-black">-</span>}
                                 </td>
                                 <td className="text-uppercase font_work ">
@@ -313,8 +318,14 @@ const Dashboard = () => {
                                 <td className="text-uppercase font_work  ">
                                   {data?.stock || <span className="text-black">-</span>}
                                 </td>
-                                <td></td> {/* maintain table structure */}
+                                <td className="text-uppercase font_work ">
+                                  {data?.date
+                                    ? new Date(data.date).toLocaleDateString('en-GB') // dd/mm/yyyy
+                                    : <span className="text-black">-</span>}
 
+                                </td>
+                                <td></td> {/* maintain table structure */}
+                                <td></td>
                                 {/* Horizontally centered icons */}
                                 <div className="icon-container d-flex  pb-0" >
                                   <span className="icon-wrapper me-4" title="View">
@@ -356,7 +367,7 @@ const Dashboard = () => {
                         </thead>
                         {store?.dispatchListReducer?.loading ? (
                           <tr>
-                            <td className='text-center' colSpan={4}>
+                            <td className='text-center' colSpan={8}>
                               <DashboardLoading />
                             </td>
                           </tr>
@@ -371,7 +382,7 @@ const Dashboard = () => {
                             ) : (
                               DispatchData?.map((data, index) => (
                                 <tr key={index} className="text-dark text-nowrap highlight-row">
-                                  <td scope="row"  className="font_work">{index + 1}</td>
+                                  <td scope="row" className="font_work">{index + 1}</td>
                                   <td className="text-uppercase font_work ">
                                     {data?.productName || <span className="text-black">-</span>}
                                   </td>
@@ -426,7 +437,7 @@ const Dashboard = () => {
       </Row>
       {/* } */}
       {/* Off Canvas */}
-      <Offcanvas show={show} onHide={handleClose} placement="end" style={{ width: '40rem' }}>
+      <Offcanvas show={show} onHide={handleClose} placement="end" style={{ width: '60rem' }}>
         {/* backdrop="static" */}
         <Offcanvas.Header className="pb-0" closeButton>
           <Offcanvas.Title><TiArrowLeft className="fw-bold fs-3" style={{ cursor: 'pointer' }} onClick={handleClose} />&nbsp;Filter</Offcanvas.Title>
