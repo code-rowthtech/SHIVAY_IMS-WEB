@@ -122,7 +122,7 @@ const Warehouse = () => {
                                         <tbody>
                                             {warehouseData?.length === 0 ? (
                                                 <tr>
-                                                    <td colSpan={3} className='text-center'>
+                                                    <td colSpan={6} className='text-center'>
                                                         <p className='my-5 py-5 '>No Warehouse Added Yet.</p>
                                                     </td>
                                                 </tr>

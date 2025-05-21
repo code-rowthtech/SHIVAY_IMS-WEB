@@ -81,7 +81,7 @@ const OpeningStock = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <Button
-                className="mt-2 fw-bold custom-button me-2"
+                className="mt-2 fw-bold custom-button"
                 onClick={() => setShowAddModal(true)}
               >
                 <IoIosAdd className="fs-3" />&nbsp;Add

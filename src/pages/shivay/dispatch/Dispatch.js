@@ -31,6 +31,8 @@ const Dispatch = () => {
 
   const DispatchData = store?.getDispatchDataReducer?.dispatchList?.response;
   const deleteResponse = store?.deleteDispatchReducer?.deleteDispatch?.status;
+  const UpdateResponse = store?.updateDispatchReducer?.updateDispatch?.status
+  const CreateResponse = store?.createStockInReducer?.createStockIn?.status;
 
   useEffect(() => {
     dispatch(getDispatchListActions({
@@ -46,14 +48,14 @@ const Dispatch = () => {
   };
 
   useEffect(() => {
-    if (deleteResponse === 200) {
+    if (deleteResponse === 200 || UpdateResponse === 200 || CreateResponse === 200) {
       dispatch(getDispatchListActions({
         limit: pageSize,
         page: pageIndex,
         search: search,
       }));
     }
-  }, [deleteResponse]);
+  }, [deleteResponse, UpdateResponse, CreateResponse]);
 
   useEffect(() => {
     setTotalPages(Math.ceil(totalRecords / pageSize));
