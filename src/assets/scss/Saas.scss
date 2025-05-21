@@ -166,3 +166,19 @@ tbody tr:hover {
   color: #6655D9 !important;
   // transition-duration: 0.5s !important;
 }
+
+/* Add transition for smooth expand/collapse */
+.bg-light {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+/* Style for contact links */
+.bg-light a {
+    color: #495057;
+    text-decoration: none;
+}
+
+.bg-light a:hover {
+    color: #0d6efd;
+}

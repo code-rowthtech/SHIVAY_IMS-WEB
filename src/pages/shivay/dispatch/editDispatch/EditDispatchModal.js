@@ -26,7 +26,7 @@ import { Loading } from '../../../../helpers/loader/Loading';
 
 function EditDispatchModal({ show, onHide, stockId }) {
     const dispatch = useDispatch();
-    const { handleSubmit, register, setValue, reset, resetField, formState: { errors } } = useForm();
+    const { handleSubmit, register, setValue, resetField } = useForm();
 
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -322,7 +322,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
     }
 
     return (
-        <Modal show={show} onHide={onHide} size='xl' centered>
+        <Modal show={show} onHide={onHide} size='xl' backdrop="static" centered>
             <Modal.Header className='py-1' closeButton>
                 <Modal.Title>Edit Dispatch</Modal.Title>
             </Modal.Header>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap'
 import { IoIosAdd } from "react-icons/io";
-import PageTitle from '../../../helpers/PageTitle';
 import { AiOutlineEdit } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
 import AddCustomerModal from './modal/AddCustomerModal';
@@ -42,7 +41,7 @@ const Customer = () => {
         stockFilter: true,
       }));
     }
-  }, [createResponse, updateResponse, deleteResponse]);
+  }, [createResponse, updateResponse, deleteResponse, dispatch, pageSize, pageIndex, search]);
 
   useEffect(() => {
     dispatch(getCustomerListActions({
@@ -74,13 +73,6 @@ const Customer = () => {
 
   return (
     <div>
-      <PageTitle
-        breadCrumbItems={[
-          { label: "SHIVAY Customer List", path: "/shivay/customer" },
-          { label: "Customer List", path: "/shivay/customer", active: true },
-        ]}
-        title={"Customer List"}
-      />
       <Form>
         <Row>
           <Col sm={12}>
@@ -111,9 +103,6 @@ const Customer = () => {
                       <th scope="col">Customer Name</th>
                       <th scope="col">Location</th>
                       <th scope="col">Billing Address</th>
-                      {/* <th scope="col">Location</th> */}
-
-                      {/* <th scope="col">Action</th> */}
                     </tr>
                   </thead>
                   {store?.customerListReducer?.loading ? (
@@ -135,42 +124,17 @@ const Customer = () => {
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
                             <td className='font_work'>{index + 1}</td>
                             <td className="text-uppercase font_work " title={data?.name}>
-                                {data?.name
+                              {data?.name
                                 ? `${data.name.slice(0, 30)}${data.name.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}
                             </td>
-                            {/* <td className="font_work text-primary">
-                              {data?.email ? (
-                                <>
-                                  <span>{data.email}</span>
-                                  <FaRegCopy
-                                    style={{ cursor: 'pointer' }}
-                                    title="Copy Email"
-                                    className='text-muted ms-2 fs-6'
-                                    onClick={() => {
-                                      navigator.clipboard.writeText(data.email);
-                                      alert('Email copied to clipboard!');
-                                    }}
-                                  />
-                                </>
-                              ) : (
-                                <span className="text-black">-</span>
-                              )}
-                            </td> */}
                             <td>{data?.location || <span className="text-black">-</span>}</td>
                             <td className="font_work" title={data?.billingAddress}>
                               {data?.billingAddress
                                 ? `${data.billingAddress.slice(0, 30)}${data.billingAddress.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}
                             </td>
-
-                            {/* <td className="fs-5">
-                          {data?.location || <span className="text-black">-</span>}
-                        </td> */}
                             <div className="icon-container d-flex  pb-0" >
-                              {/* <span className="icon-wrapper" title="View">
-                            <PiEye className="fs-4 text-black" style={{ cursor: 'pointer' }} />
-                          </span> */}
                               <span className="icon-wrapper" title="Edit">
                                 <AiOutlineEdit
                                   className="fs-4 text-black"

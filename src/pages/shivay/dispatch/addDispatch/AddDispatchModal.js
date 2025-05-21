@@ -22,7 +22,7 @@ import { CgCloseO } from 'react-icons/cg';
 
 function AddDispatchModal({ show, onHide }) {
     const dispatch = useDispatch();
-    const { handleSubmit, register, setValue, reset, resetField, formState: { errors } } = useForm();
+    const { handleSubmit, register, setValue, reset, resetField } = useForm();
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
     const [selectedUser, setSelectedUser] = useState();
@@ -43,10 +43,6 @@ function AddDispatchModal({ show, onHide }) {
         getWarehouseListReducer: {
             searchWarehouse: { response: Warehouse = [] },
             error: warehouseError
-        },
-        listingCustomerReducer: {
-            listingCustomer: { response: Customer = [] },
-            error: customerError
         },
         createDispatchReducer: { createDispatch: { status: createResponse, loading: createLoading } = {} }
     } = useSelector(state => state);
@@ -86,8 +82,7 @@ function AddDispatchModal({ show, onHide }) {
     useEffect(() => {
         if (productError) toast.error(productError.message || 'Failed to search products');
         if (warehouseError) toast.error(warehouseError.message || 'Failed to load warehouses');
-        if (customerError) toast.error(customerError.message || 'Failed to load customers');
-    }, [productError, warehouseError, customerError]);
+    }, [productError, warehouseError]);
 
     const warehouseOptions = useMemo(() => (
         Warehouse?.map(({ _id, name }) => ({ value: _id, label: name }))
@@ -142,11 +137,11 @@ function AddDispatchModal({ show, onHide }) {
             dispatch(createStockCheckActions({
                 warehouseId: selectedWarehouse.value,
                 productId: selected.value,
-                qty: rows[index]?.quantity || 1, 
+                qty: rows[index]?.quantity || 1,
                 oldQty: ''
             }));
         }
-    }, [selectedWarehouse, dispatch]);
+    }, [selectedWarehouse, dispatch, rows]);
 
 
     const handleWarehouseChange = (selectedOption) => {
@@ -215,7 +210,7 @@ function AddDispatchModal({ show, onHide }) {
     };
 
     return (
-        <Modal show={show} onHide={onHide} size='xl' centered>
+        <Modal show={show} onHide={onHide} size='xl' backdrop="static" centered>
             <Modal.Header className='py-1' closeButton>
                 <Modal.Title>Add Dispatch</Modal.Title>
             </Modal.Header>
@@ -294,23 +289,13 @@ function AddDispatchModal({ show, onHide }) {
                         <Col sm={3}>
                             <Form.Group className="mb-1">
                                 <Form.Label className="mb-0">Attach GR File <span className='text-danger'>*</span>
-                                    {/* {DispatchProductData?.[0]?.attachmentGRfile && (
-                                        <a
-                                            href={DispatchProductData?.[0]?.attachmentGRfile}
-                                            target="_blank"
-                                            title='Download GR File'
-                                            rel="noopener noreferrer"
-                                        >
-                                            <HiOutlineFolderDownload className='ms-1 fs-4' />
-                                        </a>
-                                    )} */}
                                 </Form.Label>
                                 <Form.Control
                                     type="file"
                                     placeholder="Upload file"
                                     required
                                     {...register('attachmentGRfile', {
-                                        required: !DispatchProductData?.[0]?.attachmentGRfile, // only require if no existing
+                                        required: !DispatchProductData?.[0]?.attachmentGRfile, 
                                     })}
                                 />
 
@@ -323,23 +308,11 @@ function AddDispatchModal({ show, onHide }) {
                                     {attachmentType && (
                                         <span className="text-capitalize"> ({attachmentType}) <span className="text-danger"> *</span></span>
                                     )}
-                                    {/* {DispatchProductData?.[0]?.invoiceAttachment && (
-                                        <a
-                                            href={DispatchProductData?.[0]?.invoiceAttachment}
-                                            target="_blank"
-                                            title='Download Attachment'
-                                            rel="noopener noreferrer"
-                                        // style={{position:'absolute', top:'20px'}}
-                                        >
-                                            <HiOutlineFolderDownload className='ms-1 fs-4' />
-                                        </a>
-                                    )} */}
                                 </Form.Label>
 
                                 {!attachmentType ? (
                                     <Form.Select
                                         className="mb-0"
-                                        // defaultValue=""
                                         value={attachmentType}
                                         onChange={handleAttachmentTypeChange}
 
@@ -353,9 +326,7 @@ function AddDispatchModal({ show, onHide }) {
                                         <Form.Control
                                             type="file"
                                             placeholder="Upload file"
-                                            // required={!stockId}
                                             {...register("invoiceAttachment")}
-                                        // ref={fileInputRef}
                                         />
                                         <CgCloseO
                                             size={20}
@@ -460,7 +431,7 @@ function AddDispatchModal({ show, onHide }) {
                                             value={row?.quantity}
                                             onChange={(e) => {
                                                 const val = parseInt(e.target.value);
-                                                handleQuantityChange(e, index); // Use the existing handler
+                                                handleQuantityChange(e, index); 
                                             }}
                                             required
                                             min={1}

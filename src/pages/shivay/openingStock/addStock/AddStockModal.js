@@ -123,7 +123,7 @@ function AddStockModal({ show, onHide }) {
     }, [rows, dispatch, today]);
 
     return (
-        <Modal show={show} onHide={onHide} size='xl' centered>
+        <Modal show={show} onHide={onHide} size='xl' backdrop="static" centered>
             <Modal.Header className='py-1' closeButton>
                 <Modal.Title>Add Stock</Modal.Title>
             </Modal.Header>

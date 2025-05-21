@@ -30,7 +30,7 @@ function EditStockModal({ show, onHide, stockId }) {
     const UpdateResponse = store?.updateStockReducer?.updateStock?.status
 
     const [stateDelete, setStateDelete] = useState(false)
-    
+
     useEffect(() => {
         if (show && stockId) {
             dispatch(getStockByIdActions(stockId));
@@ -41,13 +41,13 @@ function EditStockModal({ show, onHide, stockId }) {
         if (DeleteProductResponse === 200) {
             dispatch(getStockByIdActions(stockId));
         }
-    }, [DeleteProductResponse]);
+    }, [dispatch, DeleteProductResponse, stockId]);
 
     useEffect(() => {
         if (UpdateResponse === 200) {
             onHide();
         }
-    }, [UpdateResponse]);
+    }, [UpdateResponse, onHide]);
 
     useEffect(() => {
         if (stockDetails) {
@@ -215,7 +215,7 @@ function EditStockModal({ show, onHide, stockId }) {
     }
 
     return (
-        <Modal show={show} onHide={onHide} size='xl' centered>
+        <Modal show={show} onHide={onHide} size='xl' backdrop="static" centered>
             <Modal.Header className='py-1' closeButton>
                 <Modal.Title>Edit Stock</Modal.Title>
             </Modal.Header>
