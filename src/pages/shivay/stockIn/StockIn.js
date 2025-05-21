@@ -84,7 +84,7 @@ const StockIn = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <Button
-                className="mt-2 fw-bold custom-button me-2"
+                className="mt-2 fw-bold custom-button"
                 onClick={() => setShowAddModal(true)}
               >
                 <IoIosAdd className="fs-3" />&nbsp;Add
@@ -128,9 +128,15 @@ const StockIn = () => {
                         StockInData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
                             <td scope="row" className='font_work'>{index + 1}</td>
-                            <td className="text-uppercase font_work ">
-                              {data?.supplierData?.[0]?.name || <span className="text-black">-</span>}
+                            <td
+                              className="text-uppercase font_work"
+                              title={data?.supplierData?.[0]?.name || '-'}
+                            >
+                              {data?.supplierData?.[0]?.name
+                                ? data.supplierData[0].name.slice(0, 25) + (data.supplierData[0].name.length > 25 ? '...' : '')
+                                : <span className="text-black">-</span>}
                             </td>
+
                             <td className="font_work">
                               {data?.controlNumber || <span className="text-black">-</span>}
                             </td>

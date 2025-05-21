@@ -30,7 +30,7 @@ function EditStockModal({ show, onHide, stockId }) {
     const UpdateResponse = store?.updateStockReducer?.updateStock?.status
 
     const [stateDelete, setStateDelete] = useState(false)
-
+    
     useEffect(() => {
         if (show && stockId) {
             dispatch(getStockByIdActions(stockId));
@@ -41,13 +41,13 @@ function EditStockModal({ show, onHide, stockId }) {
         if (DeleteProductResponse === 200) {
             dispatch(getStockByIdActions(stockId));
         }
-    }, [dispatch, DeleteProductResponse, stockId]);
+    }, [DeleteProductResponse]);
 
     useEffect(() => {
         if (UpdateResponse === 200) {
             onHide();
         }
-    }, [UpdateResponse, onHide]);
+    }, [UpdateResponse]);
 
     useEffect(() => {
         if (stockDetails) {
@@ -71,7 +71,7 @@ function EditStockModal({ show, onHide, stockId }) {
                     searchTerm: modelName || name
                 };
             }) || [];
-
+console.log(initialRows,'hgfxzcvbnm,')
             setRows(initialRows);
             // setIsInitialLoad(false);
 
@@ -109,6 +109,16 @@ function EditStockModal({ show, onHide, stockId }) {
             data: product
         }));
     }, [ProductSearch]);
+
+         const productOptionsCode = useMemo(() => (
+            ProductSearch?.map(product => ({
+                value: product._id,
+                label: product.code,
+                code: product.code,
+                name: product.name,
+                data: product
+            })) || []
+        ), [ProductSearch]);
 
     // API error handling
     useEffect(() => {
@@ -215,7 +225,7 @@ function EditStockModal({ show, onHide, stockId }) {
     }
 
     return (
-        <Modal show={show} onHide={onHide} size='xl' backdrop="static" centered>
+        <Modal show={show} onHide={onHide} size='xl' centered>
             <Modal.Header className='py-1' closeButton>
                 <Modal.Title>Edit Stock</Modal.Title>
             </Modal.Header>
@@ -303,25 +313,45 @@ function EditStockModal({ show, onHide, stockId }) {
                                         <Form.Label className='mb-0'>
                                             {row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}
                                         </Form.Label>
-                                        <Select
-                                            value={row.selectedProduct}
-                                            onChange={(selected) => handleProductChange(selected, index)}
-                                            onInputChange={(inputValue) => {
-                                                setRows(prev => {
-                                                    const updated = [...prev];
-                                                    updated[index].searchTerm = inputValue;
-                                                    return updated;
-                                                });
-                                                handleSearch(inputValue, row.searchType, index);
-                                            }}
-                                            options={productOptions}
-                                            placeholder={`Search by ${row.searchType === 'modelName' ? 'model' : 'code'}`}
-                                            isClearable
-                                            isSearchable
-                                            isLoading={productLoading}
-                                            // inputValue={row.searchTerm}
-                                            filterOption={() => true}
-                                        />
+                                        {row.searchType === 'modelName' ?
+                                            <Select
+                                                value={row?.selectedProduct}
+                                                onChange={(selected) => handleProductChange(selected, index)}
+                                                onInputChange={(inputValue) => {
+                                                    setRows(prev => {
+                                                        const updated = [...prev];
+                                                        updated[index].searchTerm = inputValue;
+                                                        return updated;
+                                                    });
+                                                    handleSearch(inputValue, row.searchType);
+                                                }}
+                                                options={productOptions}
+                                                placeholder={`Search by ${row.searchType === 'modelName' ? 'model' : 'code'}`}
+                                                isClearable
+                                                isSearchable
+                                                isLoading={productLoading}
+                                                filterOption={() => true}
+                                            />
+                                            :
+                                            <Select
+                                                value={row?.selectedProduct}
+                                                onChange={(selected) => handleProductChange(selected, index)}
+                                                onInputChange={(inputValue) => {
+                                                    setRows(prev => {
+                                                        const updated = [...prev];
+                                                        updated[index].searchTerm = inputValue;
+                                                        return updated;
+                                                    });
+                                                    handleSearch(inputValue, row.searchType);
+                                                }}
+                                                options={productOptionsCode}
+                                                placeholder={`Search by code`}
+                                                isClearable
+                                                isSearchable
+                                                isLoading={productLoading}
+                                                filterOption={() => true}
+                                            />
+                                        }
                                     </Form.Group>
                                 </Col>
 

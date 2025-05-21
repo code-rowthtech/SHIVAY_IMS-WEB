@@ -34,21 +34,21 @@ function AddStockinModal({ show, onHide }) {
             searchWarehouse: { response: Warehouse = [] },
             error: warehouseError
         },
-        createStockReducer: { createStock: { status: createResponse, loading: createLoading } = {} }
+        createStockReducer: { createStockIn: { status: createResponse, loading: createLoading } = {} }
     } = useSelector(state => state);
 
     const UsersList = store?.listingUsersReducer?.listingUsers?.response;
     const SupplierList = store?.listingSupplierReducer?.listingSupplier?.response;
     const stockInData = store?.stockInByIdReducer?.stockInById?.response;
-
-
+    const CreateResponse = store?.createStockInReducer?.createStockIn?.status;
+    
     useEffect(() => {
-        if (createResponse === 200) {
+        if (CreateResponse === 200) {
             onHide();
             reset();
             setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
         }
-    }, [createResponse, onHide, reset]);
+    }, [CreateResponse, onHide, reset]);
 
 
     useEffect(() => {
@@ -70,6 +70,15 @@ function AddStockinModal({ show, onHide }) {
         ProductSearch?.map(product => ({
             value: product._id,
             label: product.modelId?.name,
+            code: product.code,
+            name: product.name,
+            data: product
+        })) || []
+    ), [ProductSearch]);
+    const productOptionsCode = useMemo(() => (
+        ProductSearch?.map(product => ({
+            value: product._id,
+            label: product.code,
             code: product.code,
             name: product.name,
             data: product
@@ -240,7 +249,7 @@ function AddStockinModal({ show, onHide }) {
                         </Col>
                         <Col sm={3}>
                             <Form.Group className="mb-1">
-                                <Form.Label className='mb-0'>Date Range</Form.Label>
+                                <Form.Label className='mb-0'>Date</Form.Label>
                                 <Form.Control
                                     type="date"
                                     value={today}
@@ -263,7 +272,7 @@ function AddStockinModal({ show, onHide }) {
                             <Form.Group className="mb-1">
                                 <Form.Label className="mb-0">
                                     Attachment
-                                    {attachmentType && (
+                                    {/* {attachmentType && (
                                         <span className="text-capitalize"> ({attachmentType})</span>
                                     )}
                                     {stockInData?.[0]?.invoiceAttachment && (
@@ -276,7 +285,7 @@ function AddStockinModal({ show, onHide }) {
                                         >
                                             <HiOutlineFolderDownload className='ms-1 fs-4' />
                                         </a>
-                                    )}
+                                    )} */}
                                     <span className="text-danger"> *</span>
                                 </Form.Label>
 
@@ -360,24 +369,46 @@ function AddStockinModal({ show, onHide }) {
                                 <Col sm={3}>
                                     <Form.Group className='mb-1'>
                                         <Form.Label className="mb-0">{row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}</Form.Label>
-                                        <Select
-                                            value={row?.selectedProduct}
-                                            onChange={(selected) => handleProductChange(selected, index)}
-                                            onInputChange={(inputValue) => {
-                                                setRows(prev => {
-                                                    const updated = [...prev];
-                                                    updated[index].searchTerm = inputValue;
-                                                    return updated;
-                                                });
-                                                handleSearch(inputValue, row.searchType);
-                                            }}
-                                            options={productOptions}
-                                            placeholder={`Search by ${row.searchType === 'modelName' ? 'model' : 'code'}`}
-                                            isClearable
-                                            isSearchable
-                                            isLoading={productLoading}
-                                            filterOption={() => true}
-                                        />
+                                        {row.searchType === 'modelName' ?
+                                            <Select
+                                                value={row?.selectedProduct}
+                                                onChange={(selected) => handleProductChange(selected, index)}
+                                                onInputChange={(inputValue) => {
+                                                    setRows(prev => {
+                                                        const updated = [...prev];
+                                                        updated[index].searchTerm = inputValue;
+                                                        return updated;
+                                                    });
+                                                    handleSearch(inputValue, row.searchType);
+                                                }}
+                                                options={productOptions}
+                                                placeholder={`Search by model`}
+                                                isClearable
+                                                isSearchable
+                                                isLoading={productLoading}
+                                                filterOption={() => true}
+                                            />
+                                            :
+                                            <Select
+                                                value={row?.selectedProduct}
+                                                onChange={(selected) => handleProductChange(selected, index)}
+                                                onInputChange={(inputValue) => {
+                                                    setRows(prev => {
+                                                        const updated = [...prev];
+                                                        updated[index].searchTerm = inputValue;
+                                                        return updated;
+                                                    });
+                                                    handleSearch(inputValue, row.searchType);
+                                                }}
+                                                options={productOptionsCode}
+                                                placeholder={`Search by code`}
+                                                isClearable
+                                                isSearchable
+                                                isLoading={productLoading}
+                                                filterOption={() => true}
+                                            />
+                                        }
+
                                     </Form.Group>
                                 </Col>
 
