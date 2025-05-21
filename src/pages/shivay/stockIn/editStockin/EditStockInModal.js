@@ -22,10 +22,10 @@ import { MdDelete, MdSave } from 'react-icons/md';
 import { Loading } from '../../../../helpers/loader/Loading';
 
 function EditStockinModal({ show, onHide, stockId }) {
-  const dispatch = useDispatch();
-  const { handleSubmit, register, setValue, reset, resetField, formState: { errors } } = useForm();
-  const store = useSelector((state) => state)
 
+  const dispatch = useDispatch();
+  const { handleSubmit, register, setValue, reset, resetField } = useForm();
+  const store = useSelector((state) => state)
   const [today, setToday] = useState(new Date().toISOString().split('T')[0]);
   const [rows, setRows] = useState([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
   const [editedQuantity, setEditedQuantity] = useState('');
@@ -40,7 +40,6 @@ function EditStockinModal({ show, onHide, stockId }) {
       searchWarehouse: { response: Warehouse = [] },
       error: warehouseError
     },
-    createStockReducer: { createStock: { status: createResponse, loading: createLoading } = {} }
   } = useSelector(state => state);
 
   const UsersList = store?.listingUsersReducer?.listingUsers?.response;
@@ -94,11 +93,6 @@ function EditStockinModal({ show, onHide, stockId }) {
   const handleAddRow = useCallback(() => {
     setRows(prev => [...prev, { searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
   }, []);
-
-  const handleDeleteRow = useCallback((index) => {
-    if (rows.length <= 1) return;
-    setRows(prev => prev.filter((_, i) => i !== index));
-  }, [rows.length]);
 
   const handleProductChange = useCallback((selected, index) => {
     setRows(prev => {
@@ -196,7 +190,7 @@ function EditStockinModal({ show, onHide, stockId }) {
     if (CreateProductResponse === 200 || DeleteProductResponse === 200 || UpdateProductResponse === 200) {
       dispatch(getStockInByIdActions(stockId));
     }
-  }, [CreateProductResponse, DeleteProductResponse, UpdateProductResponse]);
+  }, [dispatch, CreateProductResponse, DeleteProductResponse, UpdateProductResponse, stockId]);
 
   useEffect(() => {
     if (stockId) {
@@ -252,7 +246,7 @@ function EditStockinModal({ show, onHide, stockId }) {
       setProductId(stockInData?.[0]?.productData?._id)
     }
 
-  }, [stockId, stockInData])
+  }, [setValue, stockId, stockInData])
 
   const handleSaveRow = (row, rowId) => {
 
@@ -289,7 +283,7 @@ function EditStockinModal({ show, onHide, stockId }) {
     );
   }
   return (
-    <Modal show={show} onHide={onHide} size='xl' centered>
+    <Modal show={show} onHide={onHide} size='xl' backdrop="static" centered>
       <Modal.Header className='py-1' closeButton>
         <Modal.Title>Edit Stock in</Modal.Title>
       </Modal.Header>
@@ -372,7 +366,6 @@ function EditStockinModal({ show, onHide, stockId }) {
                       target="_blank"
                       title='Download Attachment'
                       rel="noopener noreferrer"
-                    // style={{position:'absolute', top:'20px'}}
                     >
                       <HiOutlineFolderDownload className='ms-1 fs-4' />
                     </a>
@@ -383,7 +376,6 @@ function EditStockinModal({ show, onHide, stockId }) {
                 {!attachmentType ? (
                   <Form.Select
                     className="mb-0"
-                    // defaultValue=""
                     value={attachmentType}
                     onChange={handleAttachmentTypeChange}
                     required
@@ -525,7 +517,6 @@ function EditStockinModal({ show, onHide, stockId }) {
                       title='Update'
                       onClick={() => handleSaveRow(row, row._id)}
                       className="p-1 me-2"
-                    // disabled={updateLoading}
                     >
                       <MdSave className="fs-5" />
                     </Button>
@@ -540,7 +531,6 @@ function EditStockinModal({ show, onHide, stockId }) {
                           action: 'delete'
                         }));
                       }}
-                      // disabled={rows?.length <= 1}
                       className="p-1"
                     >
                       <MdDelete className="fs-5" />

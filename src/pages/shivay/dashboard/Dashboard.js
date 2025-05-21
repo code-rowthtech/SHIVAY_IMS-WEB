@@ -178,7 +178,7 @@ const Dashboard = () => {
             </Row>
           </div>
         ) : (
-          <div>
+          <div className="m-0">
             <Row className="d-flex align-items-center">
               {dashboardItemsUsers?.map((item, index) => (
                 <Col key={index} md={6} lg={3} className="pt-3">
@@ -242,8 +242,8 @@ const Dashboard = () => {
                 />
               }
 
-              <Button className="mt-2 custom-button" onClick={handleShow}>
-                <MdFilterList className="fs-3" />
+              <Button className="mt-2 custom-button" title="Filter" onClick={handleShow}>
+                <MdFilterList className="fs-3"  />
               </Button>
 
             </div>
@@ -293,9 +293,15 @@ const Dashboard = () => {
                                 <td className="text-uppercase font_work ">
                                   {data?.productName || <span className="text-black">-</span>}
                                 </td>
-                                <td className="text-uppercase font_work ">
-                                  {data?.supplierName || <span className="text-black">-</span>}
+                                <td
+                                  className="text-uppercase font_work"
+                                  title={data?.supplierName}
+                                >
+                                  {data?.supplierName
+                                    ? `${data.supplierName.slice(0, 25)}${data.supplierName.length > 25 ? '...' : ''}`
+                                    : <span className="text-black">-</span>}
                                 </td>
+
                                 <td className="text-uppercase font_work ">
                                   {data?.receivedBy || <span className="text-black">-</span>}
                                 </td>
@@ -305,8 +311,8 @@ const Dashboard = () => {
                                 <td className="text-uppercase font_work ">
                                   {data?.stockIn || <span className="text-black">-</span>}
                                 </td>
-                                <td className="text-uppercase font_work  ">
-                                  {data?.stock || <span className="text-black">-</span>}
+                                <td className="text-uppercase font_work">
+                                  {data?.stock !== null && data?.stock !== undefined ? data.stock : <span className="text-black">-</span>}
                                 </td>
                                 <td className="text-uppercase font_work ">
                                   {data?.date
@@ -346,9 +352,9 @@ const Dashboard = () => {
                           <tr className="table_header">
                             <th scope="col"><i className="mdi mdi-merge"></i></th>
                             <th scope="col" className="test"> Product Name</th>
+                            <th scope="col">Customer</th>
                             <th scope="col">Code</th>
                             <th scope="col">Dispatch</th>
-                            <th scope="col">Customer</th>
                             <th scope="col">Stock</th>
                             <th scope="col">Date</th>
                           </tr>
@@ -375,16 +381,16 @@ const Dashboard = () => {
                                     {data?.productName || <span className="text-black">-</span>}
                                   </td>
                                   <td className="font_work ">
+                                    {data?.customerName || <span className="text-black">-</span>}
+                                  </td>
+                                  <td className="font_work ">
                                     {data?.code || <span className="text-black">-</span>}
                                   </td>
                                   <td className="text-uppercase font_work ">
                                     {data?.stockOut !== undefined ? data.stockOut : <span className="text-black">-</span>}
                                   </td>
-                                  <td className="font_work ">
-                                    {data?.customerName || <span className="text-black">-</span>}
-                                  </td>
-                                  <td className="text-uppercase font_work ">
-                                    {data?.stock !== null && data?.stock !== undefined
+                                  <td className="text-uppercase font_work">
+                                    {data?.stock !== null && data?.stock !== undefined && data.stock !== ""
                                       ? data.stock
                                       : <span className="text-black">-</span>}
                                   </td>
@@ -394,7 +400,6 @@ const Dashboard = () => {
                                       : <span className="text-black">-</span>}
 
                                   </td>
-                                  <td ></td>
                                   <td ></td>
                                   <div className="icon-container d-flex  pb-0" >
                                     <span className="icon-wrapper me-4" title="View">

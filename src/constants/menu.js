@@ -80,6 +80,6 @@ const RAW_MENU_ITEMS = [
 
 const MENU_ITEMS = Role === 'admin'
     ? RAW_MENU_ITEMS
-    : RAW_MENU_ITEMS.filter(item => !['user', 'openingStock'].includes(item.key));
+    : RAW_MENU_ITEMS.filter(item => !['user', 'openingStock', 'warehouse'].includes(item.key));
 
 export default MENU_ITEMS;

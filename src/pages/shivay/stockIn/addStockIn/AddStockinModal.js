@@ -19,7 +19,7 @@ import { MdDelete } from 'react-icons/md';
 
 function AddStockinModal({ show, onHide }) {
     const dispatch = useDispatch();
-    const { handleSubmit, register, setValue, reset, resetField, formState: { errors } } = useForm();
+    const { handleSubmit, register, setValue, reset, resetField } = useForm();
     const store = useSelector((state) => state)
 
     const [today] = useState(new Date().toISOString().split('T')[0]);
@@ -187,9 +187,9 @@ function AddStockinModal({ show, onHide }) {
             dispatch(listingUsersActions({ warehouseId: selectedWarehouse.value }));
         }
     }, [dispatch, selectedWarehouse]);
-    
+
     return (
-        <Modal show={show} onHide={onHide} size='xl' centered>
+        <Modal show={show} onHide={onHide} size='xl' backdrop="static" centered>
             <Modal.Header className='py-1' closeButton>
                 <Modal.Title>Add Stock</Modal.Title>
             </Modal.Header>

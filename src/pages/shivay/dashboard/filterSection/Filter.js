@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Badge, Button, Col, Form, Row } from 'react-bootstrap'
+import { Badge, Button, Col, Form, OverlayTrigger, Row, Tooltip } from 'react-bootstrap'
 import { TiArrowRight } from 'react-icons/ti'
 import PerformanceChart from '../chart/PerformanceChart';
 import { useDispatch, useSelector } from 'react-redux';
@@ -129,7 +129,20 @@ const Filter = () => {
             </Form.Group>
           </Col>
           <div className="d-flex justify-content-end mb-2">
-            <Button className="fw-bold custom-button" onClick={handleProductsSearch} disabled={!selectedWarehouse}>Search</Button>
+            <OverlayTrigger
+              placement="left"
+              overlay={<Tooltip>Please select a warehouse first...</Tooltip>}
+              show={!selectedWarehouse ? undefined : false}>
+              <div className="">
+                <Button
+                  className="mt-2 fw-bold custom-button"
+                  onClick={handleProductsSearch}
+                  disabled={!selectedWarehouse}
+                >
+                  Search
+                </Button>
+              </div>
+            </OverlayTrigger>
           </div>
           <Col sm={6} className="mb-2">
             <div
