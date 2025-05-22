@@ -54,9 +54,10 @@ function EditStockModal({ show, onHide, stockId }) {
             const initialRows = stockDetails?.[0]?.stockProducts?.map(item => {
                 const product = item?.product || {};
                 const modelName = product.model?.name || '';
+                const Qty = item?.liveStock;
                 const code = product.code || '';
                 const name = product.name || '';
-console.log(stockDetails,'stockDetails')
+                console.log(Qty, 'stockDetails123')
                 return {
                     _id: item._id,
                     searchType: 'modelName',
@@ -67,7 +68,7 @@ console.log(stockDetails,'stockDetails')
                         name,
                         data: item
                     },
-                    quantity: stockDetails?.[0]?.stockProducts?.[0]?.liveStock,
+                    quantity: Qty,
                     searchTerm: modelName || name
                 };
             }) || [];
