@@ -5,7 +5,7 @@ const ToastContainer = (message, type) => {
         message: message,
         type: type,
         insert: 'bottom',
-        container: 'bottom-center',
+        container: 'top-right',
         animationIn: ['animate__animated', 'animate__fadeIn'],
         animationOut: ['animate__animated', 'animate__fadeOut'],
         dismiss: {

@@ -12,7 +12,6 @@ import {
     listingUsersActions,
     searchProductActions,
 } from '../../../../redux/actions';
-import { HiOutlineFolderDownload } from "react-icons/hi";
 
 import { IoIosAdd } from 'react-icons/io';
 import { MdDelete } from 'react-icons/md';
@@ -41,7 +40,7 @@ function AddStockinModal({ show, onHide }) {
     const SupplierList = store?.listingSupplierReducer?.listingSupplier?.response;
     const stockInData = store?.stockInByIdReducer?.stockInById?.response;
     const CreateResponse = store?.createStockInReducer?.createStockIn?.status;
-    
+
     useEffect(() => {
         if (CreateResponse === 200) {
             onHide();
@@ -50,6 +49,10 @@ function AddStockinModal({ show, onHide }) {
         }
     }, [CreateResponse, onHide, reset]);
 
+    const handleClose = () => {
+        onHide();
+        setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+    };
 
     useEffect(() => {
         dispatch(getWarehouseListActions());
@@ -198,7 +201,7 @@ function AddStockinModal({ show, onHide }) {
     }, [dispatch, selectedWarehouse]);
 
     return (
-        <Modal show={show} onHide={onHide} size='xl' backdrop="static" centered>
+        <Modal show={show} onHide={handleClose} size='xl' backdrop="static" centered>
             <Modal.Header className='py-1' closeButton>
                 <Modal.Title>Add Stock</Modal.Title>
             </Modal.Header>
@@ -306,6 +309,7 @@ function AddStockinModal({ show, onHide }) {
                                         <Form.Control
                                             type="file"
                                             accept=".pdf,.docx,.jpg,.jpeg,.png"
+                                            required
                                             placeholder="Upload file"
                                             {...register("invoiceAttachment")}
                                         />
@@ -346,119 +350,133 @@ function AddStockinModal({ show, onHide }) {
                     </Row>
 
                     <hr className='mt-2 mb-1' />
-                    <div style={{ maxHeight: rows?.length >= 3 ? '51vh' : 'auto', overflowY: rows?.length >= 3 ? 'auto' : 'visible', padding: '15px' }}>
+                    <div style={{ maxHeight: rows?.length >= 3 ? '51vh' : 'auto', overflowY: rows?.length >= 3 ? 'auto' : 'visible', padding: '10px' }}>
                         {rows?.map((row, index) => (
-                            <Row key={index} className="align-items-end">
-                                <Col sm={3}>
-                                    <Form.Group className='mb-1'>
-                                        <Form.Label className="mb-0">Search By</Form.Label>
-                                        <Form.Select
-                                            value={row?.searchType}
-                                            onChange={(e) => setRows(prev => {
-                                                const updated = [...prev];
-                                                updated[index] = { ...updated[index], searchType: e.target.value, selectedProduct: null, searchTerm: '' };
-                                                return updated;
-                                            })}
-                                        >
-                                            <option value="modelName">Model Name</option>
-                                            <option value="code">Product Code</option>
-                                        </Form.Select>
-                                    </Form.Group>
-                                </Col>
-
-                                <Col sm={3}>
-                                    <Form.Group className='mb-1'>
-                                        <Form.Label className="mb-0">{row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}</Form.Label>
-                                        {row.searchType === 'modelName' ?
-                                            <Select
-                                                value={row?.selectedProduct}
-                                                onChange={(selected) => handleProductChange(selected, index)}
-                                                onInputChange={(inputValue) => {
-                                                    setRows(prev => {
+                            <div className='mb-1 rounded-1 ps-1' style={{ border: '1px solid rgba(218, 224, 225, 0.97)' }} key={index}>
+                                <Row className="align-items-center mb-2 g-2">
+                                    {/* Search By */}
+                                    <Col sm={2} className='d-flex'>
+                                        <span className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1">{index + 1}.</span>
+                                        <div>
+                                            <Form.Group className='mb-0'>
+                                                <Form.Label className="small mb-0">Search By</Form.Label>
+                                                <Form.Select
+                                                    value={row?.searchType}
+                                                    onChange={(e) => setRows(prev => {
                                                         const updated = [...prev];
-                                                        updated[index].searchTerm = inputValue;
+                                                        updated[index] = { ...updated[index], searchType: e.target.value, selectedProduct: null, searchTerm: '' };
                                                         return updated;
-                                                    });
-                                                    handleSearch(inputValue, row.searchType);
-                                                }}
-                                                options={productOptions}
-                                                placeholder={`Search by model`}
-                                                isClearable
-                                                isSearchable
-                                                isLoading={productLoading}
-                                                filterOption={() => true}
+                                                    })}
+                                                >
+                                                    <option value="modelName">Model Name</option>
+                                                    <option value="code">Product Code</option>
+                                                </Form.Select>
+                                            </Form.Group>
+                                        </div>
+                                    </Col>
+
+                                    {/* Dynamic Search Field */}
+                                    <Col sm={3}>
+                                        <Form.Group className='mb-0'>
+                                            <Form.Label className="small mb-0">{row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}</Form.Label>
+                                            {row.searchType === 'modelName' ?
+                                                <Select
+                                                    value={row?.selectedProduct}
+                                                    onChange={(selected) => handleProductChange(selected, index)}
+                                                    onInputChange={(inputValue) => {
+                                                        setRows(prev => {
+                                                            const updated = [...prev];
+                                                            updated[index].searchTerm = inputValue;
+                                                            return updated;
+                                                        });
+                                                        handleSearch(inputValue, row.searchType);
+                                                    }}
+                                                    options={productOptions}
+                                                    placeholder={`Search by model`}
+                                                    isClearable
+                                                    isSearchable
+                                                    isLoading={productLoading}
+                                                    filterOption={() => true}
+                                                />
+                                                :
+                                                <Select
+                                                    value={row?.selectedProduct}
+                                                    onChange={(selected) => handleProductChange(selected, index)}
+                                                    onInputChange={(inputValue) => {
+                                                        setRows(prev => {
+                                                            const updated = [...prev];
+                                                            updated[index].searchTerm = inputValue;
+                                                            return updated;
+                                                        });
+                                                        handleSearch(inputValue, row.searchType);
+                                                    }}
+                                                    options={productOptionsCode}
+                                                    placeholder={`Search by code`}
+                                                    isClearable
+                                                    isSearchable
+                                                    isLoading={productLoading}
+                                                    filterOption={() => true}
+                                                />
+                                            }
+                                        </Form.Group>
+                                    </Col>
+
+                                    {/* Complementary Info */}
+                                    <Col sm={2}>
+                                        <Form.Group className='mb-0'>
+                                            <Form.Label className="small mb-0">{row.searchType === 'modelName' ? 'Code' : 'Model'}</Form.Label>
+                                            <Form.Control
+                                                type='text'
+                                                value={row.searchType === 'modelName' ? row.selectedProduct?.data?.code : row.selectedProduct?.data?.modelId?.name || ''}
+                                                placeholder={row.searchType === 'modelName' ? 'Code' : 'Model'}
+                                                readOnly
                                             />
-                                            :
-                                            <Select
-                                                value={row?.selectedProduct}
-                                                onChange={(selected) => handleProductChange(selected, index)}
-                                                onInputChange={(inputValue) => {
-                                                    setRows(prev => {
-                                                        const updated = [...prev];
-                                                        updated[index].searchTerm = inputValue;
-                                                        return updated;
-                                                    });
-                                                    handleSearch(inputValue, row.searchType);
-                                                }}
-                                                options={productOptionsCode}
-                                                placeholder={`Search by code`}
-                                                isClearable
-                                                isSearchable
-                                                isLoading={productLoading}
-                                                filterOption={() => true}
+                                        </Form.Group>
+                                    </Col>
+
+                                    {/* Product Name */}
+                                    <Col sm={2}>
+                                        <Form.Group className='mb-0'>
+                                            <Form.Label className="small mb-0">Product Name</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                value={row.selectedProduct?.name || ''}
+                                                readOnly
+                                                placeholder="Product name"
                                             />
-                                        }
+                                        </Form.Group>
+                                    </Col>
 
-                                    </Form.Group>
-                                </Col>
+                                    {/* Quantity */}
+                                    <Col sm={2}>
+                                        <Form.Group className='mb-0'>
+                                            <Form.Label className="small mb-0">Quantity</Form.Label>
+                                            <Form.Control
+                                                type="number"
+                                                min="1"
+                                                value={row.quantity}
+                                                onChange={(e) => handleQuantityChange(e, index)}
+                                                placeholder="Enter quantity"
+                                                required
+                                            />
+                                        </Form.Group>
+                                    </Col>
 
-                                <Col sm={3}>
-                                    <Form.Group className='mb-1'>
-                                        <Form.Label className="mb-0">{row.searchType === 'modelName' ? 'Code' : 'Model '}</Form.Label>
-                                        <Form.Control
-                                            type='text'
-                                            value={row.searchType === 'modelName' ? row.selectedProduct?.data?.code : row.selectedProduct?.data?.modelId?.name || ''}
-                                            placeholder={row.searchType === 'modelName' ? 'Code' : 'Model'}
-                                            readOnly
-                                        />
-                                    </Form.Group>
-                                </Col>
-
-                                <Col sm={3}>
-                                    <Form.Group className='mb-1'>
-                                        <Form.Label className="mb-0">Product Name</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            value={row.selectedProduct?.name || ''}
-                                            readOnly
-                                            placeholder="Product name"
-                                        />
-                                    </Form.Group>
-                                </Col>
-
-                                <Col sm={3}>
-                                    <Form.Group className='mb-1'>
-                                        <Form.Label className="mb-0">Quantity</Form.Label>
-                                        <Form.Control
-                                            type="number"
-                                            min="1"
-                                            value={row.quantity}
-                                            onChange={(e) => handleQuantityChange(e, index)}
-                                            placeholder="Enter quantity"
-                                            required
-                                        />
-                                    </Form.Group>
-                                </Col>
-
-                                <Col sm={9} className="d-flex justify-content-end">
-                                    {rows.length > 1 && (
-                                        <Button variant="outline-danger" title='Delete' onClick={() => handleDeleteRow(index)} className="p-1 mb-1">
-                                            <MdDelete className="fs-5" />
-                                        </Button>
-                                    )}
-                                </Col>
-                                <hr className='mt-2 mb-1' />
-                            </Row>
+                                    {/* Delete Button */}
+                                    <Col sm={1} className="d-flex justify-content-center mt-2 pt-1">
+                                        {rows.length > 1 && (
+                                            <Button
+                                                variant="outline-danger"
+                                                title='Delete'
+                                                onClick={() => handleDeleteRow(index)}
+                                                className="p-1 mt-2"
+                                            >
+                                                <MdDelete className="fs-6" />
+                                            </Button>
+                                        )}
+                                    </Col>
+                                </Row>
+                            </div>
                         ))}
                     </div>
 
@@ -468,7 +486,7 @@ function AddStockinModal({ show, onHide }) {
                         </Button>
 
                         <div>
-                            <Button onClick={onHide} className="cancel-button me-2">Cancel</Button>
+                            <Button onClick={handleClose} className="cancel-button me-2">Cancel</Button>
                             <Button type="submit" className='custom-button' disabled={createLoading}>
                                 {createLoading ? 'Saving...' : 'Save'}
                             </Button>
