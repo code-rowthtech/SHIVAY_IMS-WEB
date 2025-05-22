@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Alert, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Navigate, useLocation } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
 // actions
-import { resetAuth, loginUser, getRolesListActions } from '../../redux/actions';
+import { loginUser, getRolesListActions } from '../../redux/actions';
 
 // components
-import { VerticalForm, FormInput } from '../../components/';
+import { FormInput } from '../../components/';
 import AccountLayout from './AccountLayout';
 import { useForm } from 'react-hook-form';
 import { ButtonLoading } from '../../helpers/loader/Loading';
@@ -114,7 +114,7 @@ const Login = (): React$Element<any> => {
                     />
 
                     <div className="mb-3 mb-0 text-center">
-                        <Button variant="primary" type="submit" disabled={loading}>
+                        <Button className='custom-button' type="submit" disabled={loading}>
                             {!loading ? t('Log In') : <ButtonLoading />}
                         </Button>
                     </div>

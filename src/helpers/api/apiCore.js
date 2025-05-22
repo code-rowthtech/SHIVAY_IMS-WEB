@@ -25,7 +25,7 @@ axios.interceptors.response.use(
                 console.error("Bad Request:", data);
                 break;
                 case 403:
-                    message = "Access Denied";
+                    message = data?.message;
                     break;
                 
             case 404:

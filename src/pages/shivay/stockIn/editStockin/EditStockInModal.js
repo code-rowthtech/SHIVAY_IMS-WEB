@@ -85,15 +85,15 @@ function EditStockinModal({ show, onHide, stockId }) {
     })) || []
   ), [ProductSearch]);
 
-    const productOptionsCode = useMemo(() => (
-              ProductSearch?.map(product => ({
-                  value: product._id,
-                  label: product.code,
-                  code: product.code,
-                  name: product.name,
-                  data: product
-              })) || []
-          ), [ProductSearch]);
+  const productOptionsCode = useMemo(() => (
+    ProductSearch?.map(product => ({
+      value: product._id,
+      label: product.code,
+      code: product.code,
+      name: product.name,
+      data: product
+    })) || []
+  ), [ProductSearch]);
 
   const handleSearch = useCallback((term, type) => {
     if (!term || term.length < 2) return;
@@ -441,134 +441,144 @@ function EditStockinModal({ show, onHide, stockId }) {
           <hr className='mt-2 mb-1' />
           <div style={{ maxHeight: rows?.length >= 3 ? '51vh' : 'auto', overflowY: rows?.length >= 3 ? 'auto' : 'visible', padding: '15px' }}>
             {rows?.map((row, index) => (
-              <Row key={index} className="align-items-end">
-                <Col sm={3}>
-                  <Form.Group className='mb-1'>
-                    <Form.Label className="mb-0">Search By</Form.Label>
-                    <Form.Select
-                      value={row?.searchType}
-                      onChange={(e) => setRows(prev => {
-                        const updated = [...prev];
-                        updated[index] = { ...updated[index], searchType: e.target.value, selectedProduct: null, searchTerm: '' };
-                        return updated;
-                      })}
-                    >
-                      <option value="modelName">Model Name</option>
-                      <option value="code">Product Code</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
+              <div className='mb-1 rounded-1 ps-1' style={{ border: '1px solid rgba(218, 224, 225, 0.97)' }} key={index}>
+                <Row className="align-items-center mb-2 g-2">
+                  {/* Search By */}
+                  <Col sm={2} className='d-flex'>
+                    <span className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1">{index + 1}.</span>
+                    <div>
+                      <Form.Group className='mb-0'>
+                        <Form.Label className="small mb-0">Search By</Form.Label>
+                        <Form.Select
+                          value={row?.searchType}
+                          onChange={(e) => setRows(prev => {
+                            const updated = [...prev];
+                            updated[index] = { ...updated[index], searchType: e.target.value, selectedProduct: null, searchTerm: '' };
+                            return updated;
+                          })}
+                        >
+                          <option value="modelName">Model Name</option>
+                          <option value="code">Product Code</option>
+                        </Form.Select>
+                      </Form.Group>
+                    </div>
+                  </Col>
 
-                <Col sm={3}>
-                  <Form.Group className='mb-1'>
-                    <Form.Label className="mb-0">{row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}</Form.Label>
-                     {row.searchType === 'modelName' ?
-                    <Select
-                      value={row?.selectedProduct}
-                      onChange={(selected) => handleProductChange(selected, index)}
-                      onInputChange={(inputValue) => {
-                        setRows(prev => {
-                          const updated = [...prev];
-                          updated[index].searchTerm = inputValue;
-                          return updated;
-                        });
-                        handleSearch(inputValue, row.searchType);
-                      }}
-                      options={productOptions}
-                      placeholder={`Search by model`}
-                      isClearable
-                      isSearchable
-                      isLoading={productLoading}
-                      filterOption={() => true}
-                    />:
-                       <Select
-                      value={row?.selectedProduct}
-                      onChange={(selected) => handleProductChange(selected, index)}
-                      onInputChange={(inputValue) => {
-                        setRows(prev => {
-                          const updated = [...prev];
-                          updated[index].searchTerm = inputValue;
-                          return updated;
-                        });
-                        handleSearch(inputValue, row.searchType);
-                      }}
-                      options={productOptionsCode}
-                      placeholder={`Search by code`}
-                      isClearable
-                      isSearchable
-                      isLoading={productLoading}
-                      filterOption={() => true}
-                    />
-}
-                  </Form.Group>
-                </Col>
-                <Col sm={3}>
-                  <Form.Group className='mb-1'>
-                    <Form.Label className="mb-0">{row.searchType === 'modelName' ? 'Code' : 'Model '}</Form.Label>
-                    <Form.Control
-                      type='text'
-                      value={row.searchType === 'modelName' ? row.selectedProduct?.code : row.selectedProduct?.data?.modelId?.name || ''}
-                      placeholder={row.searchType === 'modelName' ? 'Code' : 'Model'}
-                      readOnly
-                    />
-                  </Form.Group>
-                </Col>
+                  {/* Dynamic Search Field */}
+                  <Col sm={3}>
+                    <Form.Group className='mb-0'>
+                      <Form.Label className="small mb-0">{row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}</Form.Label>
+                      {row.searchType === 'modelName' ?
+                        <Select
+                          value={row?.selectedProduct}
+                          onChange={(selected) => handleProductChange(selected, index)}
+                          onInputChange={(inputValue) => {
+                            setRows(prev => {
+                              const updated = [...prev];
+                              updated[index].searchTerm = inputValue;
+                              return updated;
+                            });
+                            handleSearch(inputValue, row.searchType);
+                          }}
+                          options={productOptions}
+                          placeholder={`Search by model`}
+                          isClearable
+                          isSearchable
+                          isLoading={productLoading}
+                          filterOption={() => true}
+                        /> :
+                        <Select
+                          value={row?.selectedProduct}
+                          onChange={(selected) => handleProductChange(selected, index)}
+                          onInputChange={(inputValue) => {
+                            setRows(prev => {
+                              const updated = [...prev];
+                              updated[index].searchTerm = inputValue;
+                              return updated;
+                            });
+                            handleSearch(inputValue, row.searchType);
+                          }}
+                          options={productOptionsCode}
+                          placeholder={`Search by code`}
+                          isClearable
+                          isSearchable
+                          isLoading={productLoading}
+                          filterOption={() => true}
+                        />
+                      }
+                    </Form.Group>
+                  </Col>
 
-                <Col sm={3}>
-                  <Form.Group className='mb-1'>
-                    <Form.Label className="mb-0">Product Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={row.selectedProduct?.name || ''}
-                      readOnly
-                      placeholder="Product name"
-                    />
-                  </Form.Group>
-                </Col>
+                  {/* Complementary Info */}
+                  <Col sm={2}>
+                    <Form.Group className='mb-0'>
+                      <Form.Label className="small mb-0">{row.searchType === 'modelName' ? 'Code' : 'Model'}</Form.Label>
+                      <Form.Control
+                        type='text'
+                        value={row.searchType === 'modelName' ? row.selectedProduct?.code : row.selectedProduct?.data?.modelId?.name || ''}
+                        placeholder={row.searchType === 'modelName' ? 'Code' : 'Model'}
+                        readOnly
+                      />
+                    </Form.Group>
+                  </Col>
 
-                <Col sm={3}>
-                  <Form.Group className='mb-1'>
-                    <Form.Label className="mb-0">Quantity</Form.Label>
-                    <Form.Control
-                      type="number"
-                      min="1"
-                      value={row.quantity}
-                      onChange={(e) => handleQuantityChange(e, index)}
-                      placeholder="Enter quantity"
-                      required
-                    />
-                  </Form.Group>
-                </Col>
+                  {/* Product Name */}
+                  <Col sm={2}>
+                    <Form.Group className='mb-0'>
+                      <Form.Label className="small mb-0">Product Name</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={row.selectedProduct?.name || ''}
+                        readOnly
+                        placeholder="Product name"
+                      />
+                    </Form.Group>
+                  </Col>
 
-                <Col sm={9} className="d-flex justify-content-end">
-                  <div className='mb-1'>
-                    <Button
-                      variant="outline-success"
-                      title='Update'
-                      onClick={() => handleSaveRow(row, row._id)}
-                      className="p-1 me-2"
-                    >
-                      <MdSave className="fs-5" />
-                    </Button>
+                  {/* Quantity */}
+                  <Col sm={2}>
+                    <Form.Group className='mb-0'>
+                      <Form.Label className="small mb-0">Quantity</Form.Label>
+                      <Form.Control
+                        type="number"
+                        min="1"
+                        value={row.quantity}
+                        onChange={(e) => handleQuantityChange(e, index)}
+                        placeholder="Enter quantity"
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
 
-                    <Button
-                      variant="outline-danger"
-                      title='Delete'
-                      onClick={() => {
-                        setStateDelete(true)
-                        dispatch(deleteStockInProductActions({
-                          stockInProductId: row?._id,
-                          action: 'delete'
-                        }));
-                      }}
-                      className="p-1"
-                    >
-                      <MdDelete className="fs-5" />
-                    </Button>
-                  </div>
-                </Col>
-                <hr className='mt-2 mb-1' />
-              </Row>
+                  {/* Action Buttons */}
+                  <Col sm={1} className="d-flex justify-content-center mt-2 pt-1">
+                    <div className='d-flex'>
+                      <Button
+                        variant="outline-success"
+                        title='Update'
+                        onClick={() => handleSaveRow(row, row._id)}
+                        className="p-1 me-1 mt-2"
+                      >
+                        <MdSave className="fs-6" />
+                      </Button>
+                      <Button
+                        variant="outline-danger"
+                        title='Delete'
+                        onClick={() => {
+                          setStateDelete(true)
+                          dispatch(deleteStockInProductActions({
+                            stockInProductId: row?._id,
+                            action: 'delete'
+                          }));
+                        }}
+                        className="p-1 mt-2"
+                      >
+                        <MdDelete className="fs-6" />
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
             ))}
           </div>
 
