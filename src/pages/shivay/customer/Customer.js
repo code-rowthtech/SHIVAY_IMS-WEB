@@ -103,6 +103,7 @@ const Customer = () => {
                       <th scope="col">Customer Name</th>
                       <th scope="col">Location</th>
                       <th scope="col">Billing Address</th>
+                      <th scope="col">Phone no.</th>
                     </tr>
                   </thead>
                   {store?.customerListReducer?.loading ? (
@@ -134,6 +135,8 @@ const Customer = () => {
                                 ? `${data.billingAddress.slice(0, 30)}${data.billingAddress.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}
                             </td>
+                             <td>{data?.primaryPhoneNumber || <span className="text-black">-</span>}</td>
+                             <td></td>
                             <div className="icon-container d-flex  pb-0" >
                               <span className="icon-wrapper" title="Edit">
                                 <AiOutlineEdit

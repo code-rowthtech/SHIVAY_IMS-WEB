@@ -204,6 +204,34 @@ const searchProductNameReducer = (state = SEARCH_PRODUCT_NAME_INITIAL_STATE, act
         default: return state
     }
 }
+
+const VIEW_PRODUCT_STOCK_INITIAL_STATE = {
+    viewProductStock: [],
+    loading: false
+}
+
+const viewProductStockReducer = (state = VIEW_PRODUCT_STOCK_INITIAL_STATE, action) => {
+
+    switch (action.type) {
+        case InventoryActionTypes.VIEW_PRODUCT_STOCK_LOADING:
+            return {
+                viewProductStock: state.viewProductStock,
+                loading: true
+            }
+        case InventoryActionTypes.VIEW_PRODUCT_STOCK_SUCCESS:
+            return {
+                viewProductStock: action.payload,
+                loading: false
+            }
+        case InventoryActionTypes.VIEW_PRODUCT_STOCK_ERROR:
+            return {
+                viewProductStock: action.payload,
+                loading: false
+            }
+        default: return state
+    }
+}
+
 export {
     productListReducer,
     createProductReducer,
@@ -212,4 +240,5 @@ export {
     searchProductReducer,
     viewProductReducer,
     searchProductNameReducer,
+    viewProductStockReducer,
 }

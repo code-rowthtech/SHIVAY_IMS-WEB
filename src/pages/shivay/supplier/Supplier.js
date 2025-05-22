@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import PageTitle from '../../../helpers/PageTitle'
 import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import { FaRegCopy } from 'react-icons/fa';
 import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
 import { IoIosAdd } from 'react-icons/io';
 import AddSupplierModal from './modal/AddSupplierModal';
@@ -112,6 +111,7 @@ const Supplier = () => {
                       <th scope="col">Supplier Name</th>
                       <th scope="col">Location</th>
                       <th scope="col">Address</th>
+                      <th scope="col">Phone no.</th>
                     </tr>
                   </thead>
                   {store?.supplierListReducer?.loading ? (
@@ -135,29 +135,14 @@ const Supplier = () => {
                             <td className="text-uppercase font_work ">
                               {data?.name || <span className="text-black">-</span>}
                             </td>
-                            {/* <td className="font_work text-primary">
-                              {data?.email ? (
-                                <>
-                                  <span>{data.email}</span>
-                                  <FaRegCopy
-                                    style={{ cursor: 'pointer' }}
-                                    title="Copy Email"
-                                    className='text-muted ms-2 fs-6'
-                                    onClick={() => {
-                                      navigator.clipboard.writeText(data.email);
-                                      alert('Email copied to clipboard!');
-                                    }}
-                                  />
-                                </>
-                              ) : (
-                                <span className="text-black">-</span>
-                              )}
-                            </td> */}
                             <td>{data?.location || <span className="text-black">-</span>}</td>
                             <td className="font_work" title={data?.address}>
                               {data?.address
                                 ? `${data.address.slice(0, 30)}${data.address.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}
+                            </td>
+                             <td className="text-uppercase font_work ">
+                              {data?.phoneNumber || <span className="text-black">-</span>}
                             </td>
                             <td></td>
                             <div className="icon-container d-flex  pb-0" >
