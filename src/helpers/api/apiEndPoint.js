@@ -24,6 +24,7 @@ export const DELETE_PRODUCT = '/api/product/delete'
 export const SEARCH_PRODUCT = '/api/product/search'
 export const VIEW_PRODUCT = '/api/product/view'
 export const SEARCH_PRODUCT_NAME = '/api/product/search-name'
+export const VIEW_PRODUCT_STOCK = '/api/product'
 
 // location 
 export const GET_LOCATION = '/api/location/get'

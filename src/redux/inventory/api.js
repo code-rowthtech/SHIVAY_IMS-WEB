@@ -40,6 +40,11 @@ function searchProductNameApi(params) {
     return api.create(URL.SEARCH_PRODUCT_NAME, data);
 }
 
+function viewProductStockApi(params) {
+    const { productId} = params?.data
+    return api.get(`${URL.VIEW_PRODUCT_STOCK}?productId=${productId}`);
+}
+
 export {
     getProductListApi,
     createProductApi,
@@ -48,4 +53,5 @@ export {
     searchProductApi,
     viewProductApi,
     searchProductNameApi,
+    viewProductStockApi,
 };

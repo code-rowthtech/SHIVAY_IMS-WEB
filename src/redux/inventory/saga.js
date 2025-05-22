@@ -1,11 +1,17 @@
 //------------------------------------S A G A---------------------------------------------------------------
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import { InventoryActionTypes } from './constants';
-
-import { createProductApi, deleteProductApi, getProductListApi, searchProductApi, searchProductNameApi, updateProductApi, viewProductApi } from './api';
+import {
+    createProductApi,
+    deleteProductApi,
+    getProductListApi,
+    searchProductApi,
+    searchProductNameApi,
+    updateProductApi,
+    viewProductApi,
+    viewProductStockApi
+} from './api';
 import ToastContainer from '../../helpers/toast/ToastContainer';
-
-
 
 
 function* getProductListFunction(data) {
@@ -209,6 +215,32 @@ function* searchProductNameFunction(data) {
     }
 }
 
+function* viewProductStockFunction(data) {
+    try {
+        yield put({
+            type: InventoryActionTypes.VIEW_PRODUCT_STOCK_LOADING,
+            payload: {},
+        });
+        const response = yield call(viewProductStockApi, data);
+        if (response?.status === 200) {
+            yield put({
+                type: InventoryActionTypes.VIEW_PRODUCT_STOCK_SUCCESS,
+                payload: response.data,
+            });
+        } else {
+            yield put({
+                type: InventoryActionTypes.VIEW_PRODUCT_STOCK_ERROR,
+                payload: response.data,
+            });
+        }
+    } catch (error) {
+        yield put({
+            type: InventoryActionTypes.VIEW_PRODUCT_STOCK_ERROR,
+            payload: error,
+        });
+    }
+}
+
 export function* watchProductListData() {
     yield takeEvery(InventoryActionTypes.PRODUCT_LIST_FIRST, getProductListFunction);
 }
@@ -237,6 +269,10 @@ export function* watchSearchProductNameData() {
     yield takeEvery(InventoryActionTypes.SEARCH_PRODUCT_NAME_FIRST, searchProductNameFunction);
 }
 
+export function* watchViewProductStock() {
+    yield takeEvery(InventoryActionTypes.VIEW_PRODUCT_STOCK_FIRST, viewProductStockFunction);
+}
+
 function* inventorySaga() {
     yield all([
         fork(watchProductListData),
@@ -246,6 +282,7 @@ function* inventorySaga() {
         fork(watchSearchProductData),
         fork(watchViewProductData),
         fork(watchSearchProductNameData),
+        fork(watchViewProductStock),
 
     ]);
 }

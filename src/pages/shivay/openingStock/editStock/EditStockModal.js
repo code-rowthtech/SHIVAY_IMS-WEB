@@ -57,7 +57,6 @@ function EditStockModal({ show, onHide, stockId }) {
                 const Qty = item?.liveStock;
                 const code = product.code || '';
                 const name = product.name || '';
-                console.log(Qty, 'stockDetails123')
                 return {
                     _id: item._id,
                     searchType: 'modelName',
@@ -72,7 +71,6 @@ function EditStockModal({ show, onHide, stockId }) {
                     searchTerm: modelName || name
                 };
             }) || [];
-            console.log(initialRows, 'hgfxzcvbnm,')
             setRows(initialRows);
             // setIsInitialLoad(false);
 

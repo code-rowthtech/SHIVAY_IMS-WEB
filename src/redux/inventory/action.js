@@ -39,3 +39,7 @@ export const searchProductNameActions = (data) => ({
     data
 });
 
+export const viewProductStockActions = (data) => ({
+    type: InventoryActionTypes.VIEW_PRODUCT_STOCK_FIRST,
+    data
+});
