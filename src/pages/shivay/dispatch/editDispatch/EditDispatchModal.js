@@ -255,7 +255,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
         setValue('customerId', selectedCustomer?.value);
     };
 
-    const handleQuantityChange = useCallback((e, index) => {
+    const handleQuantityChange = useCallback((e, index, item) => {
         const value = Math.max(1, parseInt(e.target.value) || '');
         setRows(prev => {
             const updated = [...prev];
@@ -268,7 +268,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
                 warehouseId: selectedWarehouse.value,
                 productId: rows[index].selectedProduct.value,
                 qty: value,
-                oldQty: ''
+                oldQty: DispatchDetails?.[0]?.dispatchProducts?.find((data)=>data?._id===item?._id)?.quantity
             }));
         }
     }, [selectedWarehouse, dispatch, rows]);
@@ -600,7 +600,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
                                                 type="number"
                                                 placeholder="Enter Number"
                                                 value={row.quantity}
-                                                onChange={(e) => handleQuantityChange(e, index)}
+                                                onChange={(e) => handleQuantityChange(e, index ,row)}
                                                 required
                                                 min={0}
                                             />
