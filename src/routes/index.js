@@ -28,6 +28,7 @@ const ViewProduct = React.lazy(() => import('../pages/shivay/dashboard/ViewProdu
 
 // SHIVAY pages 
 const Inventory = React.lazy(() => import('../pages/shivay/inventory/inventory'))
+const ViewProductStock = React.lazy(() => import('../pages/shivay/inventory/viewProduct/ViewProductStock'))
 const Report = React.lazy(() => import('../pages/shivay/report/Report'))
 const User = React.lazy(() => import('../pages/shivay/user/User'))
 const Warehouse = React.lazy(() => import('../pages/shivay/warehouse/Warehouse'))
@@ -133,6 +134,10 @@ const AllRoutes = () => {
                         {
                             path: 'inventory',
                             element: <LoadComponent component={Inventory} />,
+                        },
+                         {
+                            path: 'viewProductStock',
+                            element: <LoadComponent component={ViewProductStock} />,
                         },
                         {
                             path: 'report',

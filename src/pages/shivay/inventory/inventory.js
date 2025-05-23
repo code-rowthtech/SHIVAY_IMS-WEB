@@ -11,10 +11,13 @@ import { MdDeleteOutline } from 'react-icons/md';
 import Pagination from '../../../helpers/Pagination';
 import { Loading } from '../../../helpers/loader/Loading';
 import EditProductModal from './modal/EditProductModal';
+import { PiEye } from "react-icons/pi";
+import { useNavigate } from 'react-router-dom';
 
 const Inventory = () => {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [showConfirm, setShowConfirm] = useState(false);
     const [productToDelete, setProductToDelete] = useState(null);
     const totalRecords = '0';
@@ -168,6 +171,16 @@ const Inventory = () => {
                                                         </td>
                                                         <td ></td>
                                                         <div className="icon-container d-flex  pb-0" >
+                                                            <span
+                                                                className="icon-wrapper"
+                                                                title="View Product"
+                                                                onClick={() => navigate(`/shivay/viewProductStock?id=${data?._id}`)}
+                                                            >
+                                                                <PiEye
+                                                                    className="fs-4 text-black"
+                                                                    style={{ cursor: 'pointer' }}
+                                                                />
+                                                            </span>
                                                             <span className="icon-wrapper" title="Edit">
                                                                 <AiOutlineEdit
                                                                     className="fs-4 text-black"

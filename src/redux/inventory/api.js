@@ -42,7 +42,7 @@ function searchProductNameApi(params) {
 
 function viewProductStockApi(params) {
     const { productId} = params?.data
-    return api.get(`${URL.VIEW_PRODUCT_STOCK}?productId=${productId}`);
+    return api.get(`${URL.VIEW_PRODUCT_STOCK}/${productId}`);
 }
 
 export {
