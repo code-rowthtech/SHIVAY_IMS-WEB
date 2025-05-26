@@ -243,7 +243,7 @@ const Dashboard = () => {
               }
 
               <Button className="mt-2 custom-button" title="Filter" onClick={handleShow}>
-                <MdFilterList className="fs-3"  />
+                <MdFilterList className="fs-3" />
               </Button>
 
             </div>
@@ -289,7 +289,7 @@ const Dashboard = () => {
                           ) : (
                             StockinData?.map((data, index) => (
                               <tr key={index} className="text-dark  text-nowrap highlight-row">
-                                <td className="font_work">{index + 1}</td>
+                                <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
                                 <td className="text-uppercase font_work ">
                                   {data?.productName || <span className="text-black">-</span>}
                                 </td>
@@ -376,7 +376,7 @@ const Dashboard = () => {
                             ) : (
                               DispatchData?.map((data, index) => (
                                 <tr key={index} className="text-dark text-nowrap highlight-row">
-                                  <td className="font_work">{index + 1}</td>
+                                  <td className='font_work'>{(dispatchPageIndex - 1) * dispatchPageSize + index + 1}</td>
                                   <td className="text-uppercase font_work ">
                                     {data?.productName || <span className="text-black">-</span>}
                                   </td>

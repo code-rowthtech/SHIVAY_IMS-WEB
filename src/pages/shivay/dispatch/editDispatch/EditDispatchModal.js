@@ -199,7 +199,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
     };
 
     const handleSearch = useCallback((term, type) => {
-        if (!term || term.length < 2) return;
+        if (!term || term.length < 1) return;
         dispatch(searchProductActions(type === 'modelName' ? { modelName: term } : { code: term }));
     }, [dispatch]);
 

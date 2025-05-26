@@ -82,7 +82,7 @@ function AddStockModal({ show, onHide }) {
     ), [ProductSearch]);
 
     const handleSearch = useCallback((term, type) => {
-        if (!term || term.length < 2) return;
+        if (!term || term.length < 1) return;
         dispatch(searchProductActions(type === 'modelName' ? { modelName: term } : { code: term }));
     }, [dispatch]);
 
@@ -163,13 +163,17 @@ function AddStockModal({ show, onHide }) {
 
                         <Col sm={4}>
                             <Form.Group className="mb-1">
-                                <Form.Label>Date <span className="text-danger">*</span></Form.Label>
+                                <Form.Label>
+                                    Date <span className="text-danger">*</span>
+                                </Form.Label>
                                 <Form.Control
                                     type="date"
                                     defaultValue={today}
+                                    max={today} // Prevent future dates
                                     {...register('date', { required: true })}
                                 />
                             </Form.Group>
+
                         </Col>
 
                         <Col sm={4}>

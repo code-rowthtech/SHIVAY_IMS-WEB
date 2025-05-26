@@ -128,8 +128,8 @@ const StockIn = () => {
                       ) : (
                         StockInData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
-                            <td scope="row" className='font_work'>{index + 1}</td>
-                            <td
+                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
+                              <td
                               className="text-uppercase font_work"
                               title={data?.supplierData?.[0]?.name || '-'}
                             >

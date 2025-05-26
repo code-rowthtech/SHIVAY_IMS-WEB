@@ -123,7 +123,7 @@ const Customer = () => {
                       ) : (
                         CustomerData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
-                            <td className='font_work'>{index + 1}</td>
+                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
                             <td className="text-uppercase font_work " title={data?.name}>
                               {data?.name
                                 ? `${data.name.slice(0, 30)}${data.name.length > 30 ? '...' : ''}`
@@ -135,8 +135,8 @@ const Customer = () => {
                                 ? `${data.billingAddress.slice(0, 30)}${data.billingAddress.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}
                             </td>
-                             <td>{data?.primaryPhoneNumber || <span className="text-black">-</span>}</td>
-                             <td></td>
+                            <td>{data?.primaryPhoneNumber || <span className="text-black">-</span>}</td>
+                            <td></td>
                             <div className="icon-container d-flex  pb-0" >
                               <span className="icon-wrapper" title="Edit">
                                 <AiOutlineEdit
