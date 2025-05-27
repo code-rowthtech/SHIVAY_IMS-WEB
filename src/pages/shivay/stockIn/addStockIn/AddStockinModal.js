@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useCallback, useState, useRef } from 'react';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Form, Row, Col, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
@@ -111,12 +111,42 @@ function AddStockinModal({ show, onHide }) {
     }, []);
 
     const handleQuantityChange = useCallback((e, index) => {
-        const value = Math.max(1, parseInt(e.target.value) || '');
+        const value = e.target.value === '' ? '' : parseInt(e.target.value);
         setRows(prev => {
             const updated = [...prev];
             updated[index].quantity = value;
+            updated[index].quantityError = ''; // Clear error on change
             return updated;
         });
+    }, []);
+
+    const validateQuantity = useCallback((e, index) => {
+        const value = e.target.value;
+        if (value === '') {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantity = 1; // Default to 1 if empty
+                updated[index].quantityError = '';
+                return updated;
+            });
+            return;
+        }
+
+        const numValue = parseInt(value);
+        if (isNaN(numValue) || numValue <= 0) {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantityError = 'Quantity must be greater than 0';
+                return updated;
+            });
+        } else {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantity = numValue;
+                updated[index].quantityError = '';
+                return updated;
+            });
+        }
     }, []);
 
 
@@ -448,17 +478,23 @@ function AddStockinModal({ show, onHide }) {
                                     </Col>
 
                                     {/* Quantity */}
-                                    <Col sm={2}>
+                                    <Col xs={2}>
                                         <Form.Group className='mb-0'>
-                                            <Form.Label className="small mb-0">Quantity</Form.Label>
+                                            <Form.Label className="small mb-0">Qty</Form.Label>
                                             <Form.Control
                                                 type="number"
-                                                min="1"
                                                 value={row.quantity}
                                                 onChange={(e) => handleQuantityChange(e, index)}
-                                                placeholder="Enter quantity"
+                                                onBlur={(e) => validateQuantity(e, index)}
+                                                placeholder="Qty"
                                                 required
+                                                isInvalid={!!row.quantityError}
                                             />
+                                            {row.quantityError && (
+                                                <Form.Control.Feedback type="invalid">
+                                                    {row.quantityError}
+                                                </Form.Control.Feedback>
+                                            )}
                                         </Form.Group>
                                     </Col>
 
@@ -481,15 +517,45 @@ function AddStockinModal({ show, onHide }) {
                     </div>
 
                     <div className="d-flex justify-content-between mt-3">
-                        <Button className='outline-custom-button' onClick={handleAddRow}>
+                        <Button className='outline-custom-button' style={{ height: '38px' }} onClick={handleAddRow}>
                             <IoIosAdd className="me-1" /> Add Row
                         </Button>
 
-                        <div>
-                            <Button onClick={handleClose} className="cancel-button me-2">Cancel</Button>
-                            <Button type="submit" className='custom-button' disabled={createLoading}>
+                        <div className='d-flex gap-2'>
+                            <Button onClick={handleClose} style={{ height: '38px' }} className="cancel-button">Cancel</Button>
+                            {/* <Button type="submit" className='custom-button' disabled={createLoading}>
                                 {createLoading ? 'Saving...' : 'Save'}
-                            </Button>
+                            </Button> */}
+                            {rows?.some((data) => !data?.selectedProduct) ? (
+                                <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>Please Fill required fields and select product...</Tooltip>}
+                                >
+                                    <div>
+                                        <Button
+                                            className='custom-button'
+                                            type="submit"
+                                            disabled
+                                        >
+                                            {createLoading ? 'Saving...' : 'Save'}
+                                        </Button>
+                                    </div>
+                                </OverlayTrigger>
+                            ) : (
+                                <Button
+                                    className='custom-button'
+                                    type="submit"
+                                    disabled={store?.createStockInReducer?.loading}
+                                    style={{ width: '70px !important' }}
+                                >
+                                    {store?.createStockInReducer?.loading ? (
+                                        'Saving...'
+                                    ) : (
+                                        'Save'
+                                    )}
+
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </Form>

@@ -113,14 +113,43 @@ function EditStockinModal({ show, onHide, stockId }) {
   }, []);
 
   const handleQuantityChange = useCallback((e, index) => {
-    const value = Math.max(1, parseInt(e.target.value) || '');
+    const value = e.target.value === '' ? '' : parseInt(e.target.value);
     setRows(prev => {
       const updated = [...prev];
       updated[index].quantity = value;
+      updated[index].quantityError = ''; // Clear error on change
       return updated;
     });
   }, []);
 
+  const validateQuantity = useCallback((e, index) => {
+    const value = e.target.value;
+    if (value === '') {
+      setRows(prev => {
+        const updated = [...prev];
+        updated[index].quantity = 1; // Default to 1 if empty
+        updated[index].quantityError = '';
+        return updated;
+      });
+      return;
+    }
+
+    const numValue = parseInt(value);
+    if (isNaN(numValue) || numValue <= 0) {
+      setRows(prev => {
+        const updated = [...prev];
+        updated[index].quantityError = 'Quantity must be greater than 0';
+        return updated;
+      });
+    } else {
+      setRows(prev => {
+        const updated = [...prev];
+        updated[index].quantity = numValue;
+        updated[index].quantityError = '';
+        return updated;
+      });
+    }
+  }, []);
 
   const onSubmit = (data) => {
 
@@ -536,17 +565,23 @@ function EditStockinModal({ show, onHide, stockId }) {
                   </Col>
 
                   {/* Quantity */}
-                  <Col sm={2}>
+                  <Col xs={2}>
                     <Form.Group className='mb-0'>
-                      <Form.Label className="small mb-0">Quantity</Form.Label>
+                      <Form.Label className="small mb-0">Qty</Form.Label>
                       <Form.Control
                         type="number"
-                        min="1"
                         value={row.quantity}
                         onChange={(e) => handleQuantityChange(e, index)}
-                        placeholder="Enter quantity"
+                        onBlur={(e) => validateQuantity(e, index)}
+                        placeholder="Qty"
                         required
+                        isInvalid={!!row.quantityError}
                       />
+                      {row.quantityError && (
+                        <Form.Control.Feedback type="invalid">
+                          {row.quantityError}
+                        </Form.Control.Feedback>
+                      )}
                     </Form.Group>
                   </Col>
 
@@ -589,8 +624,20 @@ function EditStockinModal({ show, onHide, stockId }) {
 
             <div>
               <Button onClick={onHide} className="cancel-button me-2">Cancel</Button>
-              <Button type="submit" className='custom-button' >
+              {/* <Button type="submit" className='custom-button' >
                 Update
+              </Button> */}
+              <Button
+                className='custom-button'
+                type="submit"
+                disabled={store?.updateStockInReducer?.loading}
+              >
+                {store?.updateStockInReducer?.loading ? (
+                  "Updating..."
+                ) : (
+                  'Update'
+                )}
+
               </Button>
             </div>
           </div>

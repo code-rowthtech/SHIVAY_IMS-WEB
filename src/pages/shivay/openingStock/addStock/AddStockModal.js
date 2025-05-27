@@ -15,10 +15,12 @@ import {
 
 import { IoIosAdd } from 'react-icons/io';
 import { MdDelete } from 'react-icons/md';
+import { ButtonLoading } from '../../../../helpers/loader/Loading';
 
 function AddStockModal({ show, onHide }) {
     const dispatch = useDispatch();
     const { handleSubmit, register, setValue, reset, formState: { errors } } = useForm();
+    const store = useSelector((state) => state)
 
     const [today] = useState(new Date().toISOString().split('T')[0]);
     const [rows, setRows] = useState([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
@@ -35,13 +37,15 @@ function AddStockModal({ show, onHide }) {
         createStockReducer: { createStock: { status: createResponse, loading: createLoading } = {} }
     } = useSelector(state => state);
 
+    const createProductResponse = store?.createStockReducer?.createStock?.status;
+
     useEffect(() => {
-        if (createResponse === 200) {
+        if (createProductResponse === 200) {
             onHide();
             reset();
             setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
         }
-    }, [createResponse, onHide, reset]);
+    }, [createProductResponse, onHide, reset]);
 
     const handleClose = () => {
         onHide();
@@ -71,6 +75,7 @@ function AddStockModal({ show, onHide }) {
             data: product
         })) || []
     ), [ProductSearch]);
+
     const productOptionsCode = useMemo(() => (
         ProductSearch?.map(product => ({
             value: product._id,
@@ -104,12 +109,42 @@ function AddStockModal({ show, onHide }) {
     }, []);
 
     const handleQuantityChange = useCallback((e, index) => {
-        const value = Math.max(1, parseInt(e.target.value) || '');
+        const value = e.target.value === '' ? '' : parseInt(e.target.value);
         setRows(prev => {
             const updated = [...prev];
             updated[index].quantity = value;
+            updated[index].quantityError = ''; // Clear error on change
             return updated;
         });
+    }, []);
+
+    const validateQuantity = useCallback((e, index) => {
+        const value = e.target.value;
+        if (value === '') {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantity = 1; // Default to 1 if empty
+                updated[index].quantityError = '';
+                return updated;
+            });
+            return;
+        }
+
+        const numValue = parseInt(value);
+        if (isNaN(numValue) || numValue <= 0) {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantityError = 'Quantity must be greater than 0';
+                return updated;
+            });
+        } else {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantity = numValue;
+                updated[index].quantityError = '';
+                return updated;
+            });
+        }
     }, []);
 
     const onSubmit = useCallback((formData) => {
@@ -295,12 +330,18 @@ function AddStockModal({ show, onHide }) {
                                             <Form.Label className="small mb-0">Qty</Form.Label>
                                             <Form.Control
                                                 type="number"
-                                                min="1"
                                                 value={row.quantity}
                                                 onChange={(e) => handleQuantityChange(e, index)}
+                                                onBlur={(e) => validateQuantity(e, index)}
                                                 placeholder="Qty"
                                                 required
+                                                isInvalid={!!row.quantityError}
                                             />
+                                            {row.quantityError && (
+                                                <Form.Control.Feedback type="invalid">
+                                                    {row.quantityError}
+                                                </Form.Control.Feedback>
+                                            )}
                                         </Form.Group>
                                     </Col>
 
@@ -335,7 +376,7 @@ function AddStockModal({ show, onHide }) {
                             {rows?.some((data) => !data?.selectedProduct) ? (
                                 <OverlayTrigger
                                     placement="top"
-                                    overlay={<Tooltip>Please select product first...</Tooltip>}
+                                    overlay={<Tooltip>Please Fill required fields and select product...</Tooltip>}
                                 >
                                     <div>
                                         <Button
@@ -351,12 +392,17 @@ function AddStockModal({ show, onHide }) {
                                 <Button
                                     className='custom-button mt-2'
                                     type="submit"
-                                    disabled={createLoading}
+                                    disabled={store?.createStockReducer?.loading}
+                                    style={{ width: '70px !important' }}
                                 >
-                                    {createLoading ? 'Saving...' : 'Save'}
+                                    {store?.createStockReducer?.loading ? (
+                                        'Saving...'
+                                    ) : (
+                                        'Save'
+                                    )}
+
                                 </Button>
                             )}
-
 
                         </div>
                     </div>

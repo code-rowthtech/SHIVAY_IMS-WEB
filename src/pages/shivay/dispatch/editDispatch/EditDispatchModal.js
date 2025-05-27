@@ -256,10 +256,11 @@ function EditDispatchModal({ show, onHide, stockId }) {
     };
 
     const handleQuantityChange = useCallback((e, index, item) => {
-        const value = Math.max(1, parseInt(e.target.value) || '');
+        const value = e.target.value === '' ? '' : parseInt(e.target.value);
         setRows(prev => {
             const updated = [...prev];
             updated[index].quantity = value;
+            updated[index].quantityError = ''; // Clear error on change
             return updated;
         });
 
@@ -268,10 +269,39 @@ function EditDispatchModal({ show, onHide, stockId }) {
                 warehouseId: selectedWarehouse.value,
                 productId: rows[index].selectedProduct.value,
                 qty: value,
-                oldQty: DispatchDetails?.[0]?.dispatchProducts?.find((data)=>data?._id===item?._id)?.quantity
+                oldQty: DispatchDetails?.[0]?.dispatchProducts?.find((data) => data?._id === item?._id)?.quantity
             }));
         }
     }, [selectedWarehouse, dispatch, rows]);
+
+    const validateQuantity = useCallback((e, index) => {
+        const value = e.target.value;
+        if (value === '') {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantity = 1; // Default to 1 if empty
+                updated[index].quantityError = '';
+                return updated;
+            });
+            return;
+        }
+
+        const numValue = parseInt(value);
+        if (isNaN(numValue) || numValue <= 0) {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantityError = 'Quantity must be greater than 0';
+                return updated;
+            });
+        } else {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantity = numValue;
+                updated[index].quantityError = '';
+                return updated;
+            });
+        }
+    }, []);
 
     const handleSaveRow = useCallback((row, rowId) => {
         if (!row.selectedProduct) {
@@ -593,17 +623,24 @@ function EditDispatchModal({ show, onHide, stockId }) {
                                         </Form.Group>
                                     </Col>
 
-                                    <Col sm={2}>
-                                        <Form.Group className="mb-0">
-                                            <Form.Label className="small mb-0">Quantity</Form.Label>
+                                    <Col xs={2}>
+                                        <Form.Group className='mb-0'>
+                                            <Form.Label className="small mb-0">Qty</Form.Label>
                                             <Form.Control
                                                 type="number"
-                                                placeholder="Enter Number"
                                                 value={row.quantity}
-                                                onChange={(e) => handleQuantityChange(e, index ,row)}
+                                                onChange={(e) => handleQuantityChange(e, index)}
+                                                onBlur={(e) => validateQuantity(e, index)}
+                                                placeholder="Qty"
                                                 required
-                                                min={0}
+                                                disabled={!selectedWarehouse}
+                                                isInvalid={!!row.quantityError}
                                             />
+                                            {row.quantityError && (
+                                                <Form.Control.Feedback type="invalid">
+                                                    {row.quantityError}
+                                                </Form.Control.Feedback>
+                                            )}
                                         </Form.Group>
                                     </Col>
 
@@ -638,10 +675,22 @@ function EditDispatchModal({ show, onHide, stockId }) {
                             <IoIosAdd className="me-1" /> Add Row
                         </Button>
 
-                        <div>
-                            <Button onClick={onHide} className="cancel-button me-2">Cancel</Button>
-                            <Button type="submit" className='custom-button' disabled={updateLoading}>
+                        <div className='d-flex gap-2'>
+                            <Button onClick={onHide} className="cancel-button">Cancel</Button>
+                            {/* <Button type="submit" className='custom-button' disabled={updateLoading}>
                                 {updateLoading ? 'Updating...' : 'Update'}
+                            </Button> */}
+                            <Button
+                                className='custom-button'
+                                type="submit"
+                                disabled={store?.updateDispatchReducer?.loading}
+                            >
+                                {store?.updateDispatchReducer?.loading ? (
+                                    "Updating..."
+                                ) : (
+                                    'Update'
+                                )}
+
                             </Button>
                         </div>
                     </div>

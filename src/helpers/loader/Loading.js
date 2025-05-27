@@ -32,7 +32,7 @@ const DashboardLoading = () => {
 const ButtonLoading = () => {
     return (
         // <div style={{ height: "5vh", display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
-        <div className=" d-flex justify-content-center align-items-center w-100" style={{ height: '2.2vh' }}>
+        <div className=" d-flex justify-content-center align-items-center w-100" style={{ height: '2.6vh' }}>
             <ColorRing
                 visible={true}
                 height="25"
