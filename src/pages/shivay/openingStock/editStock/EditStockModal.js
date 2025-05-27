@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IoIosAdd } from 'react-icons/io';
 import { MdDelete, MdSave } from 'react-icons/md';
 import { toast } from 'react-toastify';
-import { Loading } from '../../../../helpers/loader/Loading';
+import { ButtonLoading, Loading } from '../../../../helpers/loader/Loading';
 
 function EditStockModal({ show, onHide, stockId }) {
     const dispatch = useDispatch();
@@ -190,12 +190,42 @@ function EditStockModal({ show, onHide, stockId }) {
     }, []);
 
     const handleQuantityChange = useCallback((e, index) => {
-        const value = Math.max(1, parseInt(e.target.value) || '');
+        const value = e.target.value === '' ? '' : parseInt(e.target.value);
         setRows(prev => {
             const updated = [...prev];
             updated[index].quantity = value;
+            updated[index].quantityError = ''; // Clear error on change
             return updated;
         });
+    }, []);
+
+    const validateQuantity = useCallback((e, index) => {
+        const value = e.target.value;
+        if (value === '') {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantity = 1; // Default to 1 if empty
+                updated[index].quantityError = '';
+                return updated;
+            });
+            return;
+        }
+
+        const numValue = parseInt(value);
+        if (isNaN(numValue) || numValue <= 0) {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantityError = 'Quantity must be greater than 0';
+                return updated;
+            });
+        } else {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantity = numValue;
+                updated[index].quantityError = '';
+                return updated;
+            });
+        }
     }, []);
 
     const onSubmit = (data) => {
@@ -253,7 +283,7 @@ function EditStockModal({ show, onHide, stockId }) {
                                 <Form.Label>Date <span className="text-danger">*</span></Form.Label>
                                 <Form.Control
                                     type="date"
-                                    max={new Date().toISOString().split("T")[0]} 
+                                    max={new Date().toISOString().split("T")[0]}
                                     {...register('date', { required: true })}
                                 />
                             </Form.Group>
@@ -392,15 +422,21 @@ function EditStockModal({ show, onHide, stockId }) {
                                     {/* Quantity */}
                                     <Col xs={2}>
                                         <Form.Group className='mb-0'>
-                                            <Form.Label className="small mb-0">Quantity</Form.Label>
+                                            <Form.Label className="small mb-0">Qty</Form.Label>
                                             <Form.Control
                                                 type="number"
-                                                min="1"
                                                 value={row.quantity}
                                                 onChange={(e) => handleQuantityChange(e, index)}
-                                                placeholder="Enter quantity"
+                                                onBlur={(e) => validateQuantity(e, index)}
+                                                placeholder="Qty"
                                                 required
+                                                isInvalid={!!row.quantityError}
                                             />
+                                            {row.quantityError && (
+                                                <Form.Control.Feedback type="invalid">
+                                                    {row.quantityError}
+                                                </Form.Control.Feedback>
+                                            )}
                                         </Form.Group>
                                     </Col>
 
@@ -445,8 +481,17 @@ function EditStockModal({ show, onHide, stockId }) {
                             <Button onClick={onHide} className="me-2 cancel-button">
                                 Cancel
                             </Button>
-                            <Button type="submit" className='custom-button'>
-                                Update
+                            <Button
+                                className='custom-button'
+                                type="submit"
+                                disabled={store?.updateStockReducer?.loading}
+                            >
+                                {store?.updateStockReducer?.loading ? (
+                                    "Updating..."
+                                ) : (
+                                    'Update'
+                                )}
+
                             </Button>
                         </div>
                     </div>

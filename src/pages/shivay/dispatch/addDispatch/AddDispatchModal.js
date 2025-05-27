@@ -1,7 +1,7 @@
 // src/pages/dispatch/addDispatch/AddDispatchModal.jsx
 
 import { useEffect, useMemo, useCallback, useState, useRef } from 'react';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
@@ -172,10 +172,11 @@ function AddDispatchModal({ show, onHide }) {
     };
 
     const handleQuantityChange = useCallback((e, index) => {
-        const value = Math.max(1, parseInt(e.target.value) || '');
+        const value = e.target.value === '' ? '' : parseInt(e.target.value);
         setRows(prev => {
             const updated = [...prev];
             updated[index].quantity = value;
+            updated[index].quantityError = ''; // Clear error on change
             return updated;
         });
 
@@ -188,6 +189,35 @@ function AddDispatchModal({ show, onHide }) {
             }));
         }
     }, [selectedWarehouse, dispatch, rows]);
+
+    const validateQuantity = useCallback((e, index) => {
+        const value = e.target.value;
+        if (value === '') {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantity = 1; // Default to 1 if empty
+                updated[index].quantityError = '';
+                return updated;
+            });
+            return;
+        }
+
+        const numValue = parseInt(value);
+        if (isNaN(numValue) || numValue <= 0) {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantityError = 'Quantity must be greater than 0';
+                return updated;
+            });
+        } else {
+            setRows(prev => {
+                const updated = [...prev];
+                updated[index].quantity = numValue;
+                updated[index].quantityError = '';
+                return updated;
+            });
+        }
+    }, []);
 
     const onSubmit = (data) => {
 
@@ -372,128 +402,144 @@ function AddDispatchModal({ show, onHide }) {
 
                     <hr className='mt-2 mb-1' />
                     <div style={{ maxHeight: rows?.length >= 3 ? '51vh' : 'auto', overflowY: rows?.length >= 3 ? 'auto' : 'visible', padding: '10px' }}>
-                        {rows?.map((row, index) => (
-                            <div className='mb-1 rounded-1 ps-1' style={{ border: '1px solid rgba(218, 224, 225, 0.97)' }} key={index}>
-                                <Row key={index} className="align-items-center mb-2 g-2">
-                                    <Col sm={2} className='d-flex'>
-                                        <span className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1">{index + 1}.</span>
-                                        <div>
-                                            <Form.Group className='mb-0'>
-                                                <Form.Label className="small mb-0">Search By</Form.Label>
-                                                <Form.Select
-                                                    value={row?.searchType}
-                                                    onChange={(e) => setRows(prev => {
-                                                        const updated = [...prev];
-                                                        updated[index] = { ...updated[index], searchType: e.target.value, selectedProduct: null, searchTerm: '' };
-                                                        return updated;
-                                                    })}
-                                                >
-                                                    <option value="modelName">Model Name</option>
-                                                    <option value="code">Product Code</option>
-                                                </Form.Select>
-                                            </Form.Group>
-                                        </div>
-                                    </Col>
 
-                                    <Col sm={3}>
-                                        <Form.Group className='mb-0'>
-                                            <Form.Label className="small mb-0">{row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}</Form.Label>
-                                            {row.searchType === 'modelName' ?
-                                                <Select
-                                                    value={row?.selectedProduct}
-                                                    onChange={(selected) => handleProductChange(selected, index)}
-                                                    onInputChange={(inputValue) => {
-                                                        setRows(prev => {
-                                                            const updated = [...prev];
-                                                            updated[index].searchTerm = inputValue;
-                                                            return updated;
-                                                        });
-                                                        handleSearch(inputValue, row.searchType);
-                                                    }}
-                                                    options={productOptions}
-                                                    placeholder={`Search by model`}
-                                                    isClearable
-                                                    isSearchable
-                                                    isLoading={productLoading}
-                                                    filterOption={() => true}
-                                                /> :
-                                                <Select
-                                                    value={row?.selectedProduct}
-                                                    onChange={(selected) => handleProductChange(selected, index)}
-                                                    onInputChange={(inputValue) => {
-                                                        setRows(prev => {
-                                                            const updated = [...prev];
-                                                            updated[index].searchTerm = inputValue;
-                                                            return updated;
-                                                        });
-                                                        handleSearch(inputValue, row.searchType);
-                                                    }}
-                                                    options={productOptionsCode}
-                                                    placeholder={`Search by code`}
-                                                    isClearable
-                                                    isSearchable
-                                                    isLoading={productLoading}
-                                                    filterOption={() => true}
-                                                />
-                                            }
-                                        </Form.Group>
-                                    </Col>
+                        <div title={!selectedWarehouse?.value && 'Please select a warehouse first'}>
+                            {rows?.map((row, index) => (
+                                <div
+                                    key={index}
+                                    className={`mb-1 rounded-1 ps-1 row-wrapper ${!selectedWarehouse?.value && 'warehouse-missing'}`}
+                                >
+                                    <div>
+                                        <Row key={index} className="align-items-center mb-2 g-2">
+                                            <Col sm={2} className='d-flex'>
+                                                <span className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1">{index + 1}.</span>
+                                                <div>
+                                                    <Form.Group className='mb-0'>
+                                                        <Form.Label className="small mb-0">Search By</Form.Label>
+                                                        <Form.Select
+                                                            value={row?.searchType}
+                                                            onChange={(e) => setRows(prev => {
+                                                                const updated = [...prev];
+                                                                updated[index] = { ...updated[index], searchType: e.target.value, selectedProduct: null, searchTerm: '' };
+                                                                return updated;
+                                                            })}
+                                                        >
+                                                            <option value="modelName">Model Name</option>
+                                                            <option value="code">Product Code</option>
+                                                        </Form.Select>
+                                                    </Form.Group>
+                                                </div>
+                                            </Col>
 
-                                    <Col sm={2}>
-                                        <Form.Group className='mb-0'>
-                                            <Form.Label className="small mb-0">{row.searchType === 'modelName' ? 'Code' : 'Model '}</Form.Label>
-                                            <Form.Control
-                                                type='text'
-                                                value={row.searchType === 'modelName' ? row.selectedProduct?.data?.code : row.selectedProduct?.data?.modelId?.name || ''}
-                                                placeholder={row.searchType === 'modelName' ? 'Code' : 'Model'}
-                                                readOnly
-                                            />
-                                        </Form.Group>
-                                    </Col>
+                                            <Col sm={3}>
+                                                <Form.Group className='mb-0'>
+                                                    <Form.Label className="small mb-0">{row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}</Form.Label>
+                                                    {row.searchType === 'modelName' ?
+                                                        <Select
+                                                            value={row?.selectedProduct}
+                                                            onChange={(selected) => handleProductChange(selected, index)}
+                                                            onInputChange={(inputValue) => {
+                                                                setRows(prev => {
+                                                                    const updated = [...prev];
+                                                                    updated[index].searchTerm = inputValue;
+                                                                    return updated;
+                                                                });
+                                                                handleSearch(inputValue, row.searchType);
+                                                            }}
+                                                            options={productOptions}
+                                                            placeholder={`Search by model`}
+                                                            isClearable
+                                                            isSearchable
+                                                            isDisabled={!selectedWarehouse}
+                                                            isLoading={productLoading}
+                                                            filterOption={() => true}
+                                                        /> :
+                                                        <Select
+                                                            value={row?.selectedProduct}
+                                                            onChange={(selected) => handleProductChange(selected, index)}
+                                                            onInputChange={(inputValue) => {
+                                                                setRows(prev => {
+                                                                    const updated = [...prev];
+                                                                    updated[index].searchTerm = inputValue;
+                                                                    return updated;
+                                                                });
+                                                                handleSearch(inputValue, row.searchType);
+                                                            }}
+                                                            options={productOptionsCode}
+                                                            placeholder={`Search by code`}
+                                                            isClearable
+                                                            isSearchable
+                                                            isDisabled={!selectedWarehouse}
+                                                            isLoading={productLoading}
+                                                            filterOption={() => true}
+                                                        />
+                                                    }
+                                                </Form.Group>
+                                            </Col>
 
-                                    <Col sm={2}>
-                                        <Form.Group className='mb-0'>
-                                            <Form.Label className="small mb-0">Product Name</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                value={row.selectedProduct?.name || ''}
-                                                readOnly
-                                                placeholder="Product name"
-                                            />
-                                        </Form.Group>
-                                    </Col>
+                                            <Col sm={2}>
+                                                <Form.Group className='mb-0'>
+                                                    <Form.Label className="small mb-0">{row.searchType === 'modelName' ? 'Code' : 'Model '}</Form.Label>
+                                                    <Form.Control
+                                                        type='text'
+                                                        value={row.searchType === 'modelName' ? row.selectedProduct?.data?.code : row.selectedProduct?.data?.modelId?.name || ''}
+                                                        placeholder={row.searchType === 'modelName' ? 'Code' : 'Model'}
+                                                        readOnly
+                                                    />
+                                                </Form.Group>
+                                            </Col>
 
-                                    <Col sm={2}>
-                                        <Form.Group className="mb-0">
-                                            <Form.Label className="small mb-0">Quantity</Form.Label>
-                                            <Form.Control
-                                                type="number"
-                                                placeholder="Enter Number"
-                                                value={row?.quantity}
-                                                onChange={(e) => {
-                                                    const val = parseInt(e.target.value);
-                                                    handleQuantityChange(e, index);
-                                                }}
-                                                required
-                                                min={1}
-                                            />
-                                        </Form.Group>
-                                    </Col>
+                                            <Col sm={2}>
+                                                <Form.Group className='mb-0'>
+                                                    <Form.Label className="small mb-0">Product Name</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        value={row.selectedProduct?.name || ''}
+                                                        readOnly
+                                                        placeholder="Product name"
+                                                    />
+                                                </Form.Group>
+                                            </Col>
 
-                                    <Col sm={1} className="d-flex justify-content-center mt-2 pt-1">
-                                        {rows.length > 1 && (
-                                            <Button
-                                                variant="outline-danger"
-                                                title='Delete' onClick={() => handleDeleteRow(index)}
-                                                className="p-1 mt-2"
-                                            >
-                                                <MdDelete className="fs-6" />
-                                            </Button>
-                                        )}
-                                    </Col>
-                                </Row>
-                            </div>
-                        ))}
+                                            <Col xs={2}>
+                                                <Form.Group className='mb-0'>
+                                                    <Form.Label className="small mb-0">Qty</Form.Label>
+                                                    <Form.Control
+                                                        type="number"
+                                                        value={row.quantity}
+                                                        onChange={(e) => handleQuantityChange(e, index)}
+                                                        onBlur={(e) => validateQuantity(e, index)}
+                                                        placeholder="Qty"
+                                                        required
+                                                        disabled={!selectedWarehouse}
+                                                        isInvalid={!!row.quantityError}
+                                                    />
+                                                    {row.quantityError && (
+                                                        <Form.Control.Feedback type="invalid">
+                                                            {row.quantityError}
+                                                        </Form.Control.Feedback>
+                                                    )}
+                                                </Form.Group>
+                                            </Col>
+
+                                            <Col sm={1} className="d-flex justify-content-center mt-2 pt-1">
+                                                {rows.length > 1 && (
+                                                    <Button
+                                                        variant="outline-danger"
+                                                        title='Delete' onClick={() => handleDeleteRow(index)}
+                                                        className="p-1 mt-2"
+                                                    >
+                                                        <MdDelete className="fs-6" />
+                                                    </Button>
+                                                )}
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+
                     </div>
 
                     <div className="d-flex justify-content-between mt-3">
@@ -501,11 +547,41 @@ function AddDispatchModal({ show, onHide }) {
                             <IoIosAdd className="me-1" /> Add Row
                         </Button>
 
-                        <div>
-                            <Button onClick={handleClose} className="cancel-button me-2">Cancel</Button>
-                            <Button type="submit" className='custom-button' disabled={createLoading}>
+                        <div className='d-flex gap-2'>
+                            <Button onClick={handleClose} className="cancel-button">Cancel</Button>
+                            {/* <Button type="submit" className='custom-button' disabled={createLoading}>
                                 {createLoading ? 'Saving...' : 'Save'}
-                            </Button>
+                            </Button> */}
+                            {rows?.some((data) => !data?.selectedProduct) ? (
+                                <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>Please Fill required fields and select product...</Tooltip>}
+                                >
+                                    <div>
+                                        <Button
+                                            className='custom-button'
+                                            type="submit"
+                                            disabled
+                                        >
+                                            {createLoading ? 'Saving...' : 'Save'}
+                                        </Button>
+                                    </div>
+                                </OverlayTrigger>
+                            ) : (
+                                <Button
+                                    className='custom-button'
+                                    type="submit"
+                                    disabled={store?.createDispatchReducer?.loading}
+                                    style={{ width: '70px !important' }}
+                                >
+                                    {store?.createDispatchReducer?.loading ? (
+                                        'Saving...'
+                                    ) : (
+                                        'Save'
+                                    )}
+
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </Form>

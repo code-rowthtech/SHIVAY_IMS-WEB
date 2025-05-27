@@ -183,3 +183,14 @@ tbody tr:hover {
     color: #0d6efd;
 }
 
+.row-wrapper {
+  border: 1px solid rgba(218, 224, 225, 0.97);
+  transition: border-color 0.3s;
+}
+
+.row-wrapper.warehouse-missing:hover {
+  border-color: red;
+}
+
+
+
