@@ -136,7 +136,7 @@ const Dispatch = () => {
                       ) : (
                         DispatchData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
-                            <td scope="row" className='fs-5'>{index + 1}</td>
+                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
                             <td
                               className="text-uppercase font_work"
                               title={data?.customerData?.[0]?.name || ""}

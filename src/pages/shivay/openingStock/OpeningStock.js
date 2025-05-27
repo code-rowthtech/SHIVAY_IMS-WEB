@@ -113,7 +113,7 @@ const OpeningStock = () => {
                       openingStockData.length > 0 ? (
                         openingStockData.map((data, index) => (
                           <tr key={index} className="text-dark text-nowrap highlight-row">
-                            <td className="font_work">{index + 1}</td>
+                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
                             <td className="text-uppercase font_work">{data?.warehouseData?.name || '-'}</td>
                             <td className="font_work">{data?.date ? new Date(data.date).toLocaleDateString('en-GB') : '-'}</td>
                             <td className="font_work">{data?.description || '-'}</td>

@@ -1,7 +1,7 @@
 // src/pages/openingStock/addStock/AddStockModal.jsx
 
 import { useEffect, useMemo, useCallback, useState } from 'react';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
@@ -82,7 +82,7 @@ function AddStockModal({ show, onHide }) {
     ), [ProductSearch]);
 
     const handleSearch = useCallback((term, type) => {
-        if (!term || term.length < 2) return;
+        if (!term || term.length < 1) return;
         dispatch(searchProductActions(type === 'modelName' ? { modelName: term } : { code: term }));
     }, [dispatch]);
 
@@ -163,13 +163,17 @@ function AddStockModal({ show, onHide }) {
 
                         <Col sm={4}>
                             <Form.Group className="mb-1">
-                                <Form.Label>Date <span className="text-danger">*</span></Form.Label>
+                                <Form.Label>
+                                    Date <span className="text-danger">*</span>
+                                </Form.Label>
                                 <Form.Control
                                     type="date"
                                     defaultValue={today}
+                                    max={today} // Prevent future dates
                                     {...register('date', { required: true })}
                                 />
                             </Form.Group>
+
                         </Col>
 
                         <Col sm={4}>
@@ -319,15 +323,41 @@ function AddStockModal({ show, onHide }) {
                     </div>
 
                     <div className="d-flex justify-content-between mt-3">
-                        <Button className='outline-custom-button' onClick={handleAddRow}>
+                        <Button className='outline-custom-button mt-2' style={{ height: '38px' }} onClick={handleAddRow}>
                             <IoIosAdd className="me-1" /> Add Row
                         </Button>
 
-                        <div>
-                            <Button onClick={handleClose} className="cancel-button me-2">Cancel</Button>
-                            <Button type="submit" className='custom-button' disabled={createLoading}>
+                        <div className='d-flex gap-2'>
+                            <Button onClick={handleClose} style={{ height: '38px' }} className="cancel-button mt-2">Cancel</Button>
+                            {/* <Button type="submit" className='custom-button' disabled={createLoading || rows?.some((data) => !data?.selectedProduct)}>
                                 {createLoading ? 'Saving...' : 'Save'}
-                            </Button>
+                            </Button> */}
+                            {rows?.some((data) => !data?.selectedProduct) ? (
+                                <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>Please select product first...</Tooltip>}
+                                >
+                                    <div>
+                                        <Button
+                                            className='custom-button mt-2'
+                                            type="submit"
+                                            disabled
+                                        >
+                                            {createLoading ? 'Saving...' : 'Save'}
+                                        </Button>
+                                    </div>
+                                </OverlayTrigger>
+                            ) : (
+                                <Button
+                                    className='custom-button mt-2'
+                                    type="submit"
+                                    disabled={createLoading}
+                                >
+                                    {createLoading ? 'Saving...' : 'Save'}
+                                </Button>
+                            )}
+
+
                         </div>
                     </div>
                 </Form>

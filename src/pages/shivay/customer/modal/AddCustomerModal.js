@@ -46,7 +46,7 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
             setValue('deliveryAddress', CustomerData.data?.deliveryAddress)
             setValue('billingGstNumber', CustomerData.data?.billingGstNumber)
             setValue('deliveryGstNumber', CustomerData.data?.deliveryGstNumber)
-            setValue('address', CustomerData.data?.address)
+            // setValue('address', CustomerData.data?.address)
 
             setCopyChecked(CustomerData.data?.billingAndDeliveryAddress || false);
             setLocationSelected({
@@ -66,7 +66,7 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
             billingGstNumber: data?.billingGstNumber,
             deliveryGstNumber: data?.deliveryGstNumber,
             billingAndDeliveryAddress: copyChecked,
-            address: data?.address,
+            // address: data?.address,
             location: locationSelected?.value,
         };
         if (CustomerData?.data?._id) {
@@ -282,7 +282,7 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
                             </Col>
 
                         </Row>
-                        <hr className='mb-2 mt-1 text-secondary' />
+                        {/* <hr className='mb-2 mt-1 text-secondary' />
                         <Row>
                             <Col sm={12}>
                                 <Form.Group className="mb-2">
@@ -298,7 +298,7 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
                                     />
                                 </Form.Group>
                             </Col>
-                        </Row>
+                        </Row> */}
                     </Modal.Body>
                     <Modal.Footer>
                         <Button className='cancel-button' onClick={closeModal}>

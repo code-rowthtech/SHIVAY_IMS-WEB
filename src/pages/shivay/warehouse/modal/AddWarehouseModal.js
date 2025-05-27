@@ -135,17 +135,17 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
                         <Col sm={12}>
                             <Form.Group className="mb-1">
                                 <Form.Label className="mb-0">
-                                    Full Address <span className="text-danger">*</span>
+                                    Address <span className="text-danger">*</span>
                                 </Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     rows={3}
-                                    placeholder="Enter Full Address"
+                                    placeholder="Enter Address"
                                     {...register('address', {
-                                        required: 'Full Address is required',
+                                        required: 'Address is required',
                                         validate: value => {
                                             const cleaned = value.replace(/[\n\r\s]/g, '');
-                                            if (!cleaned) return 'Full Address cannot be empty or only new lines';
+                                            if (!cleaned) return 'Address cannot be empty or only new lines';
                                             return true;
                                         }
                                     })}

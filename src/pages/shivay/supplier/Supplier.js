@@ -131,7 +131,7 @@ const Supplier = () => {
                       ) : (
                         SupplierData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
-                            <td scope="row" className='font_work'>{index + 1}</td>
+                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
                             <td className="text-uppercase font_work ">
                               {data?.name || <span className="text-black">-</span>}
                             </td>
@@ -141,7 +141,7 @@ const Supplier = () => {
                                 ? `${data.address.slice(0, 30)}${data.address.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}
                             </td>
-                             <td className="text-uppercase font_work ">
+                            <td className="text-uppercase font_work ">
                               {data?.phoneNumber || <span className="text-black">-</span>}
                             </td>
                             <td></td>

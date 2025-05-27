@@ -174,11 +174,28 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Enter new product name"
-                                                {...register("name")}
+                                                {...register("name", {
+                                                    required: "Product name is required",
+                                                    minLength: {
+                                                        value: 3,
+                                                        message: "Minimum 3 characters required",
+                                                    },
+                                                    validate: (value) => !/\s/.test(value) || "Spaces are not allowed",
+                                                })}
+                                                value={newProductName}
                                                 onChange={(e) => setNewProductName(e.target.value)}
-                                                required
+                                                onKeyDown={(e) => {
+                                                    if (e.key === " ") {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
+                                                isInvalid={!!errors.name}
                                             />
+
                                         )}
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors.name?.message}
+                                        </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
 
@@ -248,6 +265,11 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
                                                 placeholder="Enter new model name"
                                                 {...register("model")}
                                                 onChange={(e) => setNewModelName(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === ' ') {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
                                             />
                                         )}
                                     </Form.Group>
@@ -263,6 +285,11 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
                                         {...register("code", {
                                             required: "Code is required"
                                         })}
+                                        onKeyDown={(e) => {
+                                            if (e.key === ' ') {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                     />
                                     {errors.code && (
                                         <small className="text-danger">{errors.code.message}</small>

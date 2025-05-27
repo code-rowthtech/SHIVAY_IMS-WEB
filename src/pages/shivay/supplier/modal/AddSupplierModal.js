@@ -191,10 +191,11 @@ const AddSupplierModal = ({ showModal, handleClose, SupplierData }) => {
                             </Col>
                             <Col sm={6}>
                                 <Form.Group className="mb-1">
-                                    <Form.Label className='mb-0'>GST Number</Form.Label>
+                                    <Form.Label className='mb-0'>GST Number <span className='text-danger'>*</span></Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Enter GST Number"
+                                        required
                                         name="GST Number"
                                         {...register("gstNumber")}
                                     />
@@ -202,11 +203,12 @@ const AddSupplierModal = ({ showModal, handleClose, SupplierData }) => {
                             </Col>
                             <Col sm={6}>
                                 <Form.Group className="mb-1">
-                                    <Form.Label className='mb-0'>Full Address</Form.Label>
+                                    <Form.Label className='mb-0'>Full Address <span className='text-danger'>*</span></Form.Label>
                                     <Form.Control
                                         as="textarea"
                                         rows={3}
                                         placeholder="Enter Full Address"
+                                        required
                                         name="Full Address"
                                         {...register("address")}
                                     />

@@ -131,7 +131,7 @@ function EditStockModal({ show, onHide, stockId }) {
 
     // Debounced search function
     const handleSearch = useCallback((searchTerm, searchType, index) => {
-        if (!searchTerm || searchTerm?.length < 2) return;
+        if (!searchTerm || searchTerm?.length < 1) return;
 
         const searchParams = {};
         if (searchType === 'modelName') {
@@ -253,6 +253,7 @@ function EditStockModal({ show, onHide, stockId }) {
                                 <Form.Label>Date <span className="text-danger">*</span></Form.Label>
                                 <Form.Control
                                     type="date"
+                                    max={new Date().toISOString().split("T")[0]} 
                                     {...register('date', { required: true })}
                                 />
                             </Form.Group>

@@ -1,2 +1,0 @@
-.navbar{color:#fff;display:flex;font-family:Arial,sans-serif;justify-content:start}.nav-item{cursor:pointer;padding:10px 20px;position:relative;transition:color .3s ease}.nav-item.active{color:#6655d9;font-weight:700}.nav-item:before{background-color:#6655d9;bottom:0;content:"";height:2px;left:0;position:absolute;transform:scaleX(0);transform-origin:right;transition:transform .3s ease;width:100%}.nav-item.active:before{transform:scaleX(1);transform-origin:left}
-/*# sourceMappingURL=290.764a6d93.chunk.css.map*/
