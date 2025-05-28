@@ -32,7 +32,7 @@ const Dispatch = () => {
   const DispatchData = store?.getDispatchDataReducer?.dispatchList?.response;
   const deleteResponse = store?.deleteDispatchReducer?.deleteDispatch?.status;
   const UpdateResponse = store?.updateDispatchReducer?.updateDispatch?.status
-  const CreateResponse = store?.createStockInReducer?.createStockIn?.status;
+  const CreateResponse = store?.createDispatchReducer?.createDispatch?.status;
 
   useEffect(() => {
     dispatch(getDispatchListActions({
@@ -123,7 +123,7 @@ const Dispatch = () => {
                   </thead>
                   {store?.getDispatchDataReducer?.loading ? (
                     <tr>
-                      <td className='text-center' colSpan={8}>
+                      <td className='text-center' colSpan={10}>
                         <Loading />
                       </td>
                     </tr>
@@ -131,7 +131,7 @@ const Dispatch = () => {
                     <tbody>
                       {DispatchData?.length === 0 ? (
                         <tr>
-                          <td colSpan={8} className='text-center'>
+                          <td colSpan={10} className='text-center'>
                             <p className='my-5 py-5 '>No data found in dispatch.</p>
                           </td>
                         </tr>

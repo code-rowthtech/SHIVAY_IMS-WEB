@@ -444,7 +444,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
                             <Form.Group className="mb-1">
                                 <Form.Label className="mb-0">GR Number</Form.Label>
                                 <Form.Control
-                                    type="text"
+                                    type="number"
                                     placeholder="Enter GR Number"
                                     {...register('grNumber')}
                                     onKeyDown={(e) => {
