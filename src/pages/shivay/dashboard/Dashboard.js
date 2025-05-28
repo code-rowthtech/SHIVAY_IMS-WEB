@@ -270,6 +270,7 @@ const Dashboard = () => {
                           <th scope="col">Stock In</th>
                           <th scope="col">Stock</th>
                           <th scope="col">Date</th>
+                          <th scope="col">Action</th>
                         </tr>
                       </thead>
                       {store?.stockinTransListReducer?.loading ? (
@@ -290,11 +291,11 @@ const Dashboard = () => {
                             StockinData?.map((data, index) => (
                               <tr key={index} className="text-dark  text-nowrap highlight-row">
                                 <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                                <td className="text-uppercase font_work ">
+                                <td className=" font_work ">
                                   {data?.productName || <span className="text-black">-</span>}
                                 </td>
                                 <td
-                                  className="text-uppercase font_work"
+                                  className="text-capitalize font_work"
                                   title={data?.supplierName}
                                 >
                                   {data?.supplierName
@@ -302,34 +303,35 @@ const Dashboard = () => {
                                     : <span className="text-black">-</span>}
                                 </td>
 
-                                <td className="text-uppercase font_work ">
+                                <td className="text-capitalize font_work ">
                                   {data?.receivedBy || <span className="text-black">-</span>}
                                 </td>
-                                <td className="text-uppercase font_work ">
+                                <td className=" font_work ">
                                   {data?.code || <span className="text-black">-</span>}
                                 </td>
-                                <td className="text-uppercase font_work ">
+                                <td className=" font_work ">
                                   {data?.stockIn || <span className="text-black">-</span>}
                                 </td>
-                                <td className="text-uppercase font_work">
+                                <td className=" font_work">
                                   {data?.stock !== null && data?.stock !== undefined ? data.stock : <span className="text-black">-</span>}
                                 </td>
-                                <td className="text-uppercase font_work ">
+                                <td className=" font_work ">
                                   {data?.date
                                     ? new Date(data.date).toLocaleDateString('en-GB')
                                     : <span className="text-black">-</span>}
                                 </td>
-                                <td></td>
-                                <td></td>
-                                <div className="icon-container d-flex  pb-0" >
-                                  <span className="icon-wrapper me-4" title="View">
+                                <td>
+                                  <span
+                                    className="icon-wrapper me-4"
+                                    title="View"
+                                    onClick={() => navigate(`/shivay/ViewProduct?id=${data?.productId}&warehouseId=${data?.warehouseId}`)}
+                                  >
                                     <PiEye
-                                      className="fs-4 text-black"
-                                      onClick={() => navigate(`/shivay/ViewProduct?id=${data?.productId}&warehouseId=${data?.warehouseId}`)}
+                                      className="fs-4"
                                       style={{ cursor: 'pointer' }}
                                     />
                                   </span>
-                                </div>
+                                </td>
                               </tr>
                             )))}
                         </tbody>
@@ -357,6 +359,8 @@ const Dashboard = () => {
                             <th scope="col">Dispatch</th>
                             <th scope="col">Stock</th>
                             <th scope="col">Date</th>
+                            <th scope="col">Action</th>
+
                           </tr>
                         </thead>
                         {store?.dispatchListReducer?.loading ? (
@@ -377,7 +381,7 @@ const Dashboard = () => {
                               DispatchData?.map((data, index) => (
                                 <tr key={index} className="text-dark text-nowrap highlight-row">
                                   <td className='font_work'>{(dispatchPageIndex - 1) * dispatchPageSize + index + 1}</td>
-                                  <td className="text-uppercase font_work ">
+                                  <td className=" font_work ">
                                     {data?.productName || <span className="text-black">-</span>}
                                   </td>
                                   <td className="font_work ">
@@ -386,28 +390,30 @@ const Dashboard = () => {
                                   <td className="font_work ">
                                     {data?.code || <span className="text-black">-</span>}
                                   </td>
-                                  <td className="text-uppercase font_work ">
+                                  <td className=" font_work ">
                                     {data?.stockOut !== undefined ? data.stockOut : <span className="text-black">-</span>}
                                   </td>
-                                  <td className="text-uppercase font_work">
+                                  <td className=" font_work">
                                     {data?.stock !== null && data?.stock !== undefined && data.stock !== ""
                                       ? data.stock
                                       : <span className="text-black">-</span>}
                                   </td>
-                                  <td className="text-uppercase font_work ">
+                                  <td className=" font_work ">
                                     {data?.date
                                       ? new Date(data.date).toLocaleDateString('en-GB') // dd/mm/yyyy
                                       : <span className="text-black">-</span>}
 
                                   </td>
-                                  <td ></td>
-                                  <div className="icon-container d-flex  pb-0" >
-                                    <span className="icon-wrapper me-4" title="View">
-                                      <PiEye className="fs-4 text-black"
-                                        onClick={() => navigate(`/shivay/ViewProduct?id=${data?.productId}&warehouseId=${data?.warehouseId}`)}
+                                  <td >
+                                    <span
+                                      className="icon-wrapper me-4"
+                                      title="View"
+                                      onClick={() => navigate(`/shivay/ViewProduct?id=${data?.productId}&warehouseId=${data?.warehouseId}`)}
+                                    >
+                                      <PiEye className="fs-4"
                                         style={{ cursor: 'pointer' }} />
                                     </span>
-                                  </div>
+                                  </td>
                                 </tr>
                               )))}
                           </tbody>

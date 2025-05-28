@@ -104,6 +104,7 @@ const Customer = () => {
                       <th scope="col">Location</th>
                       <th scope="col">Billing Address</th>
                       <th scope="col">Phone no.</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   {store?.customerListReducer?.loading ? (
@@ -124,31 +125,33 @@ const Customer = () => {
                         CustomerData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
                             <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                            <td className="text-uppercase font_work " title={data?.name}>
+                            <td className="text-capitalize font_work " title={data?.name}>
                               {data?.name
                                 ? `${data.name.slice(0, 30)}${data.name.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}
                             </td>
-                            <td>{data?.location || <span className="text-black">-</span>}</td>
-                            <td className="font_work" title={data?.billingAddress}>
+                            <td className='text-capitalize'>{data?.location || <span className="text-black">-</span>}</td>
+                            <td className="text-capitalize font_work" title={data?.billingAddress}>
                               {data?.billingAddress
                                 ? `${data.billingAddress.slice(0, 30)}${data.billingAddress.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}
                             </td>
                             <td>{data?.primaryPhoneNumber || <span className="text-black">-</span>}</td>
-                            <td></td>
-                            <div className="icon-container d-flex  pb-0" >
-                              <span className="icon-wrapper" title="Edit">
+                            <td>
+                              <span
+                                className="icon-wrapper"
+                                title="Edit"
+                                onClick={() => handleCustomerModal(data, 'Edit', true)}
+                              >
                                 <AiOutlineEdit
-                                  className="fs-4 text-black"
+                                  className="fs-4"
                                   style={{ cursor: 'pointer' }}
-                                  onClick={() => handleCustomerModal(data, 'Edit', true)}
                                 />
                               </span>
                               <span className="icon-wrapper" title="Delete" onClick={() => { setCustomerToDelete(data?._id); setShowConfirm(true); }}>
-                                <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
                               </span>
-                            </div>
+                            </td>
                           </tr>
                         )))}
                     </tbody>

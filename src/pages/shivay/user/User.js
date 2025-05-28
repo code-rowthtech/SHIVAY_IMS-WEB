@@ -110,7 +110,7 @@ const User = () => {
                                             <th scope="col">User Name</th>
                                             <th scope="col">Email Id</th>
                                             <th scope="col">Password</th>
-                                            {/* <th scope="col">Action</th> */}
+                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     {store?.userListReducer?.loading ? (
@@ -131,7 +131,7 @@ const User = () => {
                                                 UserData?.map((data, index) => (
                                                     <tr key={index} className="text-dark  text-nowrap highlight-row">
                                                         <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                                                        <td className="text-uppercase font_work ">
+                                                        <td className="text-capitalize font_work ">
                                                             {data?.name || <span className="text-black">-</span>}
                                                         </td>
                                                         <td className="font_work">
@@ -140,19 +140,21 @@ const User = () => {
                                                         <td className=" font_work">
                                                             {data?.password || <span className="text-black">-</span>}
                                                         </td>
-                                                        <td></td>
-                                                        <div className="icon-container d-flex pb-0" >
-                                                            <span className="icon-wrapper" title="Edit">
+                                                        <td>
+                                                            <span
+                                                                className="icon-wrapper"
+                                                                title="Edit"
+                                                                onClick={() => handleUserModal(data, 'Edit', true)}
+                                                            >
                                                                 <AiOutlineEdit
-                                                                    className="fs-4 text-black"
+                                                                    className="fs-4"
                                                                     style={{ cursor: 'pointer' }}
-                                                                    onClick={() => handleUserModal(data, 'Edit', true)}
                                                                 />
                                                             </span>
                                                             <span className="icon-wrapper" title="Delete" onClick={() => { setUserToDelete(data?._id); setShowConfirm(true); }}>
-                                                                <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                                                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
                                                             </span>
-                                                        </div>
+                                                        </td>
                                                     </tr>
                                                 )))}
                                         </tbody>

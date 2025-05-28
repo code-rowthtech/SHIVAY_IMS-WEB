@@ -39,13 +39,14 @@ tbody tr:hover {
 .icon-container {
   position: absolute;
   right: -3%;
+  top: 17%;
   transform: translateX(-50%);
   display: flex;
   gap: 3px;
   /* spacing between icons */
   opacity: 0;
   transition: opacity 0.3s ease;
-  padding-top: 8px !important;
+  // padding-top: 8px !important;
   // pointer-events: none;
 }
 
@@ -69,7 +70,8 @@ tbody tr:hover {
 }
 
 .icon-wrapper:hover {
-  background-color: #e7e7f0;
+  background-color: #6655D9;
+  color: white;
   /* fallback for bg-secondary */
 }
 

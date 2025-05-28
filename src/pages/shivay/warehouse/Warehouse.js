@@ -109,7 +109,7 @@ const Warehouse = () => {
                                             <th scope="col">Warehouse Name</th>
                                             <th scope="col">Location</th>
                                             <th scope="col">Address</th>
-
+                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     {store?.getWarehouseReducer?.loading ? (
@@ -130,28 +130,31 @@ const Warehouse = () => {
                                                 warehouseData?.map((data, index) => (
                                                     <tr key={index} className="text-dark  text-nowrap highlight-row">
                                                         <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                                                        <td className="text-uppercase font_work ">
+                                                        <td className="text-capitalize font_work ">
                                                             {data?.name || <span className="text-danger">-</span>}
                                                         </td>
-                                                        <td className="font_work">
+                                                        <td className="text-capitalize font_work">
                                                             {data?.locationId?.name || <span className="text-danger">-</span>}
                                                         </td>
-                                                        <td className="text-uppercase font_work" title={data.address}>
+                                                        <td className="text-capitalize font_work" title={data.address}>
                                                             {data?.address
                                                                 ? `${data.address.slice(0, 25)}${data.address.length > 25 ? '...' : ''}`
                                                                 : <span className="text-danger">-</span>}
                                                         </td>
-                                                        <div className="icon-container d-flex  pb-0" >
-                                                            <span className="icon-wrapper" title="Edit">
-                                                                <AiOutlineEdit className="fs-4 text-black"
+                                                        <td>
+                                                            <span
+                                                                className="icon-wrapper"
+                                                                title="Edit"
+                                                                onClick={() => handleWarehouseModal(data, 'Edit', true)}
+                                                            >
+                                                                <AiOutlineEdit className="fs-4"
                                                                     style={{ cursor: 'pointer' }}
-                                                                    onClick={() => handleWarehouseModal(data, 'Edit', true)}
                                                                 />
                                                             </span>
                                                             <span className="icon-wrapper" title="Delete" onClick={() => { setWarehouseToDelete(data?._id); setShowConfirm(true); }}>
-                                                                <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                                                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
                                                             </span>
-                                                        </div>
+                                                        </td>
                                                     </tr>
                                                 )))}
                                         </tbody>

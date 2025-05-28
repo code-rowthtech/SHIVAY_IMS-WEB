@@ -131,6 +131,7 @@ const Inventory = () => {
                                             <th scope="col">Code</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Qty</th>
+                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     {store?.productListReducer?.loading ? (
@@ -169,29 +170,32 @@ const Inventory = () => {
                                                         <td className="text-uppercase font_work ">
                                                             {data?.quantity !== undefined ? data?.quantity : <span className="text-black">-</span>}
                                                         </td>
-                                                        <td ></td>
-                                                        <div className="icon-container d-flex  pb-0" >
+                                                        <td >
                                                             <span
                                                                 className="icon-wrapper"
                                                                 title="View Product"
                                                                 onClick={() => navigate(`/shivay/viewProductStock?id=${data?._id}`)}
                                                             >
                                                                 <PiEye
-                                                                    className="fs-4 text-black"
+                                                                    className="fs-4"
                                                                     style={{ cursor: 'pointer' }}
                                                                 />
                                                             </span>
-                                                            <span className="icon-wrapper" title="Edit">
+                                                            <span
+                                                                className="icon-wrapper"
+                                                                title="Edit"
+                                                                style={{ cursor: 'pointer' }}
+                                                                onClick={() => handleEditModal(data, 'Edit', true)}
+                                                            >
                                                                 <AiOutlineEdit
-                                                                    className="fs-4 text-black"
-                                                                    style={{ cursor: 'pointer' }}
-                                                                    onClick={() => handleEditModal(data, 'Edit', true)}
+                                                                    className="fs-4"
                                                                 />
                                                             </span>
                                                             <span className="icon-wrapper" title="Delete" onClick={() => { setProductToDelete(data?._id); setShowConfirm(true); }}>
-                                                                <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                                                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
                                                             </span>
-                                                        </div>
+                                                        </td>
+
                                                     </tr>
                                                 )))}
                                         </tbody>

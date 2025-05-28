@@ -283,6 +283,7 @@ function EditStockModal({ show, onHide, stockId }) {
                                 <Form.Label>Date <span className="text-danger">*</span></Form.Label>
                                 <Form.Control
                                     type="date"
+                                    required
                                     max={new Date().toISOString().split("T")[0]}
                                     {...register('date', { required: true })}
                                 />
