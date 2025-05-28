@@ -5,12 +5,17 @@ import PageTitle from '../../../helpers/PageTitle';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReportActions, getWarehouseListActions } from '../../../redux/actions';
 import ToastContainer from '../../../helpers/toast/ToastContainer';
+import Pagination from '../../../helpers/Pagination';
 
 const Report = () => {
 
   const dispatch = useDispatch();
   const store = useSelector((state) => state)
   const Warehouse = store?.getWarehouseListReducer?.searchWarehouse?.response;
+  const totalRecords = '0';
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / pageSize));
 
   const warehouseOptions = Warehouse?.map((warehouse) => ({
     value: warehouse._id,
@@ -25,8 +30,20 @@ const Report = () => {
   };
 
   useEffect(() => {
+    setTotalPages(Math.ceil(totalRecords / pageSize));
+  },
+    [totalRecords, pageSize]);
+
+
+  useEffect(() => {
     dispatch(getWarehouseListActions());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (selectedWarehouse?.value) {
+      handleProductsSearch();
+    }
+  }, [pageIndex, pageSize, selectedWarehouse, stockType]);
 
   const resp = store?.reportReducer?.report?.status;
   useEffect(() => {
@@ -52,8 +69,8 @@ const Report = () => {
     const payload = {
       warehouseId: selectedWarehouse?.value,
       search: '',
-      page: '',
-      limit: '',
+      page: pageIndex,
+      limit: pageSize,
       type: "",
       stockFilter: stockType,
     }
@@ -64,8 +81,8 @@ const Report = () => {
     const payload = {
       warehouseId: selectedWarehouse?.value,
       search: '',
-      page: '',
-      limit: '',
+      page: pageIndex,
+      limit: pageSize,
       type: "sendMail",
       stockFilter: stockType
     }
@@ -165,7 +182,7 @@ const Report = () => {
           }}
         >
           <Card.Body className=" py-1">
-            <table className="table table-striped bg-white">
+            <table className="table table-striped bg-white mb-0">
               <thead>
                 <tr className="table_header">
                   <th scope="col"><i className="mdi mdi-merge"></i></th>
@@ -205,6 +222,13 @@ const Report = () => {
               </tbody>
 
             </table>
+            <Pagination
+              pageIndex={pageIndex}
+              pageSize={pageSize}
+              totalPages={useSelector((state) => state?.reportReducer?.report?.totalPages)}
+              setPageIndex={setPageIndex}
+              onChangePageSize={setPageSize}
+            />
 
           </Card.Body>
         </Card>

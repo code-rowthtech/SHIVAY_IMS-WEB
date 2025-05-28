@@ -275,7 +275,7 @@ const Dashboard = () => {
                       </thead>
                       {store?.stockinTransListReducer?.loading ? (
                         <tr>
-                          <td className='text-center' colSpan={8}>
+                          <td className='text-center' colSpan={9}>
                             <DashboardLoading />
                           </td>
                         </tr>
@@ -283,7 +283,7 @@ const Dashboard = () => {
                         <tbody>
                           {StockinData?.length === 0 ? (
                             <tr>
-                              <td colSpan={8} className='text-center'>
+                              <td colSpan={9} className='text-center'>
                                 <p className='my-4 py-5'>No stock-in data to show.</p>
                               </td>
                             </tr>

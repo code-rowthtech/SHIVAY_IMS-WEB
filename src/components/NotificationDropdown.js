@@ -1,12 +1,13 @@
 // @flow
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Dropdown } from 'react-bootstrap';
+import { Button, Card, Dropdown } from 'react-bootstrap';
 import SimpleBar from 'simplebar-react';
 import classNames from 'classnames';
 import { getNotificationActions } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import { HiChevronDown, HiChevronUp } from 'react-icons/hi';
 
 const styles = {
     hidden: { maxHeight: '300px', display: 'none' },
@@ -20,17 +21,20 @@ const NotificationDropdown = () => {
     const [notifStyle, setNotifStyle] = useState(styles.hidden);
     const [expandedIndex, setExpandedIndex] = useState(null);
     const [viewAll, setViewAll] = useState(false);
+    const [limit, setLimit] = useState(10); // Initial limit of 10 notifications
+    const [page, setPage] = useState(1);
 
     const { notificationData } = useSelector((state) => state.getNotificationDataReducer || {});
     const NotificationData = notificationData?.response || [];
+    const totalNotifications = notificationData?.count || 0;
 
     useEffect(() => {
         dispatch(getNotificationActions({
             userId: '67c69cd2b073fa62663dced3',
-            limit: '',
-            page: '',
+            limit: viewAll ? '' : limit, // Show all if viewAll is true
+            page: viewAll ? '' : page,
         }));
-    }, [dispatch]);
+    }, [dispatch, limit, page, viewAll]);
 
     const toggleDropdown = () => {
         setDropdownOpen((prev) => !prev);
@@ -70,9 +74,18 @@ const NotificationDropdown = () => {
     };
 
     const handleViewAll = (e) => {
-        e.stopPropagation(); // Prevent dropdown from closing
+        e.stopPropagation();
         setViewAll((prev) => !prev);
         setNotifStyle((prev) => (prev === styles.visible ? styles.fullView : styles.visible));
+
+        // Reset to first page when toggling view all
+        if (!viewAll) {
+            setLimit(''); // Show all notifications
+            setPage('');
+        } else {
+            setLimit(10); // Show only 10 notifications
+            setPage(1);
+        }
     };
 
     return (
@@ -132,6 +145,20 @@ const NotificationDropdown = () => {
                                         </Dropdown.Item>
                                     );
                                 })}
+                                {!viewAll && totalNotifications > limit && (
+                                    <div className="text-center mt-2 mb-2">
+                                        <Button
+                                            variant="link"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setLimit(prev => prev + 10); // Load 10 more notifications
+                                            }}
+                                            style={{ color: '#6655D9' }}
+                                        >
+                                            Load More
+                                        </Button>
+                                    </div>
+                                )}
                             </React.Fragment>
                         )) : (
                             <div className="text-center text-muted py-3">No notifications available</div>
@@ -143,7 +170,8 @@ const NotificationDropdown = () => {
                         style={{ color: '#6655D9' }}
                         onClick={handleViewAll}
                     >
-                        {viewAll ? 'Show Less' : 'View All'}
+                        {/* {viewAll ? 'Show Less' : 'View All'} */}
+                        {viewAll ? <HiChevronUp className='fs-2' /> : <HiChevronDown className='fs-2'/>}
                     </Dropdown.Item>
                 </div>
             </Dropdown.Menu>
