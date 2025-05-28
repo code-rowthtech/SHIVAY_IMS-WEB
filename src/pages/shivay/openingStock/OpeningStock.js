@@ -100,6 +100,7 @@ const OpeningStock = () => {
                       <th>Date</th>
                       <th>Description</th>
                       <th>No. of Products</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -114,12 +115,11 @@ const OpeningStock = () => {
                         openingStockData.map((data, index) => (
                           <tr key={index} className="text-dark text-nowrap highlight-row">
                             <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                            <td className="text-uppercase font_work">{data?.warehouseData?.name || '-'}</td>
+                            <td className="text-capitalize font_work">{data?.warehouseData?.name || '-'}</td>
                             <td className="font_work">{data?.date ? new Date(data.date).toLocaleDateString('en-GB') : '-'}</td>
                             <td className="font_work">{data?.description || '-'}</td>
                             <td className="font_work">{data?.totalStockProductCount || '-'}</td>
-
-                            <div className="icon-container d-flex pb-0">
+                            <td>
                               <span
                                 className="icon-wrapper me-4"
                                 title="Edit"
@@ -129,11 +129,11 @@ const OpeningStock = () => {
                                 }}
                               >
                                 <AiOutlineEdit
-                                  className="fs-4 text-black"
+                                  className="fs-4"
                                   style={{ cursor: 'pointer' }}
                                 />
                               </span>
-                            </div>
+                            </td>
                           </tr>
                         ))
                       ) : (

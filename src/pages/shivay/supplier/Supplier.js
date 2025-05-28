@@ -112,6 +112,8 @@ const Supplier = () => {
                       <th scope="col">Location</th>
                       <th scope="col">Address</th>
                       <th scope="col">Phone no.</th>
+                      <th scope="col">Action</th>
+
                     </tr>
                   </thead>
                   {store?.supplierListReducer?.loading ? (
@@ -132,31 +134,30 @@ const Supplier = () => {
                         SupplierData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
                             <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                            <td className="text-uppercase font_work ">
+                            <td className="text-capitalize font_work ">
                               {data?.name || <span className="text-black">-</span>}
                             </td>
-                            <td>{data?.location || <span className="text-black">-</span>}</td>
-                            <td className="font_work" title={data?.address}>
+                            <td className='text-capitalize'>{data?.location || <span className="text-black">-</span>}</td>
+                            <td className="text-capitalize font_work" title={data?.address}>
                               {data?.address
                                 ? `${data.address.slice(0, 30)}${data.address.length > 30 ? '...' : ''}`
                                 : <span className="text-black">-</span>}
                             </td>
-                            <td className="text-uppercase font_work ">
+                            <td className=" font_work ">
                               {data?.phoneNumber || <span className="text-black">-</span>}
                             </td>
-                            <td></td>
-                            <div className="icon-container d-flex  pb-0" >
+                            <td>
                               <span className="icon-wrapper" title="Edit">
                                 <AiOutlineEdit
-                                  className="fs-4 text-black"
+                                  className="fs-4"
                                   style={{ cursor: 'pointer' }}
                                   onClick={() => handleSupplierModal(data, 'Edit', true)}
                                 />
                               </span>
                               <span className="icon-wrapper" title="Delete" onClick={() => { setSupplierToDelete(data?._id); setShowConfirm(true); }}>
-                                <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
                               </span>
-                            </div>
+                            </td>
                           </tr>
                         )))}
                     </tbody>

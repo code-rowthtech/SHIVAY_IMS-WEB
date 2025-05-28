@@ -112,11 +112,13 @@ const Dispatch = () => {
                       <th scope="col">#</th>
                       <th scope="col">Customer Name</th>
                       <th scope="col">Dispatch by</th>
+                      <th scope="col">Control No.</th>
                       <th scope="col">GR Number</th>
                       <th scope="col">Warehouse</th>
                       <th scope="col">Location</th>
                       <th scope="col">Date</th>
                       <th scope="col">No. of Products</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   {store?.getDispatchDataReducer?.loading ? (
@@ -138,7 +140,7 @@ const Dispatch = () => {
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
                             <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
                             <td
-                              className="text-uppercase font_work"
+                              className="text-capitalize font_work"
                               title={data?.customerData?.[0]?.name || ""}
                             >
                               {data?.customerData?.[0]?.name ? (
@@ -149,17 +151,19 @@ const Dispatch = () => {
                                 <span className="text-black">-</span>
                               )}
                             </td>
-
-                            <td className="text-uppercase font_work ">
+                            <td className="text-capitalize font_work ">
                               {data?.dispatchByData?.[0]?.name || <span className="text-black">-</span>}
+                            </td>
+                             <td className=" font_work ">
+                              {data?.controlNumber || <span className="text-black">-</span>}
                             </td>
                             <td className="font_work ">
                               {data?.grNumber || <span className="text-black">-</span>}
                             </td>
-                            <td className="text-uppercase font_work ">
+                            <td className="text-capitalize font_work ">
                               {data?.warehouseData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
-                            <td className="font_work">
+                            <td className="text-capitalize font_work">
                               {data?.customerData?.[0]?.location || <span className="text-black">-</span>}
                             </td>
                             <td className="font_work">
@@ -172,9 +176,7 @@ const Dispatch = () => {
                             <td className="font_work">
                               {data?.totalDispatchProductCount || <span className="text-black">-</span>}
                             </td>
-                            <td></td>
-                            <td></td>
-                            <div className="icon-container d-flex pb-0" >
+                            <td>
                               <span
                                 className="icon-wrapper "
                                 title="Edit"
@@ -184,17 +186,14 @@ const Dispatch = () => {
                                 }}
                               >
                                 <AiOutlineEdit
-                                  className="fs-4 text-black"
+                                  className="fs-4 "
                                   style={{ cursor: 'pointer' }}
                                 />
                               </span>
-                              {/* <span className="icon-wrapper" title="Edit">
-                                <AiOutlineEdit onClick={() => navigate(`/shivay/addDispatch?id=${data?._id}`)} className="fs-4 text-black" style={{ cursor: 'pointer' }} />
-                              </span> */}
                               <span className="icon-wrapper" title="Delete" onClick={() => { setDispatchToDelete(data?._id); setShowConfirm(true); }}>
-                                <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                                <RiDeleteBinLine className="fs-4 " style={{ cursor: 'pointer' }} />
                               </span>
-                            </div>
+                            </td>
                           </tr>
                         )))}
                     </tbody>

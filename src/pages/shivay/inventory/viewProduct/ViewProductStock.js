@@ -113,14 +113,14 @@ const ViewProductStock = () => {
                                             WarehouseData?.map((item, index) => (
                                                 <tr key={index} className="text-dark font_work text-nowrap highlight-row">
                                                     <td className='font_work'>{index + 1}</td>
-                                                    <td className="text-uppercase font_work" title={item.warehouseData?.[0]?.name ?? '-'}>
+                                                    <td className="text-capitalize font_work" title={item.warehouseData?.[0]?.name ?? '-'}>
                                                         {(item.warehouseData?.[0]?.name ?? '-').slice(0, 30)}{(item.warehouseData?.[0]?.name?.length > 30) ? '...' : ''}
                                                     </td>
 
-                                                    <td className="text-uppercase font_work" title={item.warehouseData?.[0]?.address ?? '-'}>
+                                                    <td className="text-capitalize font_work" title={item.warehouseData?.[0]?.address ?? '-'}>
                                                         {(item.warehouseData?.[0]?.address ?? '-').slice(0, 30)}{(item.warehouseData?.[0]?.address?.length > 30) ? '...' : ''}
                                                     </td>
-                                                    <td className="text-uppercase font_work">{item.stock ?? '-'}</td>
+                                                    <td className="font_work">{item.stock ?? '-'}</td>
                                                 </tr>
                                             )))}
                                     </tbody>

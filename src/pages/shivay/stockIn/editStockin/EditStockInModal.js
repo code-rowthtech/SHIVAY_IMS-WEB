@@ -323,9 +323,24 @@ function EditStockinModal({ show, onHide, stockId }) {
   }
   return (
     <Modal show={show} onHide={onHide} size='xl' backdrop="static" centered>
-      <Modal.Header className='py-1' closeButton>
-        <Modal.Title>Edit Stock in</Modal.Title>
+      <Modal.Header className="py-2">
+        <div className="d-flex w-100 justify-content-between align-items-center">
+          <div className="col-4 text-start flex-grow-1">
+            <h4>Edit Stock in</h4>
+          </div>
+          <div className="col-4 text-center flex-grow-1">
+            <span className='border border-1 rounded-2 px-2 text-black' title='Control Number'>{stockInData?.[0]?.controlNumber}</span>
+          </div>
+          <div className="col-4 text-end">
+            <Button
+              variant="close"
+              aria-label="Close"
+              onClick={onHide} 
+            />
+          </div>
+        </div>
       </Modal.Header>
+
       <Modal.Body className='pt-1'>
         <Form onSubmit={handleSubmit(onSubmit)}>
 

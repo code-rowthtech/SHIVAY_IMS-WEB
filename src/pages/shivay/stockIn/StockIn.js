@@ -109,6 +109,7 @@ const StockIn = () => {
                       <th scope="col">Date</th>
                       <th scope="col">No. of Products</th>
                       <th scope="col">Invoice Number</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   {store?.stockInListReducer?.loading ? (
@@ -129,8 +130,8 @@ const StockIn = () => {
                         StockInData?.map((data, index) => (
                           <tr key={index} className="text-dark  text-nowrap highlight-row">
                             <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                              <td
-                              className="text-uppercase font_work"
+                            <td
+                              className="text-capitalize font_work"
                               title={data?.supplierData?.[0]?.name || '-'}
                             >
                               {data?.supplierData?.[0]?.name
@@ -141,7 +142,7 @@ const StockIn = () => {
                             <td className="font_work">
                               {data?.controlNumber || <span className="text-black">-</span>}
                             </td>
-                            <td className="font_work">
+                            <td className="text-capitalize font_work">
                               {data?.warehouseData?.[0]?.name || <span className="text-black">-</span>}
                             </td>
                             <td className="font_work">
@@ -157,9 +158,7 @@ const StockIn = () => {
                             <td className="font_work">
                               {data?.invoiceNumber || <span className="text-black">-</span>}
                             </td>
-                            <td></td>
-                            <td></td>
-                            <div className="icon-container d-flex  pb-0" >
+                            <td>
                               <span
                                 className="icon-wrapper"
                                 title="Edit"
@@ -169,13 +168,13 @@ const StockIn = () => {
                                 }}
                               >
                                 <AiOutlineEdit
-                                  className="fs-4 text-black"
+                                  className="fs-4"
                                   style={{ cursor: 'pointer' }}
                                 />                              </span>
                               <span className="icon-wrapper" title="Delete" onClick={() => { setStockToDelete(data?._id); setShowConfirm(true); }}>
-                                <RiDeleteBinLine className="fs-4 text-black" style={{ cursor: 'pointer' }} />
+                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
                               </span>
-                            </div>
+                            </td>
                           </tr>
                         )))}
                     </tbody>
