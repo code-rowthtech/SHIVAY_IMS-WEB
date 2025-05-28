@@ -57,13 +57,12 @@ function EditStockinModal({ show, onHide, stockId }) {
       reset();
       setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
     }
-  }, [UpdateResponse, onHide, reset]);
+  }, [UpdateResponse]);
 
 
   useEffect(() => {
     dispatch(getWarehouseListActions());
     dispatch(listingSupplierActions());
-
   }, [dispatch]);
 
   useEffect(() => {
@@ -229,13 +228,13 @@ function EditStockinModal({ show, onHide, stockId }) {
     if (CreateProductResponse === 200 || DeleteProductResponse === 200 || UpdateProductResponse === 200) {
       dispatch(getStockInByIdActions(stockId));
     }
-  }, [dispatch, CreateProductResponse, DeleteProductResponse, UpdateProductResponse, stockId]);
+  }, [ CreateProductResponse, DeleteProductResponse, UpdateProductResponse]);
 
   useEffect(() => {
-    if (stockId) {
+    if (stockId&&show) {
       dispatch(getStockInByIdActions(stockId));
     }
-  }, [dispatch, stockId]);
+  }, [show,stockId]);
 
   useEffect(() => {
     if (stockId && stockInData) {
