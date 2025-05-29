@@ -18,7 +18,7 @@ import { MdDelete } from 'react-icons/md';
 
 function AddStockinModal({ show, onHide }) {
     const dispatch = useDispatch();
-    const { handleSubmit, register, setValue, reset, resetField } = useForm();
+    const { handleSubmit, register, setValue, reset, resetField, watch } = useForm();
     const store = useSelector((state) => state)
 
     const [today] = useState(new Date().toISOString().split('T')[0]);
@@ -285,8 +285,10 @@ function AddStockinModal({ show, onHide }) {
                                 <Form.Label className='mb-0'>Date</Form.Label>
                                 <Form.Control
                                     type="date"
-                                    value={today}
-                                    {...register('date')}
+                                    {...register('date', {
+                                        value: new Date().toISOString().split('T')[0] // Set initial value to today
+                                    })}
+                                    max={new Date().toISOString().split('T')[0]} // Restrict to today or earlier
                                 />
                             </Form.Group>
                         </Col>

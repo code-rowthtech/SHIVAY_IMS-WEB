@@ -310,6 +310,7 @@ function AddDispatchModal({ show, onHide }) {
                                     type="date"
                                     defaultValue={today}
                                     {...register('date')}
+                                    max={today}
                                 />
                             </Form.Group>
                         </Col>

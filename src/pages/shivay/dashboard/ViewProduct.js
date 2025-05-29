@@ -20,20 +20,31 @@ const ViewProduct = () => {
     const warehouseId = searchParams.get('warehouseId')
     const ProductData = store?.viewProductReducer?.viewProduct;
 
+    const handleDateChange = (update) => {
+        const [start, end] = update;
+
+        // Adjust dates to local timezone properly
+        const adjustedStart = start ? new Date(start.setHours(0, 0, 0, 0)) : null;
+        const adjustedEnd = end ? new Date(end.setHours(0, 0, 0, 0)) : null;
+
+        setDateRange([adjustedStart, adjustedEnd]);
+    };
+
     useEffect(() => {
-        const formatDate = (date) => {
-            if (!date) return undefined;
-            return date.toISOString().split('T')[0]; // Gets YYYY-MM-DD
-        };
+        function format(date, formatStr) {
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
 
         dispatch(viewProductActions({
             warehouseId: warehouseId,
             productId: productId,
 
-            startDate: formatDate(startDate) || '',
-            endDate: formatDate(endDate) || '',
+            startDate: startDate ? format(startDate, 'yyyy-MM-dd') : null,
+            endDate: endDate ? format(endDate, 'yyyy-MM-dd') : null,
 
         }));
+
+
     }, [dispatch, warehouseId, productId, startDate, endDate]);
 
     const handleGoBack = () => {
@@ -74,16 +85,16 @@ const ViewProduct = () => {
                         </div>
 
                         <Form.Group className="mb-3 w-100" style={{ maxWidth: 250 }}>
-                            {/* <Form.Label className="mb-1">Date Range</Form.Label> */}
                             <DatePicker
                                 selected={startDate}
-                                onChange={(update) => setDateRange(update)}
+                                onChange={handleDateChange}
                                 startDate={startDate}
                                 endDate={endDate}
                                 selectsRange
                                 className="form-control"
                                 placeholderText="Select date range"
                                 dateFormat="yyyy-MM-dd"
+                                maxDate={new Date()}
                             />
                         </Form.Group>
                     </div>
