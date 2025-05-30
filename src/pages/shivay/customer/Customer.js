@@ -96,67 +96,69 @@ const Customer = () => {
               style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
             >
               <Card.Body className=" py-1">
-                <table className="table table-striped bg-white mb-0">
-                  <thead>
-                    <tr className="table_header">
-                      <th scope="col">#</th>
-                      <th scope="col">Customer Name</th>
-                      <th scope="col">Location</th>
-                      <th scope="col">Billing Address</th>
-                      <th scope="col">Phone no.</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  {store?.customerListReducer?.loading ? (
-                    <tr>
-                      <td className='text-center' colSpan={6}>
-                        <Loading />
-                      </td>
-                    </tr>
-                  ) : (
-                    <tbody>
-                      {CustomerData?.length === 0 ? (
-                        <tr>
-                          <td colSpan={6} className='text-center'>
-                            <p className='my-5 py-5 '>No customer found.</p>
-                          </td>
-                        </tr>
-                      ) : (
-                        CustomerData?.map((data, index) => (
-                          <tr key={index} className="text-dark  text-nowrap highlight-row">
-                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                            <td className="text-capitalize font_work " title={data?.name}>
-                              {data?.name
-                                ? `${data.name.slice(0, 30)}${data.name.length > 30 ? '...' : ''}`
-                                : <span className="text-black">-</span>}
-                            </td>
-                            <td className='text-capitalize'>{data?.location || <span className="text-black">-</span>}</td>
-                            <td className="text-capitalize font_work" title={data?.billingAddress}>
-                              {data?.billingAddress
-                                ? `${data.billingAddress.slice(0, 30)}${data.billingAddress.length > 30 ? '...' : ''}`
-                                : <span className="text-black">-</span>}
-                            </td>
-                            <td>{data?.primaryPhoneNumber || <span className="text-black">-</span>}</td>
-                            <td>
-                              <span
-                                className="icon-wrapper"
-                                title="Edit"
-                                onClick={() => handleCustomerModal(data, 'Edit', true)}
-                              >
-                                <AiOutlineEdit
-                                  className="fs-4"
-                                  style={{ cursor: 'pointer' }}
-                                />
-                              </span>
-                              <span className="icon-wrapper" title="Delete" onClick={() => { setCustomerToDelete(data?._id); setShowConfirm(true); }}>
-                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
-                              </span>
+                <div className='table-responsive'>
+                  <table className="table table-striped bg-white mb-0">
+                    <thead>
+                      <tr className="table_header">
+                        <th scope="col">#</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Billing Address</th>
+                        <th scope="col">Phone no.</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    {store?.customerListReducer?.loading ? (
+                      <tr>
+                        <td className='text-center' colSpan={6}>
+                          <Loading />
+                        </td>
+                      </tr>
+                    ) : (
+                      <tbody>
+                        {CustomerData?.length === 0 ? (
+                          <tr>
+                            <td colSpan={6} className='text-center'>
+                              <p className='my-5 py-5 '>No customer found.</p>
                             </td>
                           </tr>
-                        )))}
-                    </tbody>
-                  )}
-                </table>
+                        ) : (
+                          CustomerData?.map((data, index) => (
+                            <tr key={index} className="text-dark  text-nowrap highlight-row">
+                              <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
+                              <td className="text-capitalize font_work " title={data?.name}>
+                                {data?.name
+                                  ? `${data.name.slice(0, 30)}${data.name.length > 30 ? '...' : ''}`
+                                  : <span className="text-black">-</span>}
+                              </td>
+                              <td className='text-capitalize'>{data?.location || <span className="text-black">-</span>}</td>
+                              <td className="text-capitalize font_work" title={data?.billingAddress}>
+                                {data?.billingAddress
+                                  ? `${data.billingAddress.slice(0, 30)}${data.billingAddress.length > 30 ? '...' : ''}`
+                                  : <span className="text-black">-</span>}
+                              </td>
+                              <td>{data?.primaryPhoneNumber || <span className="text-black">-</span>}</td>
+                              <td>
+                                <span
+                                  className="icon-wrapper"
+                                  title="Edit"
+                                  onClick={() => handleCustomerModal(data, 'Edit', true)}
+                                >
+                                  <AiOutlineEdit
+                                    className="fs-4"
+                                    style={{ cursor: 'pointer' }}
+                                  />
+                                </span>
+                                <span className="icon-wrapper" title="Delete" onClick={() => { setCustomerToDelete(data?._id); setShowConfirm(true); }}>
+                                  <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
+                                </span>
+                              </td>
+                            </tr>
+                          )))}
+                      </tbody>
+                    )}
+                  </table>
+                </div>
                 <Pagination
                   pageIndex={pageIndex}
                   pageSize={pageSize}

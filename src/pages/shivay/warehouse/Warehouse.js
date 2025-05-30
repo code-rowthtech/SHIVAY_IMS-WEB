@@ -102,64 +102,66 @@ const Warehouse = () => {
                             style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
                         >
                             <Card.Body className=" py-1">
-                                <table className="table table-striped bg-white mb-0">
-                                    <thead>
-                                        <tr className="table_header">
-                                            <th scope="col">#</th>
-                                            <th scope="col">Warehouse Name</th>
-                                            <th scope="col">Location</th>
-                                            <th scope="col">Address</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </thead>
-                                    {store?.getWarehouseReducer?.loading ? (
-                                        <tr>
-                                            <td className='text-center' colSpan={6}>
-                                                <Loading />
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        <tbody>
-                                            {warehouseData?.length === 0 ? (
-                                                <tr>
-                                                    <td colSpan={6} className='text-center'>
-                                                        <p className='my-5 py-5 '>No Warehouse Added Yet.</p>
-                                                    </td>
-                                                </tr>
-                                            ) : (
-                                                warehouseData?.map((data, index) => (
-                                                    <tr key={index} className="text-dark  text-nowrap highlight-row">
-                                                        <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                                                        <td className="text-capitalize font_work ">
-                                                            {data?.name || <span className="text-danger">-</span>}
-                                                        </td>
-                                                        <td className="text-capitalize font_work">
-                                                            {data?.locationId?.name || <span className="text-danger">-</span>}
-                                                        </td>
-                                                        <td className="text-capitalize font_work" title={data.address}>
-                                                            {data?.address
-                                                                ? `${data.address.slice(0, 25)}${data.address.length > 25 ? '...' : ''}`
-                                                                : <span className="text-danger">-</span>}
-                                                        </td>
-                                                        <td>
-                                                            <span
-                                                                className="icon-wrapper"
-                                                                title="Edit"
-                                                                onClick={() => handleWarehouseModal(data, 'Edit', true)}
-                                                            >
-                                                                <AiOutlineEdit className="fs-4"
-                                                                    style={{ cursor: 'pointer' }}
-                                                                />
-                                                            </span>
-                                                            <span className="icon-wrapper" title="Delete" onClick={() => { setWarehouseToDelete(data?._id); setShowConfirm(true); }}>
-                                                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
-                                                            </span>
+                                <div className='table-responsive'>
+                                    <table className="table table-striped bg-white mb-0">
+                                        <thead>
+                                            <tr className="table_header">
+                                                <th scope="col">#</th>
+                                                <th scope="col">Warehouse Name</th>
+                                                <th scope="col">Location</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        {store?.getWarehouseReducer?.loading ? (
+                                            <tr>
+                                                <td className='text-center' colSpan={6}>
+                                                    <Loading />
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            <tbody>
+                                                {warehouseData?.length === 0 ? (
+                                                    <tr>
+                                                        <td colSpan={6} className='text-center'>
+                                                            <p className='my-5 py-5 '>No Warehouse Added Yet.</p>
                                                         </td>
                                                     </tr>
-                                                )))}
-                                        </tbody>
-                                    )}
-                                </table>
+                                                ) : (
+                                                    warehouseData?.map((data, index) => (
+                                                        <tr key={index} className="text-dark  text-nowrap highlight-row">
+                                                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
+                                                            <td className="text-capitalize font_work ">
+                                                                {data?.name || <span className="text-danger">-</span>}
+                                                            </td>
+                                                            <td className="text-capitalize font_work">
+                                                                {data?.locationId?.name || <span className="text-danger">-</span>}
+                                                            </td>
+                                                            <td className="text-capitalize font_work" title={data.address}>
+                                                                {data?.address
+                                                                    ? `${data.address.slice(0, 25)}${data.address.length > 25 ? '...' : ''}`
+                                                                    : <span className="text-danger">-</span>}
+                                                            </td>
+                                                            <td>
+                                                                <span
+                                                                    className="icon-wrapper"
+                                                                    title="Edit"
+                                                                    onClick={() => handleWarehouseModal(data, 'Edit', true)}
+                                                                >
+                                                                    <AiOutlineEdit className="fs-4"
+                                                                        style={{ cursor: 'pointer' }}
+                                                                    />
+                                                                </span>
+                                                                <span className="icon-wrapper" title="Delete" onClick={() => { setWarehouseToDelete(data?._id); setShowConfirm(true); }}>
+                                                                    <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    )))}
+                                            </tbody>
+                                        )}
+                                    </table>
+                                </div>
                                 <Pagination
                                     pageIndex={pageIndex}
                                     pageSize={pageSize}

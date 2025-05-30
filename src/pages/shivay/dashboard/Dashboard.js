@@ -258,7 +258,7 @@ const Dashboard = () => {
               <Card.Body className=" py-1">
 
                 {activeTab === 0 &&
-                  <div>
+                  <div className="table-responsive">
                     <table className="table table-striped bg-white mb-0">
                       <thead>
                         <tr className="table_header">
@@ -348,13 +348,14 @@ const Dashboard = () => {
                 }
                 {activeTab === 1 &&
                   <div>
-                    <div>
-                      <table className="table table-striped bg-white mb-0">
+                    <div className="table-responsive">
+                      <table responsive className="table table-striped bg-white mb-0">
                         <thead>
                           <tr className="table_header">
                             <th scope="col"><i className="mdi mdi-merge"></i></th>
                             <th scope="col" className="test"> Product Name</th>
                             <th scope="col">Customer</th>
+                            <th scope="col">Dispatch by</th>
                             <th scope="col">Code</th>
                             <th scope="col">Dispatch</th>
                             <th scope="col">Stock</th>
@@ -386,6 +387,9 @@ const Dashboard = () => {
                                   </td>
                                   <td className="font_work ">
                                     {data?.customerName || <span className="text-black">-</span>}
+                                  </td>
+                                   <td className="font_work ">
+                                    {data?.dispatchBy || <span className="text-black">-</span>}
                                   </td>
                                   <td className="font_work ">
                                     {data?.code || <span className="text-black">-</span>}

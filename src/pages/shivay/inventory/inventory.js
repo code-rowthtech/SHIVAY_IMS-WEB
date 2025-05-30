@@ -122,85 +122,87 @@ const Inventory = () => {
                             style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
                         >
                             <Card.Body className=" py-1">
-                                <table className="table table-striped bg-white mb-0">
-                                    <thead>
-                                        <tr className="table_header">
-                                            <th scope="col">#</th>
-                                            <th scope="col">Product Name</th>
-                                            <th scope="col">Model</th>
-                                            <th scope="col">Code</th>
-                                            <th scope="col">Description</th>
-                                            <th scope="col">Qty</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </thead>
-                                    {store?.productListReducer?.loading ? (
-                                        <tr>
-                                            <td className='text-center' colSpan={7}>
-                                                <Loading />
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        <tbody>
-                                            {ProductData?.length === 0 ? (
-                                                <tr>
-                                                    <td colSpan={7} className='text-center'>
-                                                        <p className='my-5 py-5 '>No Products to show.</p>
-                                                    </td>
-                                                </tr>
-                                            ) : (
-                                                ProductData?.map((data, index) => (
-                                                    <tr key={index} className="text-dark  text-nowrap highlight-row">
-                                                        <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                                                        <td className="text-uppercase font_work ">
-                                                            {data?.name || <span className="text-black">-</span>}
+                                <div className='table-responsive'>
+                                    <table className="table table-striped bg-white mb-0">
+                                        <thead>
+                                            <tr className="table_header">
+                                                <th scope="col">#</th>
+                                                <th scope="col">Product Name</th>
+                                                <th scope="col">Model</th>
+                                                <th scope="col">Code</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Qty</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        {store?.productListReducer?.loading ? (
+                                            <tr>
+                                                <td className='text-center' colSpan={7}>
+                                                    <Loading />
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            <tbody>
+                                                {ProductData?.length === 0 ? (
+                                                    <tr>
+                                                        <td colSpan={7} className='text-center'>
+                                                            <p className='my-5 py-5 '>No Products to show.</p>
                                                         </td>
-                                                        <td className="text-uppercase font_work ">
-                                                            {data?.modelData?.name || <span className="text-black">-</span>}
-                                                        </td>
-                                                        <td className="text-uppercase font_work ">
-                                                            {data?.code || <span className="text-black">-</span>}
-                                                        </td>
-                                                        <td className="text-uppercase font_work" title={data.description}>
-                                                            {data?.description
-                                                                ? `${data.description.slice(0, 25)}${data.description.length > 25 ? '...' : ''}`
-                                                                : <span className="text-black">-</span>}
-                                                        </td>
-
-                                                        <td className="text-uppercase font_work ">
-                                                            {data?.quantity !== undefined ? data?.quantity : <span className="text-black">-</span>}
-                                                        </td>
-                                                        <td >
-                                                            <span
-                                                                className="icon-wrapper"
-                                                                title="View Product"
-                                                                onClick={() => navigate(`/shivay/viewProductStock?id=${data?._id}`)}
-                                                            >
-                                                                <PiEye
-                                                                    className="fs-4"
-                                                                    style={{ cursor: 'pointer' }}
-                                                                />
-                                                            </span>
-                                                            <span
-                                                                className="icon-wrapper"
-                                                                title="Edit"
-                                                                style={{ cursor: 'pointer' }}
-                                                                onClick={() => handleEditModal(data, 'Edit', true)}
-                                                            >
-                                                                <AiOutlineEdit
-                                                                    className="fs-4"
-                                                                />
-                                                            </span>
-                                                            <span className="icon-wrapper" title="Delete" onClick={() => { setProductToDelete(data?._id); setShowConfirm(true); }}>
-                                                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
-                                                            </span>
-                                                        </td>
-
                                                     </tr>
-                                                )))}
-                                        </tbody>
-                                    )}
-                                </table>
+                                                ) : (
+                                                    ProductData?.map((data, index) => (
+                                                        <tr key={index} className="text-dark  text-nowrap highlight-row">
+                                                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
+                                                            <td className="text-uppercase font_work ">
+                                                                {data?.name || <span className="text-black">-</span>}
+                                                            </td>
+                                                            <td className="text-uppercase font_work ">
+                                                                {data?.modelData?.name || <span className="text-black">-</span>}
+                                                            </td>
+                                                            <td className="text-uppercase font_work ">
+                                                                {data?.code || <span className="text-black">-</span>}
+                                                            </td>
+                                                            <td className="text-uppercase font_work" title={data.description}>
+                                                                {data?.description
+                                                                    ? `${data.description.slice(0, 25)}${data.description.length > 25 ? '...' : ''}`
+                                                                    : <span className="text-black">-</span>}
+                                                            </td>
+
+                                                            <td className="text-uppercase font_work ">
+                                                                {data?.quantity !== undefined ? data?.quantity : <span className="text-black">-</span>}
+                                                            </td>
+                                                            <td >
+                                                                <span
+                                                                    className="icon-wrapper"
+                                                                    title="View Product"
+                                                                    onClick={() => navigate(`/shivay/viewProductStock?id=${data?._id}`)}
+                                                                >
+                                                                    <PiEye
+                                                                        className="fs-4"
+                                                                        style={{ cursor: 'pointer' }}
+                                                                    />
+                                                                </span>
+                                                                <span
+                                                                    className="icon-wrapper"
+                                                                    title="Edit"
+                                                                    style={{ cursor: 'pointer' }}
+                                                                    onClick={() => handleEditModal(data, 'Edit', true)}
+                                                                >
+                                                                    <AiOutlineEdit
+                                                                        className="fs-4"
+                                                                    />
+                                                                </span>
+                                                                <span className="icon-wrapper" title="Delete" onClick={() => { setProductToDelete(data?._id); setShowConfirm(true); }}>
+                                                                    <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
+                                                                </span>
+                                                            </td>
+
+                                                        </tr>
+                                                    )))}
+                                            </tbody>
+                                        )}
+                                    </table>
+                                </div>
                                 <Pagination
                                     pageIndex={pageIndex}
                                     pageSize={pageSize}

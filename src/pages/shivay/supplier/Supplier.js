@@ -104,65 +104,67 @@ const Supplier = () => {
               style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}
             >
               <Card.Body className=" py-1">
-                <table className="table table-striped bg-white mb-0">
-                  <thead>
-                    <tr className="table_header">
-                      <th scope="col">#</th>
-                      <th scope="col">Supplier Name</th>
-                      <th scope="col">Location</th>
-                      <th scope="col">Address</th>
-                      <th scope="col">Phone no.</th>
-                      <th scope="col">Action</th>
+                <div className='table-responsive'>
+                  <table className="table table-striped bg-white mb-0">
+                    <thead>
+                      <tr className="table_header">
+                        <th scope="col">#</th>
+                        <th scope="col">Supplier Name</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Phone no.</th>
+                        <th scope="col">Action</th>
 
-                    </tr>
-                  </thead>
-                  {store?.supplierListReducer?.loading ? (
-                    <tr>
-                      <td className='text-center' colSpan={6}>
-                        <Loading />
-                      </td>
-                    </tr>
-                  ) : (
-                    <tbody>
-                      {SupplierData?.length === 0 ? (
-                        <tr>
-                          <td colSpan={6} className='text-center'>
-                            <p className='my-5 py-5 '>No supplier found.</p>
-                          </td>
-                        </tr>
-                      ) : (
-                        SupplierData?.map((data, index) => (
-                          <tr key={index} className="text-dark  text-nowrap highlight-row">
-                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                            <td className="text-capitalize font_work ">
-                              {data?.name || <span className="text-black">-</span>}
-                            </td>
-                            <td className='text-capitalize'>{data?.location || <span className="text-black">-</span>}</td>
-                            <td className="text-capitalize font_work" title={data?.address}>
-                              {data?.address
-                                ? `${data.address.slice(0, 30)}${data.address.length > 30 ? '...' : ''}`
-                                : <span className="text-black">-</span>}
-                            </td>
-                            <td className=" font_work ">
-                              {data?.phoneNumber || <span className="text-black">-</span>}
-                            </td>
-                            <td>
-                              <span className="icon-wrapper" title="Edit">
-                                <AiOutlineEdit
-                                  className="fs-4"
-                                  style={{ cursor: 'pointer' }}
-                                  onClick={() => handleSupplierModal(data, 'Edit', true)}
-                                />
-                              </span>
-                              <span className="icon-wrapper" title="Delete" onClick={() => { setSupplierToDelete(data?._id); setShowConfirm(true); }}>
-                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
-                              </span>
+                      </tr>
+                    </thead>
+                    {store?.supplierListReducer?.loading ? (
+                      <tr>
+                        <td className='text-center' colSpan={6}>
+                          <Loading />
+                        </td>
+                      </tr>
+                    ) : (
+                      <tbody>
+                        {SupplierData?.length === 0 ? (
+                          <tr>
+                            <td colSpan={6} className='text-center'>
+                              <p className='my-5 py-5 '>No supplier found.</p>
                             </td>
                           </tr>
-                        )))}
-                    </tbody>
-                  )}
-                </table>
+                        ) : (
+                          SupplierData?.map((data, index) => (
+                            <tr key={index} className="text-dark  text-nowrap highlight-row">
+                              <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
+                              <td className="text-capitalize font_work ">
+                                {data?.name || <span className="text-black">-</span>}
+                              </td>
+                              <td className='text-capitalize'>{data?.location || <span className="text-black">-</span>}</td>
+                              <td className="text-capitalize font_work" title={data?.address}>
+                                {data?.address
+                                  ? `${data.address.slice(0, 30)}${data.address.length > 30 ? '...' : ''}`
+                                  : <span className="text-black">-</span>}
+                              </td>
+                              <td className=" font_work ">
+                                {data?.phoneNumber || <span className="text-black">-</span>}
+                              </td>
+                              <td>
+                                <span className="icon-wrapper" title="Edit">
+                                  <AiOutlineEdit
+                                    className="fs-4"
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => handleSupplierModal(data, 'Edit', true)}
+                                  />
+                                </span>
+                                <span className="icon-wrapper" title="Delete" onClick={() => { setSupplierToDelete(data?._id); setShowConfirm(true); }}>
+                                  <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
+                                </span>
+                              </td>
+                            </tr>
+                          )))}
+                      </tbody>
+                    )}
+                  </table>
+                </div>
                 <Pagination
                   pageIndex={pageIndex}
                   pageSize={pageSize}
