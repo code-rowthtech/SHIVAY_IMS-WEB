@@ -41,16 +41,17 @@ const Report = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (selectedWarehouse?.value&&ReportData?.length>0) {
-    const payload = {
-      warehouseId: selectedWarehouse?.value,
-      search: '',
-      page: pageIndex,
-      limit: pageSize,
-      type: "",
-      stockFilter: stockType,
+    if (selectedWarehouse?.value && ReportData?.length > 0) {
+      const payload = {
+        warehouseId: selectedWarehouse?.value,
+        search: '',
+        page: pageIndex,
+        limit: pageSize,
+        type: "",
+        stockFilter: stockType,
+      }
+      dispatch(getReportActions(payload))
     }
-    dispatch(getReportActions(payload))    }
   }, [pageIndex, pageSize, stockType]);
 
   const resp = store?.reportReducer?.report?.status;
@@ -84,7 +85,7 @@ const Report = () => {
     }
     dispatch(getReportActions(payload))
   }
-  
+
   const [toast, setToast] = useState(false)
   const handleSendMail = () => {
     const payload = {
@@ -191,46 +192,48 @@ const Report = () => {
           }}
         >
           <Card.Body className=" py-1">
-            <table className="table table-striped bg-white mb-0">
-              <thead>
-                <tr className="table_header">
-                  <th scope="col"><i className="mdi mdi-merge"></i></th>
-                  <th scope="col">Product Name</th>
-                  <th scope="col">Model</th>
-                  <th scope="col">Code</th>
-                  <th scope="col">Quantity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ReportData && ReportData.length > 0 ? (
-                  ReportData?.map((data, index) => (
-                    <tr key={index} className="text-dark  text-nowrap highlight-row">
-                      <td scope="row" className='font_work'>{index + 1}</td>
-                      <td className="text-uppercase font_work">
-                        {data?.productName || <span className="text-black">-</span>}
-                      </td>
-                      <td className="font_work">
-                        {data?.modelName || <span className="text-black">-</span>}
-                      </td>
-                      <td className="font_work">
-                        {data?.code || <span className="text-black">-</span>}
-                      </td>
-                      <td className="font_work">
-                        {data?.quantity || <span>0</span>}
-                      </td>
-
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" className="text-center text-danger py-3">
-                      Note : Please select a warehouse and search to view report data.
-                    </td>
+            <div className='table-responsive'>
+              <table className="table table-striped bg-white mb-0">
+                <thead>
+                  <tr className="table_header">
+                    <th scope="col"><i className="mdi mdi-merge"></i></th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Code</th>
+                    <th scope="col">Quantity</th>
                   </tr>
-                )}
-              </tbody>
+                </thead>
+                <tbody>
+                  {ReportData && ReportData.length > 0 ? (
+                    ReportData?.map((data, index) => (
+                      <tr key={index} className="text-dark  text-nowrap highlight-row">
+                        <td scope="row" className='font_work'>{index + 1}</td>
+                        <td className="text-uppercase font_work">
+                          {data?.productName || <span className="text-black">-</span>}
+                        </td>
+                        <td className="font_work">
+                          {data?.modelName || <span className="text-black">-</span>}
+                        </td>
+                        <td className="font_work">
+                          {data?.code || <span className="text-black">-</span>}
+                        </td>
+                        <td className="font_work">
+                          {data?.quantity || <span>0</span>}
+                        </td>
 
-            </table>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6" className="text-center text-danger py-3">
+                        Note : Please select a warehouse and search to view report data.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+
+              </table>
+            </div>
             <Pagination
               pageIndex={pageIndex}
               pageSize={pageSize}

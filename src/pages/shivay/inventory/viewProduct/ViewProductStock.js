@@ -85,7 +85,7 @@ const ViewProductStock = () => {
 
                         <hr className='mb-0' />
 
-                        <div className="row px-2 ">
+                        <div className="row px-2 table-responsive ">
                             <table className="table table-striped bg-white mb-0">
                                 <thead>
                                     <tr className="table_header">

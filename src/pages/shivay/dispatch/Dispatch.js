@@ -106,99 +106,101 @@ const Dispatch = () => {
               }}
             >
               <Card.Body className=" py-1">
-                <table className="table table-striped bg-white mb-0">
-                  <thead>
-                    <tr className="table_header">
-                      <th scope="col">#</th>
-                      <th scope="col">Customer Name</th>
-                      <th scope="col">Dispatch by</th>
-                      <th scope="col">Control No.</th>
-                      <th scope="col">GR Number</th>
-                      <th scope="col">Warehouse</th>
-                      <th scope="col">Location</th>
-                      <th scope="col">Date</th>
-                      <th scope="col">No. of Products</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  {store?.getDispatchDataReducer?.loading ? (
-                    <tr>
-                      <td className='text-center' colSpan={10}>
-                        <Loading />
-                      </td>
-                    </tr>
-                  ) : (
-                    <tbody>
-                      {DispatchData?.length === 0 ? (
-                        <tr>
-                          <td colSpan={10} className='text-center'>
-                            <p className='my-5 py-5 '>No data found in dispatch.</p>
-                          </td>
-                        </tr>
-                      ) : (
-                        DispatchData?.map((data, index) => (
-                          <tr key={index} className="text-dark  text-nowrap highlight-row">
-                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                            <td
-                              className="text-capitalize font_work"
-                              title={data?.customerData?.[0]?.name || ""}
-                            >
-                              {data?.customerData?.[0]?.name ? (
-                                data.customerData[0].name.length > 25
-                                  ? `${data.customerData[0].name.slice(0, 25)}...`
-                                  : data.customerData[0].name
-                              ) : (
-                                <span className="text-black">-</span>
-                              )}
-                            </td>
-                            <td className="text-capitalize font_work ">
-                              {data?.dispatchByData?.[0]?.name || <span className="text-black">-</span>}
-                            </td>
-                             <td className=" font_work ">
-                              {data?.controlNumber || <span className="text-black">-</span>}
-                            </td>
-                            <td className="font_work ">
-                              {data?.grNumber || <span className="text-black">-</span>}
-                            </td>
-                            <td className="text-capitalize font_work ">
-                              {data?.warehouseData?.[0]?.name || <span className="text-black">-</span>}
-                            </td>
-                            <td className="text-capitalize font_work">
-                              {data?.customerData?.[0]?.location || <span className="text-black">-</span>}
-                            </td>
-                            <td className="font_work">
-                              {data?.createdAt ? (
-                                new Date(data?.createdAt).toLocaleDateString('en-GB')
-                              ) : (
-                                <span className="text-black">-</span>
-                              )}
-                            </td>
-                            <td className="font_work">
-                              {data?.totalDispatchProductCount || <span className="text-black">-</span>}
-                            </td>
-                            <td>
-                              <span
-                                className="icon-wrapper "
-                                title="Edit"
-                                onClick={() => {
-                                  setShowEditModal(true);
-                                  setEditData(data?._id);
-                                }}
-                              >
-                                <AiOutlineEdit
-                                  className="fs-4 "
-                                  style={{ cursor: 'pointer' }}
-                                />
-                              </span>
-                              <span className="icon-wrapper" title="Delete" onClick={() => { setDispatchToDelete(data?._id); setShowConfirm(true); }}>
-                                <RiDeleteBinLine className="fs-4 " style={{ cursor: 'pointer' }} />
-                              </span>
+                <div className='table-responsive'>
+                  <table className="table table-striped bg-white mb-0">
+                    <thead>
+                      <tr className="table_header">
+                        <th scope="col">#</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Dispatch by</th>
+                        <th scope="col">Control No.</th>
+                        <th scope="col">GR Number</th>
+                        <th scope="col">Warehouse</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">No. of Products</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    {store?.getDispatchDataReducer?.loading ? (
+                      <tr>
+                        <td className='text-center' colSpan={10}>
+                          <Loading />
+                        </td>
+                      </tr>
+                    ) : (
+                      <tbody>
+                        {DispatchData?.length === 0 ? (
+                          <tr>
+                            <td colSpan={10} className='text-center'>
+                              <p className='my-5 py-5 '>No data found in dispatch.</p>
                             </td>
                           </tr>
-                        )))}
-                    </tbody>
-                  )}
-                </table>
+                        ) : (
+                          DispatchData?.map((data, index) => (
+                            <tr key={index} className="text-dark  text-nowrap highlight-row">
+                              <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
+                              <td
+                                className="text-capitalize font_work"
+                                title={data?.customerData?.[0]?.name || ""}
+                              >
+                                {data?.customerData?.[0]?.name ? (
+                                  data.customerData[0].name.length > 25
+                                    ? `${data.customerData[0].name.slice(0, 25)}...`
+                                    : data.customerData[0].name
+                                ) : (
+                                  <span className="text-black">-</span>
+                                )}
+                              </td>
+                              <td className="text-capitalize font_work ">
+                                {data?.dispatchByData?.[0]?.name || <span className="text-black">-</span>}
+                              </td>
+                              <td className=" font_work ">
+                                {data?.controlNumber || <span className="text-black">-</span>}
+                              </td>
+                              <td className="font_work ">
+                                {data?.grNumber || <span className="text-black">-</span>}
+                              </td>
+                              <td className="text-capitalize font_work ">
+                                {data?.warehouseData?.[0]?.name || <span className="text-black">-</span>}
+                              </td>
+                              <td className="text-capitalize font_work">
+                                {data?.customerData?.[0]?.location || <span className="text-black">-</span>}
+                              </td>
+                              <td className="font_work">
+                                {data?.createdAt ? (
+                                  new Date(data?.createdAt).toLocaleDateString('en-GB')
+                                ) : (
+                                  <span className="text-black">-</span>
+                                )}
+                              </td>
+                              <td className="font_work">
+                                {data?.totalDispatchProductCount || <span className="text-black">-</span>}
+                              </td>
+                              <td>
+                                <span
+                                  className="icon-wrapper "
+                                  title="Edit"
+                                  onClick={() => {
+                                    setShowEditModal(true);
+                                    setEditData(data?._id);
+                                  }}
+                                >
+                                  <AiOutlineEdit
+                                    className="fs-4 "
+                                    style={{ cursor: 'pointer' }}
+                                  />
+                                </span>
+                                <span className="icon-wrapper" title="Delete" onClick={() => { setDispatchToDelete(data?._id); setShowConfirm(true); }}>
+                                  <RiDeleteBinLine className="fs-4 " style={{ cursor: 'pointer' }} />
+                                </span>
+                              </td>
+                            </tr>
+                          )))}
+                      </tbody>
+                    )}
+                  </table>
+                </div>
                 <Pagination
                   pageIndex={pageIndex}
                   pageSize={pageSize}

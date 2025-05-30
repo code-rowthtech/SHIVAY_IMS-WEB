@@ -92,60 +92,62 @@ const OpeningStock = () => {
           <div className="mt-2">
             <Card style={{ boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset' }}>
               <Card.Body className="py-1">
-                <table className="table table-striped bg-white mb-0">
-                  <thead>
-                    <tr className="table_header">
-                      <th>#</th>
-                      <th>Warehouse</th>
-                      <th>Date</th>
-                      <th>Description</th>
-                      <th>No. of Products</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {loading ? (
-                      <tr>
-                        <td colSpan={6} className="text-center">
-                          <Loading />
-                        </td>
+                <div className='table-responsive'>
+                  <table className="table table-striped bg-white mb-0">
+                    <thead>
+                      <tr className="table_header">
+                        <th>#</th>
+                        <th>Warehouse</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>No. of Products</th>
+                        <th>Action</th>
                       </tr>
-                    ) : (
-                      openingStockData.length > 0 ? (
-                        openingStockData.map((data, index) => (
-                          <tr key={index} className="text-dark text-nowrap highlight-row">
-                            <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
-                            <td className="text-capitalize font_work">{data?.warehouseData?.name || '-'}</td>
-                            <td className="font_work">{data?.date ? new Date(data.date).toLocaleDateString('en-GB') : '-'}</td>
-                            <td className="font_work">{data?.description || '-'}</td>
-                            <td className="font_work">{data?.totalStockProductCount || '-'}</td>
-                            <td>
-                              <span
-                                className="icon-wrapper me-4"
-                                title="Edit"
-                                onClick={() => {
-                                  setShowEditModal(true);
-                                  setEditData(data?._id);
-                                }}
-                              >
-                                <AiOutlineEdit
-                                  className="fs-4"
-                                  style={{ cursor: 'pointer' }}
-                                />
-                              </span>
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
+                    </thead>
+                    <tbody>
+                      {loading ? (
                         <tr>
-                          <td colSpan={6} className="py-5 text-center">
-                            No stock records found.
+                          <td colSpan={6} className="text-center">
+                            <Loading />
                           </td>
                         </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
+                      ) : (
+                        openingStockData.length > 0 ? (
+                          openingStockData.map((data, index) => (
+                            <tr key={index} className="text-dark text-nowrap highlight-row">
+                              <td className='font_work'>{(pageIndex - 1) * pageSize + index + 1}</td>
+                              <td className="text-capitalize font_work">{data?.warehouseData?.name || '-'}</td>
+                              <td className="font_work">{data?.date ? new Date(data.date).toLocaleDateString('en-GB') : '-'}</td>
+                              <td className="font_work">{data?.description || '-'}</td>
+                              <td className="font_work">{data?.totalStockProductCount || '-'}</td>
+                              <td>
+                                <span
+                                  className="icon-wrapper me-4"
+                                  title="Edit"
+                                  onClick={() => {
+                                    setShowEditModal(true);
+                                    setEditData(data?._id);
+                                  }}
+                                >
+                                  <AiOutlineEdit
+                                    className="fs-4"
+                                    style={{ cursor: 'pointer' }}
+                                  />
+                                </span>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={6} className="py-5 text-center">
+                              No stock records found.
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
                 <Pagination
                   pageIndex={pageIndex}
                   pageSize={pageSize}
