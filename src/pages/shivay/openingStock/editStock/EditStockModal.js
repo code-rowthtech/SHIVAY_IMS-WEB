@@ -54,7 +54,7 @@ function EditStockModal({ show, onHide, stockId }) {
             const initialRows = stockDetails?.[0]?.stockProducts?.map(item => {
                 const product = item?.product || {};
                 const modelName = product.model?.name || '';
-                const Qty = item?.liveStock;
+                const Qty = item?.quantity;
                 const code = product.code || '';
                 const name = product.name || '';
                 return {
