@@ -411,6 +411,6 @@ body[data-leftbar-theme="light"] {
 
      // Menu
      --#{$variable-prefix}menu-item: #{map-get($grays, "700")};
-     --#{$variable-prefix}menu-item-hover: #6655D9;
-     --#{$variable-prefix}menu-item-active: #6655D9;
+     --#{$variable-prefix}menu-item-hover: #00A0E3;
+     --#{$variable-prefix}menu-item-active: #00A0E3;
 }

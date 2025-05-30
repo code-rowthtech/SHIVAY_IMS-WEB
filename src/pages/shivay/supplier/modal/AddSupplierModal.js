@@ -70,7 +70,7 @@ const AddSupplierModal = ({ showModal, handleClose, SupplierData }) => {
 
     return (
         <div>
-            <Modal show={showModal} centered size='lg' onHide={closeModal} backdrop="static" keyboard={false}>
+            <Modal show={showModal} centered size='lg' onHide={closeModal} backdrop="static">
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Header closeButton>
                         <Modal.Title className='text-black'>{type} Supplier</Modal.Title>

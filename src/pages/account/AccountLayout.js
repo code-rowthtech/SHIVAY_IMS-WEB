@@ -32,10 +32,10 @@ const AccountLayout = ({ bottomLinks, children }: AccountLayoutProps): React$Ele
                         <Col md={8} lg={6} xl={5} xxl={4}>
                             <Card>
                                 {/* logo */}
-                                <Card.Header className=" text-center" style={{backgroundColor:'#6655D9'}} >
+                                <Card.Header className=" text-center" style={{backgroundColor:'#00A0E3'}} >
                                     <Link to="/">
                                         <span>
-                                            <img src={Shivay_Logo} alt="" height="70" className='rounded-pill px-3' style={{backgroundColor:'#6655D9'}} />
+                                            <img src={Shivay_Logo} alt="" height="70" className='rounded-pill px-3' style={{backgroundColor:'#00A0E3'}} />
                                         </span>
                                     </Link>
                                 </Card.Header>

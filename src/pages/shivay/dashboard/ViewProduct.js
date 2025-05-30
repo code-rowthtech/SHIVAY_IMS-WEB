@@ -39,8 +39,8 @@ const ViewProduct = () => {
             warehouseId: warehouseId,
             productId: productId,
 
-            startDate: startDate ? format(startDate, 'yyyy-MM-dd') : null,
-            endDate: endDate ? format(endDate, 'yyyy-MM-dd') : null,
+            startDate: startDate ? format(startDate, 'yyyy-MM-dd') : '',
+            endDate: endDate ? format(endDate, 'yyyy-MM-dd') : '',
 
         }));
 

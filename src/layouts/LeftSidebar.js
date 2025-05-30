@@ -146,7 +146,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                     </>
                 )}
 
-                <div className="d-flex flex-column h-100 mt-2">
+                <div className="d-flex flex-column h-100">
                     {/* Sidebar content (main scrollable area) */}
                     <div className="flex-grow-1 overflow-hidden">
                         {!isCondensed ? (
@@ -169,7 +169,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                             const isExpanded = expandedItems[ele.label];
 
                             return (
-                                <div key={index}>
+                                <div key={index} className=''>
                                     <div className='info-color px-2 py-1 align-items-center'>
                                         <button
                                             onClick={() => {

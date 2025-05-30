@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 
 const DeleteModal = ({ isOpen, onCancel, onConfirm }) => {
     return (
-        <Modal show={isOpen} onHide={onCancel} backdrop="static" keyboard={false} centered style={{ background: '#3b39399c' }}>
+        <Modal show={isOpen} onHide={onCancel} backdrop="static" centered style={{ background: '#3b39399c' }}>
             <Modal.Header closeButton className='py-0 bg-dark'>
                 <Modal.Title className='p-0 m-0 text-danger'><h3>Confirmation!</h3></Modal.Title>
             </Modal.Header>

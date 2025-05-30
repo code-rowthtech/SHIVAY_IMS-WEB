@@ -82,28 +82,28 @@ const Dashboard = () => {
       title: "Total Warehouse",
       value: DashboardCount?.totalWarehouse,
       icon: <MdOutlineStoreMallDirectory />,
-      background: "#5566D9",
+      background: "#00A0E3",
       link: "/shivay/warehouse"
     },
     {
       title: "Total Products",
       value: DashboardCount?.productCount,
       icon: <FaLayerGroup />,
-      background: "#5566D9",
+      background: "#00A0E3",
       link: "/shivay/inventory"
     },
     {
       title: "Total User",
       value: DashboardCount?.userCount,
       icon: <FaUsers />,
-      background: "#5566D9",
+      background: "#00A0E3",
       link: "/shivay/user"
     },
     {
       title: "Total Dispatch",
       value: DashboardCount?.dispatchCount,
       icon: <MdOutlineSell />,
-      background: "#5566D9",
+      background: "#00A0E3",
       link: "/shivay/dispatch"
     }
   ];
@@ -112,25 +112,25 @@ const Dashboard = () => {
     {
       title: "Dispatch",
       icon: <MdOutlineSell />,
-      background: "#5566D9",
+      background: "#00A0E3",
       link: "/shivay/dispatch"
     },
     {
       title: "Stock In",
       icon: <AiOutlineFileDone />,
-      background: "#5566D9",
+      background: "#00A0E3",
       link: "/shivay/stockIn"
     },
     {
       title: "Customer",
       icon: <FaUsers />,
-      background: "#5566D9",
+      background: "#00A0E3",
       link: "/shivay/customer"
     },
     {
       title: "Supplier",
       icon: <BsTruck />,
-      background: "#5566D9",
+      background: "#00A0E3",
       link: "/shivay/supplier"
     }
   ];
