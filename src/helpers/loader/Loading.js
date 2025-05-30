@@ -4,7 +4,7 @@ const Loading = () => {
     return (
         <div style={{ height: '54vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <ThreeDots
-                color="#6655D9"
+                color="#00A0E3"
                 strokeWidth="5"
                 animationDuration="0.75"
                 width="70"
@@ -18,7 +18,7 @@ const DashboardLoading = () => {
     return (
         <div style={{ height: '30vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <ThreeDots
-                color="#6655D9"
+                color="#00A0E3"
                 strokeWidth="5"
                 animationDuration="0.75"
                 width="70"

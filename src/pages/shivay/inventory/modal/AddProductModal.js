@@ -101,7 +101,7 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
 
     return (
         <div>
-            <Modal show={showModal} centered size='lg' onHide={closeModal} backdrop="static" keyboard={false}>
+            <Modal show={showModal} centered size='lg' onHide={closeModal} backdrop="static">
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Header closeButton>
                         <Modal.Title className='text-black'>{type} Product</Modal.Title>

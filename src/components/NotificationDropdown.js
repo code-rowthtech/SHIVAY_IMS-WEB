@@ -127,7 +127,7 @@ const NotificationDropdown = () => {
                                             <Card.Body className="p-2">
                                                 <div className="d-flex align-items-center">
                                                     <div className="flex-shrink-0">
-                                                        <div className="notify-icon" style={{ backgroundColor: '#6655D9' }}>
+                                                        <div className="notify-icon" style={{ backgroundColor: '#00A0E3' }}>
                                                             <i className={message.icon}></i>
                                                         </div>
                                                     </div>
@@ -153,7 +153,7 @@ const NotificationDropdown = () => {
                                                 e.stopPropagation();
                                                 setLimit(prev => prev + 10); // Load 10 more notifications
                                             }}
-                                            style={{ color: '#6655D9' }}
+                                            style={{ color: '#00A0E3' }}
                                         >
                                             Load More
                                         </Button>
@@ -167,7 +167,7 @@ const NotificationDropdown = () => {
 
                     <Dropdown.Item
                         className="text-center notify-item border-top border-light py-2 fw-bold"
-                        style={{ color: '#6655D9' }}
+                        style={{ color: '#00A0E3' }}
                         onClick={handleViewAll}
                     >
                         {/* {viewAll ? 'Show Less' : 'View All'} */}

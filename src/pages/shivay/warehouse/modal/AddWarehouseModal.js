@@ -17,8 +17,6 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
         formState: { errors },
     } = useForm();
 
-
-
     const { location } = useSelector((state) => state?.locationReducer || {});
     const [locationSelected, setLocationSelected] = useState(null)
     const locationData = location?.response || [];
@@ -76,7 +74,7 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
     }, [register]);
 
     return (
-        <Modal show={showModal} centered size='lg' onHide={closeModal} backdrop="static" keyboard={false}>
+        <Modal show={showModal} centered size='lg' onHide={closeModal} backdrop="static">
             <Modal.Header closeButton>
                 <Modal.Title className='text-black'>{type} Warehouse</Modal.Title>
             </Modal.Header>

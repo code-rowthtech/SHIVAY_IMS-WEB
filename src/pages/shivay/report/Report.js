@@ -25,6 +25,7 @@ const Report = () => {
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
   const [ReportData, setReportData] = useState([])
   const [stockType, setStockType] = useState('')
+
   const handleWarehouseChange = (selectedOption) => {
     setSelectedWarehouse(selectedOption);
   };
@@ -40,10 +41,17 @@ const Report = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (selectedWarehouse?.value) {
-      handleProductsSearch();
+    if (selectedWarehouse?.value&&ReportData?.length>0) {
+    const payload = {
+      warehouseId: selectedWarehouse?.value,
+      search: '',
+      page: pageIndex,
+      limit: pageSize,
+      type: "",
+      stockFilter: stockType,
     }
-  }, [pageIndex, pageSize, selectedWarehouse, stockType]);
+    dispatch(getReportActions(payload))    }
+  }, [pageIndex, pageSize, stockType]);
 
   const resp = store?.reportReducer?.report?.status;
   useEffect(() => {
@@ -76,6 +84,7 @@ const Report = () => {
     }
     dispatch(getReportActions(payload))
   }
+  
   const [toast, setToast] = useState(false)
   const handleSendMail = () => {
     const payload = {
@@ -207,7 +216,7 @@ const Report = () => {
                         {data?.code || <span className="text-black">-</span>}
                       </td>
                       <td className="font_work">
-                        {data?.quantity || <span className="text-black">-</span>}
+                        {data?.quantity || <span>0</span>}
                       </td>
 
                     </tr>
