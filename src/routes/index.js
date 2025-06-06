@@ -39,6 +39,8 @@ const Dispatch = React.lazy(() => import('../pages/shivay/dispatch/Dispatch'))
 const Customer = React.lazy(() => import('../pages/shivay/customer/Customer'))
 const Supplier = React.lazy(() => import('../pages/shivay/supplier/Supplier'))
 const Setting = React.lazy(() => import('../pages/shivay/setting/Setting'))
+const NoInternet = React.lazy(() => import('../pages/noInternet/NoInternet'))
+
 
 
 const ErrorPageNotFound = React.lazy(() => import('../pages/error/PageNotFound'));
@@ -112,6 +114,10 @@ const AllRoutes = () => {
                 {
                     path: 'error-500',
                     element: <LoadComponent component={ServerError} />,
+                },
+                 {
+                    path: 'no-internet',
+                    element: <LoadComponent component={NoInternet} />,
                 },
             ],
         },
