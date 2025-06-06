@@ -18,7 +18,7 @@ import { MdDelete } from 'react-icons/md';
 
 function AddStockinModal({ show, onHide }) {
     const dispatch = useDispatch();
-    const { handleSubmit, register, setValue, reset, resetField, watch } = useForm();
+    const { handleSubmit, register, setValue, reset, resetField, formState: { errors } } = useForm();
     const store = useSelector((state) => state)
 
     const [today] = useState(new Date().toISOString().split('T')[0]);
@@ -293,15 +293,23 @@ function AddStockinModal({ show, onHide }) {
                             </Form.Group>
                         </Col>
                         <Col sm={3}>
-                            <Form.Group className="mb-1">
-                                <Form.Label className="mb-0">Invoice Number <span className='text-danger'>*</span></Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter Invoice Number"
-                                    {...register('invoiceNumber', { required: true })}
-                                    required
-                                />
-                            </Form.Group>
+                            <Form.Label className="mb-0">Invoice Number</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter Invoice Number"
+                                {...register('invoiceNumber', {
+                                    required: 'Invoice Number is required',
+                                    validate: value => {
+                                        const trimmed = value.trim();
+                                        return /^0+$/.test(trimmed)
+                                            ? "Invoice Number cannot be all zeros"
+                                            : true;
+                                    }
+                                })}
+                            />
+                            {errors.invoiceNumber && (
+                                <span className="text-danger">{errors.invoiceNumber.message}</span>
+                            )}
                         </Col>
                         <Col sm={3}>
                             <Form.Group className="mb-1">

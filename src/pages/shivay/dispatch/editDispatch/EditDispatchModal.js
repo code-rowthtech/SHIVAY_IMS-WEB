@@ -86,6 +86,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
     // Initialize form with dispatch details
     useEffect(() => {
         if (DispatchDetails?.[0]) {
+            console.log(DispatchDetails?.[0])
             const initialRows = DispatchDetails?.[0]?.dispatchProducts?.map(item => {
                 const product = item?.productData || {};
                 const modelName = product?.modelData?.[0]?.name || '';
@@ -369,7 +370,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
             <Modal.Header className="py-2">
                 <div className="d-flex w-100 justify-content-between align-items-center">
                     <div className="col-4 text-start flex-grow-1">
-                        <h4>Edit Stock in</h4>
+                        <h4>Edit Dispatch</h4>
                     </div>
                     <div className="col-4 text-center flex-grow-1">
                         <span className='border border-1 rounded-2 px-2 text-black' title='Control Number'>{DispatchDetails?.[0]?.controlNumber}</span>
@@ -467,8 +468,10 @@ function EditDispatchModal({ show, onHide, stockId }) {
                                             target="_blank"
                                             title='Download GR File'
                                             rel="noopener noreferrer"
+                                            className="ms-1"
                                         >
-                                            <HiOutlineFolderDownload className='ms-1 fs-4' />
+                                            <HiOutlineFolderDownload className='fs-4' />
+                                            {/* <span className="ms-1">View File</span> */}
                                         </a>
                                     )}
                                 </Form.Label>
@@ -477,6 +480,13 @@ function EditDispatchModal({ show, onHide, stockId }) {
                                     placeholder="Upload file"
                                     {...register('attachmentGRfile')}
                                 />
+                                {DispatchDetails?.[0]?.attachmentGRfile && (
+                                    <small className="text-muted d-block mb-0 d-flex position-absolute gap-1">
+                                        Current file: <a href={DispatchDetails?.[0]?.attachmentGRfile} target="_blank" rel="noopener noreferrer">
+                                            {DispatchDetails?.[0]?.attachmentGRfile.split('/').pop()}
+                                        </a>
+                                    </small>
+                                )}
                             </Form.Group>
                         </Col>
 
@@ -493,8 +503,10 @@ function EditDispatchModal({ show, onHide, stockId }) {
                                             target="_blank"
                                             title='Download Attachment'
                                             rel="noopener noreferrer"
+                                            className="ms-1"
                                         >
-                                            <HiOutlineFolderDownload className='ms-1 fs-4' />
+                                            <HiOutlineFolderDownload className='fs-4' />
+                                            {/* <span className="ms-1">View File</span> */}
                                         </a>
                                     )}
                                 </Form.Label>
@@ -525,6 +537,13 @@ function EditDispatchModal({ show, onHide, stockId }) {
                                             title="Change attachment type"
                                         />
                                     </div>
+                                )}
+                                {DispatchDetails?.[0]?.invoiceAttachment && (
+                                    <small className="text-muted d-block mb-0 d-flex position-absolute gap-1">
+                                        Current file: <a href={DispatchDetails?.[0]?.invoiceAttachment} target="_blank" rel="noopener noreferrer">
+                                            {DispatchDetails?.[0]?.invoiceAttachment.split('/').pop()}
+                                        </a>
+                                    </small>
                                 )}
                             </Form.Group>
                         </Col>

@@ -233,7 +233,7 @@ function AddStockModal({ show, onHide }) {
                                 >
                                     {/* Search By */}
                                     <Col xs={2} className='d-flex'>
-                                        <span className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1">{index + 1}.</span>
+                                        <small className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1 text-nowrap">{index + 1}</small>
                                         <div>
                                             <Form.Group className='mb-0'>
                                                 <Form.Label className="small mb-0">Search By</Form.Label>
