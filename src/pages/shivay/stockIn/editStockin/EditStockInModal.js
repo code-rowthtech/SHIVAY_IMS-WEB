@@ -228,13 +228,13 @@ function EditStockinModal({ show, onHide, stockId }) {
     if (CreateProductResponse === 200 || DeleteProductResponse === 200 || UpdateProductResponse === 200) {
       dispatch(getStockInByIdActions(stockId));
     }
-  }, [ CreateProductResponse, DeleteProductResponse, UpdateProductResponse]);
+  }, [CreateProductResponse, DeleteProductResponse, UpdateProductResponse]);
 
   useEffect(() => {
-    if (stockId&&show) {
+    if (stockId && show) {
       dispatch(getStockInByIdActions(stockId));
     }
-  }, [show,stockId]);
+  }, [show, stockId]);
 
   useEffect(() => {
     if (stockId && stockInData) {
@@ -334,7 +334,7 @@ function EditStockinModal({ show, onHide, stockId }) {
             <Button
               variant="close"
               aria-label="Close"
-              onClick={onHide} 
+              onClick={onHide}
             />
           </div>
         </div>
@@ -454,6 +454,13 @@ function EditStockinModal({ show, onHide, stockId }) {
                       title="Change attachment type"
                     />
                   </div>
+                )}
+                {stockInData?.[0]?.invoiceAttachment && (
+                  <small className="text-muted d-block mb-0 d-flex position-absolute gap-1">
+                    Current file: <a href={stockInData?.[0]?.invoiceAttachment} target="_blank" rel="noopener noreferrer">
+                      {stockInData?.[0]?.invoiceAttachment.split('/').pop()}
+                    </a>
+                  </small>
                 )}
               </Form.Group>
             </Col>
