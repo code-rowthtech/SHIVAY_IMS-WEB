@@ -2,6 +2,7 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 
 import config from '../../config';
+import NoInternet from '../../pages/noInternet/NoInternet';
 
 // content type
 // axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -12,6 +13,11 @@ axios.defaults.baseURL = config.API_URL;
 axios.interceptors.response.use(
     (response) => response,
     (error) => {
+        if (!navigator.onLine) {
+            // window.location.href = "/no-internet";
+            <NoInternet />
+            return Promise.reject("No internet connection");
+        }
         if (!error.response) {
             // Network errors or no response from server
             return Promise.reject("Network error. Please check your internet connection.");
@@ -24,15 +30,15 @@ axios.interceptors.response.use(
             case 400:
                 console.error("Bad Request:", data);
                 break;
-                case 403:
-                    message = data?.message;
-                    break;
-                
+            case 403:
+                message = data?.message;
+                break;
+
             case 404:
                 message = data?.message;
                 // message = "Sorry! The data you are looking for could not be found.";
                 break;
-            
+
             default:
                 console.error(`Error ${status}:`, data);
         }
@@ -133,9 +139,9 @@ class APICore {
     /**
      * Deletes data
      */
-    delete = (url,data) => {
-        console.log({url,data},'url,data api core')
-        return axios.delete(url,data);
+    delete = (url, data) => {
+        console.log({ url, data }, 'url,data api core')
+        return axios.delete(url, data);
     };
 
     /**
@@ -227,4 +233,4 @@ if (user) {
     }
 }
 
-export { APICore, setAuthorization,getUserFromSession };
+export { APICore, setAuthorization, getUserFromSession };
