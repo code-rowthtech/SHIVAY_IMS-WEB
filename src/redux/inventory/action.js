@@ -28,6 +28,10 @@ export const searchProductActions = (data) => ({
     type: InventoryActionTypes.SEARCH_PRODUCT_FIRST,
     data
 });
+export const searchProductResetActions = (data) => ({
+    type: InventoryActionTypes.SEARCH_PRODUCT_RESET,
+    data
+});
 
 export const viewProductActions = (data) => ({
     type: InventoryActionTypes.VIEW_PRODUCT_FIRST,

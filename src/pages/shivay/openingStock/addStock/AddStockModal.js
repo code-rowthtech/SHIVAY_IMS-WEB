@@ -10,7 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     createStockActions,
     getWarehouseListActions,
-    searchProductActions
+    searchProductActions,
+    searchProductResetActions
 } from '../../../../redux/actions';
 
 import { IoIosAdd } from 'react-icons/io';
@@ -44,12 +45,15 @@ function AddStockModal({ show, onHide }) {
             onHide();
             reset();
             setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+            dispatch(searchProductResetActions());
         }
     }, [createProductResponse, onHide, reset]);
 
     const handleClose = () => {
+        reset();
         onHide();
         setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+        dispatch(searchProductResetActions());
     };
 
 

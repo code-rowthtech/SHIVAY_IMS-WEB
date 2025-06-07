@@ -180,20 +180,20 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
                                                         value: 3,
                                                         message: "Minimum 3 characters required",
                                                     },
-                                                    validate: (value) => !/\s/.test(value) || "Spaces are not allowed",
+                                                    validate: (value) => {
+                                                        const trimmed = value.trim();
+                                                        if (trimmed.length === 0) return "Only spaces are not allowed";
+                                                        return true;
+                                                    },
                                                 })}
                                                 value={newProductName}
                                                 onChange={(e) => setNewProductName(e.target.value)}
-                                                onKeyDown={(e) => {
-                                                    if (e.key === " ") {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
                                                 isInvalid={!!errors.name}
                                             />
 
+
                                         )}
-                                        <Form.Control.Feedback type="invalid">
+                                        <Form.Control.Feedback type="invalid" className='d-flex position-absolute'>
                                             {errors.name?.message}
                                         </Form.Control.Feedback>
                                     </Form.Group>
