@@ -13,7 +13,8 @@ import {
     searchProductActions,
     listingCustomerActions,
     listingUsersActions,
-    createStockCheckActions
+    createStockCheckActions,
+    searchProductResetActions
 } from '../../../../redux/actions';
 
 import { IoIosAdd } from 'react-icons/io';
@@ -52,12 +53,15 @@ function AddDispatchModal({ show, onHide }) {
             onHide();
             reset();
             setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+            dispatch(searchProductResetActions());
         }
     }, [createResponse, onHide, reset]);
 
     const handleClose = () => {
         onHide();
+        reset();
         setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+        dispatch(searchProductResetActions());
     };
 
     const handleAttachmentTypeChange = (e) => {

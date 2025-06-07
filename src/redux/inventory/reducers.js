@@ -147,6 +147,11 @@ const searchProductReducer = (state = SEARCH_PRODUCT_INITIAL_STATE, action) => {
                 searchProduct: action.payload,
                 loading: false
             }
+        case InventoryActionTypes.SEARCH_PRODUCT_RESET:
+            return {
+                searchProduct: [],
+                loading: false
+            }
         default: return state
     }
 }

@@ -11,6 +11,7 @@ import {
     listingSupplierActions,
     listingUsersActions,
     searchProductActions,
+    searchProductResetActions,
 } from '../../../../redux/actions';
 
 import { IoIosAdd } from 'react-icons/io';
@@ -46,12 +47,15 @@ function AddStockinModal({ show, onHide }) {
             onHide();
             reset();
             setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+            dispatch(searchProductResetActions());
         }
     }, [CreateResponse, onHide, reset]);
 
     const handleClose = () => {
         onHide();
+        reset();
         setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+        dispatch(searchProductResetActions());
     };
 
     useEffect(() => {
