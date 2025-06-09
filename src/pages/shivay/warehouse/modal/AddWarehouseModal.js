@@ -95,7 +95,6 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
                                             const trimmed = value.trim();
                                             if (!trimmed) return 'Warehouse cannot be empty spaces';
 
-                                            // Better emoji regex that catches surrogate pairs, ZWJ emojis, flags, etc.
                                             const emojiRegex = /(\p{Extended_Pictographic}|\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu;
 
                                             if (emojiRegex.test(trimmed)) return 'Emojis are not allowed in warehouse name';
@@ -123,7 +122,6 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
                                     }}
                                     value={locationSelected}
                                     isSearchable
-                                // isMulti
                                 />
 
                                 {errors.location && <small className="text-danger">Location is required</small>}

@@ -46,7 +46,6 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
             setValue('deliveryAddress', CustomerData.data?.deliveryAddress)
             setValue('billingGstNumber', CustomerData.data?.billingGstNumber)
             setValue('deliveryGstNumber', CustomerData.data?.deliveryGstNumber)
-            // setValue('address', CustomerData.data?.address)
 
             setCopyChecked(CustomerData.data?.billingAndDeliveryAddress || false);
             setLocationSelected({
@@ -66,7 +65,6 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
             billingGstNumber: data?.billingGstNumber,
             deliveryGstNumber: data?.deliveryGstNumber,
             billingAndDeliveryAddress: copyChecked,
-            // address: data?.address,
             location: locationSelected?.value,
         };
         if (CustomerData?.data?._id) {
@@ -99,7 +97,6 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
                         <Modal.Title className='text-black'>{type} Customer</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        {/* Your form or content here */}
                         <Row>
                             <Col sm={6}>
                                 <Form.Group className="mb-2">
@@ -112,13 +109,13 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
                                         {...register("name", {
                                             required: "Customer Name is required",
                                             pattern: {
-                                                value: /^[A-Za-z\s]+$/, // Only letters and spaces
+                                                value: /^[A-Za-z\s]+$/, 
                                                 message: "Only letters are allowed"
                                             }
                                         })}
                                         onKeyPress={(e) => {
                                             if (!/^[a-zA-Z\s]*$/.test(e.key)) {
-                                                e.preventDefault(); // block non-letter keys
+                                                e.preventDefault();
                                             }
                                         }}
                                     />
@@ -207,11 +204,9 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
                                         placeholder="Enter GST Number"
                                         {...register("billingGstNumber", {
                                             validate: value => {
-                                                if (!value) return true; // Optional field
+                                                if (!value) return true; 
 
                                                 const cleanedValue = value.trim();
-
-                                                // GSTIN regex: 2 digits, 5 letters, 4 digits, 1 letter, 1 alphanumeric, 1 Z, 1 alphanumeric
                                                 const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
                                                 if (cleanedValue.includes(' ')) return 'GST Number should not contain spaces';
@@ -258,11 +253,9 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
                                         placeholder="Enter GST Number"
                                         {...register("deliveryGstNumber", {
                                             validate: value => {
-                                                if (!value) return true; // Optional field
+                                                if (!value) return true;
 
                                                 const cleanedValue = value.trim();
-
-                                                // GSTIN regex: 2 digits, 5 letters, 4 digits, 1 letter, 1 alphanumeric, Z, 1 alphanumeric
                                                 const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
                                                 if (cleanedValue.includes(' ')) return 'GST Number should not contain spaces';
@@ -282,23 +275,6 @@ const AddCustomerModal = ({ showModal, handleClose, CustomerData }) => {
                             </Col>
 
                         </Row>
-                        {/* <hr className='mb-2 mt-1 text-secondary' />
-                        <Row>
-                            <Col sm={12}>
-                                <Form.Group className="mb-2">
-                                    <Form.Label className='mb-0'>Full Address</Form.Label>
-                                    <Form.Control
-                                        as="textarea"
-                                        rows={3}
-                                        placeholder="Enter Full Address"
-                                        name="Full Address"
-                                        {...register("address")}
-                                    // value={faq.question}
-                                    // onChange={handleChange}
-                                    />
-                                </Form.Group>
-                            </Col>
-                        </Row> */}
                     </Modal.Body>
                     <Modal.Footer>
                         <Button className='cancel-button' onClick={closeModal}>

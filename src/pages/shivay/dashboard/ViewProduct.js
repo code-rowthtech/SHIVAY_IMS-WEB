@@ -23,7 +23,6 @@ const ViewProduct = () => {
     const handleDateChange = (update) => {
         const [start, end] = update;
 
-        // Adjust dates to local timezone properly
         const adjustedStart = start ? new Date(start.setHours(0, 0, 0, 0)) : null;
         const adjustedEnd = end ? new Date(end.setHours(0, 0, 0, 0)) : null;
 
@@ -48,7 +47,7 @@ const ViewProduct = () => {
     }, [dispatch, warehouseId, productId, startDate, endDate]);
 
     const handleGoBack = () => {
-        navigate(-1); // This will go back to the previous page in history
+        navigate(-1); 
     };
 
     return (

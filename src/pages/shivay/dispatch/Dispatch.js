@@ -4,7 +4,6 @@ import { IoIosAdd } from 'react-icons/io'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import PageTitle from '../../../helpers/PageTitle'
-import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteDispatchActions, getDispatchListActions } from '../../../redux/actions'
 import { MdDeleteOutline } from 'react-icons/md'
@@ -15,7 +14,6 @@ import EditDispatchModal from './editDispatch/EditDispatchModal'
 
 const Dispatch = () => {
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [search, setSearch] = useState('')
   const [showConfirm, setShowConfirm] = useState(false);
@@ -83,13 +81,6 @@ const Dispatch = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              {/* <Button className="mt-2 fw-bold custom-button"
-                onClick={() => {
-                  navigate('/shivay/addDispatch')
-                }}
-              >
-                <IoIosAdd className="fs-3" />&nbsp;Dispatch
-              </Button> */}
               <Button
                 className="mt-2 fw-bold custom-button"
                 onClick={() => setShowAddModal(true)}
