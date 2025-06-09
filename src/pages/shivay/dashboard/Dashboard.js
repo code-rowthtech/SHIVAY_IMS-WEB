@@ -404,7 +404,7 @@ const Dashboard = () => {
                                   </td>
                                   <td className=" font_work ">
                                     {data?.date
-                                      ? new Date(data.date).toLocaleDateString('en-GB') // dd/mm/yyyy
+                                      ? new Date(data.date).toLocaleDateString('en-GB') 
                                       : <span className="text-black">-</span>}
 
                                   </td>

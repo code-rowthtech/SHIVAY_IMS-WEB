@@ -1,5 +1,3 @@
-// src/pages/openingStock/addStock/AddStockModal.jsx
-
 import { useEffect, useMemo, useCallback, useState } from 'react';
 import { Modal, Button, Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -117,7 +115,7 @@ function AddStockModal({ show, onHide }) {
         setRows(prev => {
             const updated = [...prev];
             updated[index].quantity = value;
-            updated[index].quantityError = ''; // Clear error on change
+            updated[index].quantityError = ''; 
             return updated;
         });
     }, []);
@@ -127,7 +125,7 @@ function AddStockModal({ show, onHide }) {
         if (value === '') {
             setRows(prev => {
                 const updated = [...prev];
-                updated[index].quantity = 1; // Default to 1 if empty
+                updated[index].quantity = 1; 
                 updated[index].quantityError = '';
                 return updated;
             });
@@ -349,7 +347,6 @@ function AddStockModal({ show, onHide }) {
                                         </Form.Group>
                                     </Col>
 
-                                    {/* Delete Button */}
                                     <Col xs={1} className="text-center mt-2 pt-1">
                                         {rows.length > 1 && (
                                             <Button
@@ -374,9 +371,6 @@ function AddStockModal({ show, onHide }) {
 
                         <div className='d-flex gap-2'>
                             <Button onClick={handleClose} style={{ height: '38px' }} className="cancel-button mt-2">Cancel</Button>
-                            {/* <Button type="submit" className='custom-button' disabled={createLoading || rows?.some((data) => !data?.selectedProduct)}>
-                                {createLoading ? 'Saving...' : 'Save'}
-                            </Button> */}
                             {rows?.some((data) => !data?.selectedProduct) ? (
                                 <OverlayTrigger
                                     placement="top"

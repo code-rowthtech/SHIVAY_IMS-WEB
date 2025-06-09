@@ -78,7 +78,6 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
         state?.searchProductNameReducer?.searchProductName?.response || []
     );
 
-    // Debounced search function
     const handleSearch = useCallback((inputValue, field) => {
         const payload = {
             productName: field === 'product' ? inputValue : productName?.value || '',
@@ -329,7 +328,6 @@ const AddProductModal = ({ showModal, handleClose, ProductData }) => {
                                         placeholder="Enter Description"
                                         name="Description"
                                         {...register("description")}
-                                    // required
                                     />
                                 </Form.Group>
                             </Col>

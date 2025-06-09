@@ -72,9 +72,7 @@ function EditStockModal({ show, onHide, stockId }) {
                 };
             }) || [];
             setRows(initialRows);
-            // setIsInitialLoad(false);
-
-            // Set form values
+           
             setValue(
                 'date',
                 stockDetails?.[0]?.date ? new Date(stockDetails?.[0]?.date).toISOString().split('T')[0] : ''
@@ -89,7 +87,6 @@ function EditStockModal({ show, onHide, stockId }) {
         }
     }, [stockDetails, setValue, DeleteProductResponse]);
 
-    // Memoized options
     const Warehouse = store?.getWarehouseListReducer?.searchWarehouse?.response;
 
     const warehouseOptions = Warehouse?.map((warehouse) => ({
@@ -119,7 +116,6 @@ function EditStockModal({ show, onHide, stockId }) {
         })) || []
     ), [ProductSearch]);
 
-    // API error handling
     useEffect(() => {
         if (productError) {
             toast.error(productError.message || 'Failed to search products');
@@ -129,7 +125,6 @@ function EditStockModal({ show, onHide, stockId }) {
         }
     }, [productError, warehouseError]);
 
-    // Debounced search function
     const handleSearch = useCallback((searchTerm, searchType, index) => {
         if (!searchTerm || searchTerm?.length < 1) return;
 
@@ -143,7 +138,6 @@ function EditStockModal({ show, onHide, stockId }) {
         dispatch(searchProductActions(searchParams));
     }, [dispatch]);
 
-    // Row handlers
     const handleAddRow = useCallback(() => {
         setRows(prev => [...(Array.isArray(prev) ? prev : []), {
             searchType: 'modelName',
@@ -156,7 +150,6 @@ function EditStockModal({ show, onHide, stockId }) {
     const handleSaveRow = (row, rowId) => {
 
         const quantity = row?.quantity;
-        // const selectedProductId = selectedModal?.value;
         const selectedWarehouseId = selectedWarehouse?.[0]?.value;
 
         if (rowId) {
@@ -194,7 +187,7 @@ function EditStockModal({ show, onHide, stockId }) {
         setRows(prev => {
             const updated = [...prev];
             updated[index].quantity = value;
-            updated[index].quantityError = ''; // Clear error on change
+            updated[index].quantityError = ''; 
             return updated;
         });
     }, []);
@@ -204,7 +197,7 @@ function EditStockModal({ show, onHide, stockId }) {
         if (value === '') {
             setRows(prev => {
                 const updated = [...prev];
-                updated[index].quantity = 1; // Default to 1 if empty
+                updated[index].quantity = 1; 
                 updated[index].quantityError = '';
                 return updated;
             });
@@ -272,7 +265,6 @@ function EditStockModal({ show, onHide, stockId }) {
                                     onChange={(selected) => setValue('warehouseId', selected?.value)}
                                     isClearable
                                     isLoading={!warehouseOptions?.length}
-                                // defaultValue={warehouseOptions?.find(opt => opt.value === stockDetails?.warehouseId)}
                                 />
                                 {errors.warehouseId && <small className="text-danger">Warehouse is required</small>}
                             </Form.Group>
@@ -316,7 +308,6 @@ function EditStockModal({ show, onHide, stockId }) {
                         {rows?.map((row, index) => (
                             <div className='mb-1 rounded-1 ps-1' style={{ border: '1px solid rgba(218, 224, 225, 0.97)' }} key={index}>
                                 <Row className="align-items-center mb-2 g-2">
-                                    {/* Search By */}
                                     <Col xs={2} className='d-flex'>
                                         <span className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1">{index + 1}.</span>
                                         <div>
@@ -344,7 +335,6 @@ function EditStockModal({ show, onHide, stockId }) {
                                         </div>
                                     </Col>
 
-                                    {/* Dynamic Search Field */}
                                     <Col xs={3}>
                                         <Form.Group className='mb-0'>
                                             <Form.Label className="small mb-0">
@@ -392,7 +382,6 @@ function EditStockModal({ show, onHide, stockId }) {
                                         </Form.Group>
                                     </Col>
 
-                                    {/* Complementary Info */}
                                     <Col xs={2}>
                                         <Form.Group className='mb-0'>
                                             <Form.Label className="small mb-0">
@@ -407,7 +396,6 @@ function EditStockModal({ show, onHide, stockId }) {
                                         </Form.Group>
                                     </Col>
 
-                                    {/* Product Name */}
                                     <Col xs={2}>
                                         <Form.Group className='mb-0'>
                                             <Form.Label className="small mb-0">Product Name</Form.Label>
@@ -420,7 +408,6 @@ function EditStockModal({ show, onHide, stockId }) {
                                         </Form.Group>
                                     </Col>
 
-                                    {/* Quantity */}
                                     <Col xs={2}>
                                         <Form.Group className='mb-0'>
                                             <Form.Label className="small mb-0">Qty</Form.Label>
@@ -441,7 +428,6 @@ function EditStockModal({ show, onHide, stockId }) {
                                         </Form.Group>
                                     </Col>
 
-                                    {/* Action Buttons */}
                                     <Col xs={1} className="text-center mt-2 pt-1">
                                         <div className='d-flex justify-content-end'>
                                             <Button

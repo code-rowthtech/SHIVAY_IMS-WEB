@@ -119,7 +119,7 @@ function AddStockinModal({ show, onHide }) {
         setRows(prev => {
             const updated = [...prev];
             updated[index].quantity = value;
-            updated[index].quantityError = ''; // Clear error on change
+            updated[index].quantityError = ''; 
             return updated;
         });
     }, []);
@@ -129,7 +129,7 @@ function AddStockinModal({ show, onHide }) {
         if (value === '') {
             setRows(prev => {
                 const updated = [...prev];
-                updated[index].quantity = 1; // Default to 1 if empty
+                updated[index].quantity = 1; 
                 updated[index].quantityError = '';
                 return updated;
             });
@@ -290,9 +290,9 @@ function AddStockinModal({ show, onHide }) {
                                 <Form.Control
                                     type="date"
                                     {...register('date', {
-                                        value: new Date().toISOString().split('T')[0] // Set initial value to today
+                                        value: new Date().toISOString().split('T')[0] 
                                     })}
-                                    max={new Date().toISOString().split('T')[0]} // Restrict to today or earlier
+                                    max={new Date().toISOString().split('T')[0]} 
                                 />
                             </Form.Group>
                         </Col>
@@ -319,27 +319,12 @@ function AddStockinModal({ show, onHide }) {
                             <Form.Group className="mb-1">
                                 <Form.Label className="mb-0">
                                     Attachment
-                                    {/* {attachmentType && (
-                                        <span className="text-capitalize"> ({attachmentType})</span>
-                                    )}
-                                    {stockInData?.[0]?.invoiceAttachment && (
-                                        <a
-                                            href={stockInData?.[0]?.invoiceAttachment}
-                                            target="_blank"
-                                            title='Download Attachment'
-                                            rel="noopener noreferrer"
-                                        // style={{position:'absolute', top:'20px'}}
-                                        >
-                                            <HiOutlineFolderDownload className='ms-1 fs-4' />
-                                        </a>
-                                    )} */}
                                     <span className="text-danger"> *</span>
                                 </Form.Label>
 
                                 {!attachmentType ? (
                                     <Form.Select
                                         className="mb-0"
-                                        // defaultValue=""
                                         value={attachmentType}
                                         onChange={handleAttachmentTypeChange}
                                         required
@@ -537,9 +522,6 @@ function AddStockinModal({ show, onHide }) {
 
                         <div className='d-flex gap-2'>
                             <Button onClick={handleClose} style={{ height: '38px' }} className="cancel-button">Cancel</Button>
-                            {/* <Button type="submit" className='custom-button' disabled={createLoading}>
-                                {createLoading ? 'Saving...' : 'Save'}
-                            </Button> */}
                             {rows?.some((data) => !data?.selectedProduct) ? (
                                 <OverlayTrigger
                                     placement="top"

@@ -1,11 +1,10 @@
-// src/pages/dispatch/editDispatch/EditDispatchModal.jsx
-
 import { useEffect, useMemo, useCallback, useState, useRef } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
     getDispatchByIdActions,
     updateDispatchActions,
@@ -17,6 +16,7 @@ import {
     listingCustomerActions,
     listingUsersActions,
     createStockCheckActions
+
 } from '../../../../redux/actions';
 import { IoIosAdd } from 'react-icons/io';
 import { MdDelete, MdSave } from 'react-icons/md';
@@ -39,7 +39,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
     const store = useSelector((state) => state);
     const [today] = useState('');
 
-    // Redux state selectors
     const {
         searchProductReducer: {
             searchProduct: { response: ProductSearch = [], loading: productLoading },
@@ -61,7 +60,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
     const DeleteResponse = store?.deleteDispatchProductReducer?.deleteStockProduct?.status
     const CreateResponse = store?.createDispatchProductReducer?.createDispatchProduct?.status
     const UpdateResponse = store?.updateDispatchReducer?.updateDispatch?.status
-    // Load data when modal opens
+
     useEffect(() => {
         if (show && stockId) {
             dispatch(getDispatchByIdActions(stockId));
@@ -70,7 +69,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
         }
     }, [show, stockId, dispatch]);
 
-    // Handle successful API responses
     useEffect(() => {
         if (DeleteResponse === 200 || CreateResponse === 200) {
             dispatch(getDispatchByIdActions(stockId));
@@ -83,7 +81,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
         }
     }, [UpdateResponse, onHide]);
 
-    // Initialize form with dispatch details
     useEffect(() => {
         if (DispatchDetails?.[0]) {
             console.log(DispatchDetails?.[0])
@@ -111,8 +108,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
 
             setRows(initialRows);
             setIsInitialLoad(false);
-
-            // Set form values
             setValue('date', DispatchDetails?.[0]?.date ? new Date(DispatchDetails?.[0]?.date).toISOString().split('T')[0] : today);
             setValue('grNumber', DispatchDetails?.[0]?.grNumber);
             setValue('description', DispatchDetails?.[0]?.description);
@@ -137,20 +132,17 @@ function EditDispatchModal({ show, onHide, stockId }) {
         }
     }, [DispatchDetails, setValue, today, isInitialLoad]);
 
-    // Load users when warehouse changes
     useEffect(() => {
         if (selectedWarehouse?.value) {
             dispatch(listingUsersActions({ warehouseId: selectedWarehouse.value }));
         }
     }, [selectedWarehouse, dispatch]);
 
-    // Error handling
     useEffect(() => {
         if (productError) toast.error(productError.message || 'Failed to search products');
         if (warehouseError) toast.error(warehouseError.message || 'Failed to load warehouses');
     }, [productError, warehouseError]);
 
-    // Memoized options
     const warehouseOptions = useMemo(() => (
         Warehouse?.map(({ _id, name }) => ({ value: _id, label: name }))
     ), [Warehouse]);
@@ -185,7 +177,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
         })) || []
     ), [ProductSearch]);
 
-    // Handlers
     const handleAttachmentTypeChange = (e) => {
         const type = e.target.value;
         setAttachmentType(type);
@@ -261,7 +252,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
         setRows(prev => {
             const updated = [...prev];
             updated[index].quantity = value;
-            updated[index].quantityError = ''; // Clear error on change
+            updated[index].quantityError = '';
             return updated;
         });
 
@@ -280,7 +271,7 @@ function EditDispatchModal({ show, onHide, stockId }) {
         if (value === '') {
             setRows(prev => {
                 const updated = [...prev];
-                updated[index].quantity = 1; // Default to 1 if empty
+                updated[index].quantity = 1;
                 updated[index].quantityError = '';
                 return updated;
             });
@@ -471,7 +462,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
                                             className="ms-1"
                                         >
                                             <HiOutlineFolderDownload className='fs-4' />
-                                            {/* <span className="ms-1">View File</span> */}
                                         </a>
                                     )}
                                 </Form.Label>
@@ -506,7 +496,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
                                             className="ms-1"
                                         >
                                             <HiOutlineFolderDownload className='fs-4' />
-                                            {/* <span className="ms-1">View File</span> */}
                                         </a>
                                     )}
                                 </Form.Label>
@@ -710,9 +699,6 @@ function EditDispatchModal({ show, onHide, stockId }) {
 
                         <div className='d-flex gap-2'>
                             <Button onClick={onHide} className="cancel-button">Cancel</Button>
-                            {/* <Button type="submit" className='custom-button' disabled={updateLoading}>
-                                {updateLoading ? 'Updating...' : 'Update'}
-                            </Button> */}
                             <Button
                                 className='custom-button'
                                 type="submit"

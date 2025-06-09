@@ -116,7 +116,7 @@ function EditStockinModal({ show, onHide, stockId }) {
     setRows(prev => {
       const updated = [...prev];
       updated[index].quantity = value;
-      updated[index].quantityError = ''; // Clear error on change
+      updated[index].quantityError = ''; 
       return updated;
     });
   }, []);
@@ -126,7 +126,7 @@ function EditStockinModal({ show, onHide, stockId }) {
     if (value === '') {
       setRows(prev => {
         const updated = [...prev];
-        updated[index].quantity = 1; // Default to 1 if empty
+        updated[index].quantity = 1; 
         updated[index].quantityError = '';
         return updated;
       });
@@ -645,9 +645,6 @@ function EditStockinModal({ show, onHide, stockId }) {
 
             <div>
               <Button onClick={onHide} className="cancel-button me-2">Cancel</Button>
-              {/* <Button type="submit" className='custom-button' >
-                Update
-              </Button> */}
               <Button
                 className='custom-button'
                 type="submit"

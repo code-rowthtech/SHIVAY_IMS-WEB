@@ -76,7 +76,6 @@ const AddSupplierModal = ({ showModal, handleClose, SupplierData }) => {
                         <Modal.Title className='text-black'>{type} Supplier</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        {/* Your form or content here */}
                         <Row>
                             <Col sm={6}>
                                 <Form.Group className="mb-1">

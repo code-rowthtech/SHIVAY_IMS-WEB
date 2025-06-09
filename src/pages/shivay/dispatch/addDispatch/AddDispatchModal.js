@@ -1,5 +1,3 @@
-// src/pages/dispatch/addDispatch/AddDispatchModal.jsx
-
 import { useEffect, useMemo, useCallback, useState, useRef } from 'react';
 import { Modal, Button, Form, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -180,7 +178,7 @@ function AddDispatchModal({ show, onHide }) {
         setRows(prev => {
             const updated = [...prev];
             updated[index].quantity = value;
-            updated[index].quantityError = ''; // Clear error on change
+            updated[index].quantityError = ''; 
             return updated;
         });
 
@@ -199,7 +197,7 @@ function AddDispatchModal({ show, onHide }) {
         if (value === '') {
             setRows(prev => {
                 const updated = [...prev];
-                updated[index].quantity = 1; // Default to 1 if empty
+                updated[index].quantity = 1; 
                 updated[index].quantityError = '';
                 return updated;
             });
@@ -554,9 +552,6 @@ function AddDispatchModal({ show, onHide }) {
 
                         <div className='d-flex gap-2'>
                             <Button onClick={handleClose} className="cancel-button">Cancel</Button>
-                            {/* <Button type="submit" className='custom-button' disabled={createLoading}>
-                                {createLoading ? 'Saving...' : 'Save'}
-                            </Button> */}
                             {rows?.some((data) => !data?.selectedProduct) ? (
                                 <OverlayTrigger
                                     placement="top"
