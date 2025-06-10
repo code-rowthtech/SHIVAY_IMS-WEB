@@ -196,5 +196,75 @@ tbody tr:hover {
 .form-select {
       padding: 0.45rem 2.0rem 0.45rem 0.9rem !important;
 }
+.dashboard-card {
+  transition: all 0.10s ease; /* Smooth transition from skeleton to data */
+}
 
+.dashboard-card-body {
+  min-height: 100px; /* Consistent height for skeleton and real cards */
+}
 
+.dashboard-card-hover:hover {
+  transform: scale(1.03); /* Hover effect for dashboard cards */
+}
+
+/* For the table header to stay fixed */
+.top-selling-thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #fff; /* Match your theme, e.g., Bootstrap's white background */
+}
+
+/* For the scrollable table body */
+.top-selling-tbody {
+  display: block;
+  max-height: 200px; /* Adjust based on your design */
+  overflow-y: auto;
+}
+
+/* Ensure table layout is preserved */
+.table-responsive {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure table takes full container height */
+}
+
+.table {
+  width: 100%;
+  display: table;
+}
+
+.top-selling-tbody tr {
+  display: table-row;
+}
+
+.top-selling-tbody td,
+.top-selling-tbody th {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+/* Optional: Custom scrollbar styling */
+.top-selling-tbody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.top-selling-tbody::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.top-selling-tbody::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.top-selling-tbody::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Firefox scrollbar support */
+.top-selling-tbody {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
