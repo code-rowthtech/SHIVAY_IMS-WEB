@@ -197,15 +197,17 @@ const Filter = () => {
                     'rgba(0, 0, 0, 0.05) 0px 4px 10px, rgba(0, 0, 0, 0.03) 0px 2px 5px',
                   display: 'flex',
                   flexDirection: 'column',
-                  height: '100%',
+                  height:'100%'
+                  // maxHeight: '32vh',
+                  // overflow:'auto'
                 }}
               >
                 <div>
                   <div className="d-flex justify-content-between">
                     <h5>Top Selling Products</h5>
-                    <p className="mb-0 mt-1 text-primary fs-6">View All</p>
+                    {/* <p className="mb-0 mt-1 text-primary fs-6">View All</p> */}
                   </div>
-                  <div className="table-responsive mb-0 flex-grow-1">
+                  <div className="table-responsive mb-0 flex-grow-1" style={{overflow:'auto', maxHeight:'26vh'}}>
                     <table className="table table-striped bg-white mb-0">
                       <thead>
                         <tr style={{ color: '#703133' }}>
@@ -255,7 +257,7 @@ const Filter = () => {
                 <div>
                   <div className="d-flex justify-content-between">
                     <h5>Recent Transaction</h5>
-                    <p className="mb-0 mt-1 text-primary fs-6">View All</p>
+                    {/* <p className="mb-0 mt-1 text-primary fs-6">View All</p> */}
                   </div>
                   <div className="table-responsive mb-0 flex-grow-1">
                     <table className="table table-striped bg-white mb-0">
@@ -310,7 +312,7 @@ const Filter = () => {
                 <div>
                   <div className="d-flex justify-content-between">
                     <h5>Low Stock Alert</h5>
-                    <p className="mb-0 mt-1 text-primary fs-6">View All</p>
+                    {/* <p className="mb-0 mt-1 text-primary fs-6">View All</p> */}
                   </div>
                   <div className="table-responsive mb-0 flex-grow-1">
                     <table className="table table-striped bg-white mb-0">
