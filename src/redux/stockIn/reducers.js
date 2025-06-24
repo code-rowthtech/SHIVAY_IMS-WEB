@@ -1,51 +1,50 @@
 //------------------------------------R E D U C E R S-------------------------------------------------
-import { StockInActionTypes } from "./constants"
+import { StockInActionTypes } from './constants';
 
 const STOCKIN_LIST_INITIAL_STATE = {
     stockInList: [],
-    loading: false
-}
+    loading: false,
+};
 
 const stockInListReducer = (state = STOCKIN_LIST_INITIAL_STATE, action) => {
-
     switch (action.type) {
         case StockInActionTypes.STOCKIN_LIST_LOADING:
             return {
                 stockInList: state.stockInList,
-                loading: true
-            }
+                loading: true,
+            };
         case StockInActionTypes.STOCKIN_LIST_SUCCESS:
             return {
                 stockInList: action.payload,
-                loading: false
-            }
+                loading: false,
+            };
         case StockInActionTypes.STOCKIN_LIST_ERROR:
             return {
                 stockInList: action.payload,
-                loading: false
-            }
-        default: return state
+                loading: false,
+            };
+        default:
+            return state;
     }
-}
+};
 
 const CREATE_STOCKIN_INITIAL_STATE = {
     createStockIn: [],
-    loading: false
-}
+    loading: false,
+};
 
 const createStockInReducer = (state = CREATE_STOCKIN_INITIAL_STATE, action) => {
-
     switch (action.type) {
         case StockInActionTypes.CREATE_STOCKIN_LOADING:
             return {
                 createStockIn: state.createStockIn,
-                loading: true
-            }
+                loading: true,
+            };
         case StockInActionTypes.CREATE_STOCKIN_SUCCESS:
             return {
                 createStockIn: action.payload,
-                loading: false
-            }
+                loading: false,
+            };
         case StockInActionTypes.CREATE_STOCKIN_RESET:
             return {
                 createStockIn: [],
@@ -54,30 +53,30 @@ const createStockInReducer = (state = CREATE_STOCKIN_INITIAL_STATE, action) => {
         case StockInActionTypes.CREATE_STOCKIN_ERROR:
             return {
                 createStockIn: action.payload,
-                loading: false
-            }
-        default: return state
+                loading: false,
+            };
+        default:
+            return state;
     }
-}
+};
 
 const UPDATE_STOCKIN_INITIAL_STATE = {
     updateStockIn: [],
-    loading: false
-}
+    loading: false,
+};
 
 const updateStockInReducer = (state = UPDATE_STOCKIN_INITIAL_STATE, action) => {
-
     switch (action.type) {
         case StockInActionTypes.UPDATE_STOCKIN_LOADING:
             return {
                 updateStockIn: state.updateStockIn,
-                loading: true
-            }
+                loading: true,
+            };
         case StockInActionTypes.UPDATE_STOCKIN_SUCCESS:
             return {
                 updateStockIn: action.payload,
-                loading: false
-            }
+                loading: false,
+            };
         case StockInActionTypes.UPDATE_STOCKIN_RESET:
             return {
                 updateStockIn: [],
@@ -86,89 +85,91 @@ const updateStockInReducer = (state = UPDATE_STOCKIN_INITIAL_STATE, action) => {
         case StockInActionTypes.UPDATE_STOCKIN_ERROR:
             return {
                 updateStockIn: action.payload,
-                loading: false
-            }
-        default: return state
+                loading: false,
+            };
+        default:
+            return state;
     }
-}
+};
 
 const DELETE_STOCKIN_INITIAL_STATE = {
     deleteStockIn: [],
-    loading: false
-}
+    loading: false,
+};
 
 const deleteStockInReducer = (state = DELETE_STOCKIN_INITIAL_STATE, action) => {
-
     switch (action.type) {
         case StockInActionTypes.DELETE_STOCKIN_LOADING:
             return {
                 deleteStockIn: state.deleteStockIn,
-                loading: true
-            }
+                loading: true,
+            };
         case StockInActionTypes.DELETE_STOCKIN_SUCCESS:
             return {
                 deleteStockIn: action.payload,
-                loading: false
-            }
+                loading: false,
+            };
         case StockInActionTypes.DELETE_STOCKIN_ERROR:
             return {
                 deleteStockIn: action.payload,
-                loading: false
-            }
+                loading: false,
+            };
         case StockInActionTypes.DELETE_STOCKIN_RESET:
             return {
                 deleteStockIn: [],
-                loading: false
-            }
-        default: return state
+                loading: false,
+            };
+        default:
+            return state;
     }
-}
+};
 
 const GET_STOCKIN_INITIAL_STATE = {
     stockInById: [],
-    loading: false
-}
+    loading: false,
+};
 
 const stockInByIdReducer = (state = GET_STOCKIN_INITIAL_STATE, action) => {
-
     switch (action.type) {
         case StockInActionTypes.GET_STOCKIN_LOADING:
             return {
                 stockInById: state.stockInById,
-                loading: true
-            }
+                loading: true,
+            };
         case StockInActionTypes.GET_STOCKIN_SUCCESS:
             return {
                 stockInById: action.payload,
-                loading: false
-            }
+                loading: false,
+            };
         case StockInActionTypes.GET_STOCKIN_ERROR:
             return {
                 stockInById: action.payload,
-                loading: false
-            }
-        default: return state
+                loading: false,
+            };
+        case StockInActionTypes.GET_STOCKIN_RESET:
+            return GET_STOCKIN_INITIAL_STATE;
+        default:
+            return state;
     }
-}
+};
 
 const UPDATE_STOCKIN_PRODUCT_INITIAL_STATE = {
     updateStockInProduct: [],
-    loading: false
-}
+    loading: false,
+};
 
 const updateStockInProductReducer = (state = UPDATE_STOCKIN_PRODUCT_INITIAL_STATE, action) => {
-
     switch (action.type) {
         case StockInActionTypes.UPDATE_STOCKIN_PRODUCT_LOADING:
             return {
                 updateStockInProduct: state.updateStockInProduct,
-                loading: true
-            }
+                loading: true,
+            };
         case StockInActionTypes.UPDATE_STOCKIN_PRODUCT_SUCCESS:
             return {
                 updateStockInProduct: action.payload,
-                loading: false
-            }
+                loading: false,
+            };
         case StockInActionTypes.UPDATE_STOCKIN_PRODUCT_RESET:
             return {
                 updateStockInProduct: [],
@@ -177,62 +178,62 @@ const updateStockInProductReducer = (state = UPDATE_STOCKIN_PRODUCT_INITIAL_STAT
         case StockInActionTypes.UPDATE_STOCKIN_PRODUCT_ERROR:
             return {
                 updateStockInProduct: action.payload,
-                loading: false
-            }
-        default: return state
+                loading: false,
+            };
+        default:
+            return state;
     }
-}
+};
 
 const DELETE_STOCKIN_PRODUCT_INITIAL_STATE = {
     deleteStockInProduct: [],
-    loading: false
-}
+    loading: false,
+};
 
 const deleteStockInProductReducer = (state = DELETE_STOCKIN_PRODUCT_INITIAL_STATE, action) => {
-
     switch (action.type) {
         case StockInActionTypes.DELETE_STOCKIN_PRODUCT_LOADING:
             return {
                 deleteStockInProduct: state.deleteStockInProduct,
-                loading: true
-            }
+                loading: true,
+            };
         case StockInActionTypes.DELETE_STOCKIN_PRODUCT_SUCCESS:
             return {
                 deleteStockInProduct: action.payload,
-                loading: false
-            }
+                loading: false,
+            };
         case StockInActionTypes.DELETE_STOCKIN_PRODUCT_ERROR:
             return {
                 deleteStockInProduct: action.payload,
-                loading: false
-            }
+                loading: false,
+            };
         case StockInActionTypes.DELETE_STOCKIN_PRODUCT_RESET:
             return {
                 deleteStockInProduct: [],
-                loading: false
-            }
-        default: return state
+                loading: false,
+            };
+        default:
+            return state;
     }
-}
+};
 
 const CREATE_STOCKIN_PRODUCT_INITIAL_STATE = {
     createStockInProduct: [],
-    loading: false
-}
+    loading: false,
+};
 
 const createStockInProductReducer = (state = CREATE_STOCKIN_PRODUCT_INITIAL_STATE, action) => {
-
     switch (action.type) {
         case StockInActionTypes.CREATE_STOCKIN_PRODUCT_LOADING:
             return {
                 createStockInProduct: state.createStockInProduct,
-                loading: true
-            }
+                loading: true,
+            };
         case StockInActionTypes.CREATE_STOCKIN_PRODUCT_SUCCESS:
             return {
                 createStockInProduct: action.payload,
-                loading: false
-            }
+                loading: false,
+            };
         case StockInActionTypes.CREATE_STOCKIN_PRODUCT_RESET:
             return {
                 createStockInProduct: [],
@@ -241,11 +242,12 @@ const createStockInProductReducer = (state = CREATE_STOCKIN_PRODUCT_INITIAL_STAT
         case StockInActionTypes.CREATE_STOCKIN_PRODUCT_ERROR:
             return {
                 createStockInProduct: action.payload,
-                loading: false
-            }
-        default: return state
+                loading: false,
+            };
+        default:
+            return state;
     }
-}
+};
 
 export {
     stockInListReducer,
@@ -256,4 +258,4 @@ export {
     updateStockInProductReducer,
     deleteStockInProductReducer,
     createStockInProductReducer,
-}
+};

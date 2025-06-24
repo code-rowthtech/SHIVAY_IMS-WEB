@@ -11,6 +11,7 @@ import VerticalLayout from '../layouts/Vertical';
 import DetachedLayout from '../layouts/Detached';
 import HorizontalLayout from '../layouts/Horizontal';
 import FullLayout from '../layouts/Full';
+import EditStockin from '../pages/shivay/stockIn/editStockin/EditStockin';
 
 // lazy load all the views
 
@@ -22,30 +23,28 @@ const Confirm = React.lazy(() => import('../pages/account/Confirm'));
 const ForgetPassword = React.lazy(() => import('../pages/account/ForgetPassword'));
 const LockScreen = React.lazy(() => import('../pages/account/LockScreen'));
 
-
 const Dashboard = React.lazy(() => import('../pages/shivay/dashboard/Dashboard'));
 const ViewProduct = React.lazy(() => import('../pages/shivay/dashboard/ViewProduct'));
 
-// SHIVAY pages 
-const Inventory = React.lazy(() => import('../pages/shivay/inventory/inventory'))
-const ViewProductStock = React.lazy(() => import('../pages/shivay/inventory/viewProduct/ViewProductStock'))
-const Report = React.lazy(() => import('../pages/shivay/report/Report'))
-const User = React.lazy(() => import('../pages/shivay/user/User'))
-const Warehouse = React.lazy(() => import('../pages/shivay/warehouse/Warehouse'))
-const OpeningStock = React.lazy(() => import('../pages/shivay/openingStock/OpeningStock'))
-const StockIn = React.lazy(() => import('../pages/shivay/stockIn/StockIn'))
-const Dispatch = React.lazy(() => import('../pages/shivay/dispatch/Dispatch'))
+// SHIVAY pages
+const Inventory = React.lazy(() => import('../pages/shivay/inventory/inventory'));
+const ViewProductStock = React.lazy(() => import('../pages/shivay/inventory/viewProduct/ViewProductStock'));
+const Report = React.lazy(() => import('../pages/shivay/report/Report'));
+const User = React.lazy(() => import('../pages/shivay/user/User'));
+const Warehouse = React.lazy(() => import('../pages/shivay/warehouse/Warehouse'));
+const OpeningStock = React.lazy(() => import('../pages/shivay/openingStock/OpeningStock'));
+const StockIn = React.lazy(() => import('../pages/shivay/stockIn/StockIn'));
+const Dispatch = React.lazy(() => import('../pages/shivay/dispatch/Dispatch'));
 
-const Customer = React.lazy(() => import('../pages/shivay/customer/Customer'))
-const Supplier = React.lazy(() => import('../pages/shivay/supplier/Supplier'))
-const Setting = React.lazy(() => import('../pages/shivay/setting/Setting'))
-const NoInternet = React.lazy(() => import('../pages/noInternet/NoInternet'))
-
-
+const Customer = React.lazy(() => import('../pages/shivay/customer/Customer'));
+const Supplier = React.lazy(() => import('../pages/shivay/supplier/Supplier'));
+const Setting = React.lazy(() => import('../pages/shivay/setting/Setting'));
+const NoInternet = React.lazy(() => import('../pages/noInternet/NoInternet'));
 
 const ErrorPageNotFound = React.lazy(() => import('../pages/error/PageNotFound'));
 const ErrorPageNotFoundAlt = React.lazy(() => import('../pages/error/PageNotFoundAlt'));
 const ServerError = React.lazy(() => import('../pages/error/ServerError'));
+const AddStockin = React.lazy(() => import('../pages/shivay/stockIn/addStockIn/AddStockin'));
 
 const loading = () => <div className=""></div>;
 
@@ -115,7 +114,7 @@ const AllRoutes = () => {
                     path: 'error-500',
                     element: <LoadComponent component={ServerError} />,
                 },
-                 {
+                {
                     path: 'no-internet',
                     element: <LoadComponent component={NoInternet} />,
                 },
@@ -141,7 +140,7 @@ const AllRoutes = () => {
                             path: 'inventory',
                             element: <LoadComponent component={Inventory} />,
                         },
-                         {
+                        {
                             path: 'viewProductStock',
                             element: <LoadComponent component={ViewProductStock} />,
                         },
@@ -166,6 +165,12 @@ const AllRoutes = () => {
                             path: 'stockIn',
                             element: <LoadComponent component={StockIn} />,
                         },
+                        // AddStockin
+                        {
+                            path: 'stockIn/addStockin',
+                            element: <LoadComponent component={AddStockin} />,
+                        },
+
                         {
                             path: 'dispatch',
                             element: <LoadComponent component={Dispatch} />,
@@ -182,7 +187,11 @@ const AllRoutes = () => {
                             path: 'setting',
                             element: <LoadComponent component={Setting} />,
                         },
-
+                        //EditStockin
+                        {
+                            path: 'stockIn/editStockin',
+                            element: <LoadComponent component={EditStockin} />,
+                        },
                     ],
                 },
             ],

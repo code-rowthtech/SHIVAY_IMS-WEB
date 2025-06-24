@@ -1,14 +1,14 @@
-body{
+body {
     display: none;
 }
-.active-page{
+.active-page {
     background-color: red !important;
 }
 /* This capitalizes dropdown option text */
 .custom-select__single-value,
 .custom-select__placeholder,
 .custom-select__option {
-  text-transform: capitalize !important;
+    text-transform: capitalize !important;
 }
 .font_work {
     font-size: 13px !important;
