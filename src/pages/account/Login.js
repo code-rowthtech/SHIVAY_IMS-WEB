@@ -43,21 +43,17 @@ const Login = (): React$Element<any> => {
         resolver: yupResolver(
             yup.object().shape({
                 roleId: yup.string().required(t('Please select a role')),
-                email: yup
-                    .string()
-                    .required(t('Please enter email'))
-                    .email(t('Please enter a valid email address')),
+                email: yup.string().required(t('Please enter email')).email(t('Please enter a valid email address')),
                 password: yup.string().required(t('Please enter Password')),
             })
-        )
-
+        ),
     });
 
     const onSubmit = (data) => {
         const payload = {
             ...data,
-            fireBaseId: ''
-        }
+            fireBaseId: '',
+        };
         dispatch(loginUser(payload));
     };
 
@@ -81,16 +77,13 @@ const Login = (): React$Element<any> => {
                                 {t('Select Role')}
                             </option>
                             {RolesData.map((role) => (
-                                <option key={role._id} value={role._id} className='text-capitalize'>
+                                <option key={role._id} value={role._id} className="text-capitalize">
                                     {role.name}
                                 </option>
                             ))}
                         </Form.Select>
-                        {errors.roleId && (
-                            <div className="text-danger mt-1">{errors.roleId.message}</div>
-                        )}
+                        {errors.roleId && <div className="text-danger mt-1">{errors.roleId.message}</div>}
                     </Form.Group>
-
 
                     <FormInput
                         label={t('Email')}
@@ -101,7 +94,6 @@ const Login = (): React$Element<any> => {
                         placeholder={t('Enter your email')}
                         containerClass="mb-3"
                     />
-
 
                     <FormInput
                         label={t('Password')}
@@ -114,7 +106,7 @@ const Login = (): React$Element<any> => {
                     />
 
                     <div className="mb-3 mb-0 text-center">
-                        <Button className='custom-button' type="submit" disabled={loading}>
+                        <Button className="custom-button" type="submit" disabled={loading}>
                             {!loading ? t('Log In') : <ButtonLoading />}
                         </Button>
                     </div>
