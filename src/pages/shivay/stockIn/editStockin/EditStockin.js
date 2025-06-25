@@ -1,3 +1,5 @@
+// main code
+
 import { useEffect, useMemo, useCallback, useState, useRef } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -52,6 +54,12 @@ function EditStockin() {
     const [showConfirm, setShowConfirm] = useState(false);
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [stotkinEditData, setStotkinEditData] = useState();
+    console.log(stotkinEditData, 'stotkinEditData');
+
+    // const showFormStr = ()=> {
+    //     setShowForm(prev()=> !prev)
+    // }
 
     // Redux store selectors
     const store = useSelector((state) => state);
@@ -220,13 +228,20 @@ function EditStockin() {
     }, [setValue, editData]);
 
     // Callback functions
-    const handleSearch = useCallback(
-        (term, type) => {
-            if (!term || term.length < 1) return;
-            dispatch(searchProductActions(type === 'modelName' ? { modelName: term } : { code: term }));
-        },
-        [dispatch]
-    );
+    // const handleSearch = useCallback(
+    //     (term, type) => {
+    //         console.log(term, type, 'kjhgfdszdxfghjk');
+    //         if (!term || term.length < 1) return;
+    //         dispatch(searchProductActions(type === 'modelName' ? { modelName: term } : { code: term }));
+    //     },
+    //     [dispatch]
+    // );
+
+    const handleSearch = (term, type) => {
+        console.log(term, type, 'kjhgfdszdxfghjk');
+        if (!term || term.length < 1) return;
+        dispatch(searchProductActions(type === 'modelName' ? { modelName: term } : { code: term }));
+    };
 
     const handleAddRow = useCallback(() => {
         setRows((prev) => [...prev, { searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
@@ -240,14 +255,14 @@ function EditStockin() {
         });
     }, []);
 
-    const handleQuantityChange = useCallback((e, index) => {
+    const handleQuantityChange = useCallback((e) => {
         const value = e.target.value === '' ? '' : parseInt(e.target.value);
-        setRows((prev) => {
-            const updated = [...prev];
-            updated[index].quantity = value;
-            updated[index].quantityError = '';
-            return updated;
-        });
+
+        setFormData((prev) => ({
+            ...prev,
+            quantity: value,
+            quantityError: '', // Clear error when typing
+        }));
     }, []);
 
     const validateQuantity = useCallback((e, index) => {
@@ -279,9 +294,11 @@ function EditStockin() {
         }
     }, []);
 
-    const handleDelete = () => {
-        dispatch(deleteStockInActions({ stockInId: stockToDelete }));
+    const handleDelete = (data) => {
+        console.log(data, 'jsahd');
+        dispatch(deleteStockInActions({ stockInProductId: data?._id }));
         setShowConfirm(false);
+        dispatch(getStockInByIdActions());
     };
 
     const handleWarehouseChange = (selectedOption) => {
@@ -308,6 +325,18 @@ function EditStockin() {
         resetField('invoiceAttachment');
         if (fileInputRef.current) fileInputRef.current.value = '';
     };
+    // const [FormData, setFormData] = useState({ searchType: 'modelName', selectedProduct: null, searchTerm: '' });
+
+    const [FormData, setFormData] = useState({
+        searchType: 'modelName',
+
+        selectedProduct: null,
+        searchTerm: '',
+        quantity: '',
+        quantityError: '',
+        modalName: null,
+        productCode: null,
+    });
 
     // Form submission handlers
     const onSubmit = (data) => {
@@ -326,38 +355,101 @@ function EditStockin() {
         formData.append('newProductArr', JSON.stringify([]));
         formData.append('productDetailsArr', JSON.stringify([]));
         formData.append('stockInId', editData._id);
-
         dispatch(updateStockInActions(formData));
     };
+    const [editCase, setEditCase] = useState(false);
 
+    const row =
+        editCase === ''
+            ? {
+                  searchType: 'modelName',
+                  selectedProduct: null,
+                  searchTerm: '',
+                  quantity: '',
+                  quantityError: '',
+              }
+            : stotkinEditData;
+    console.log(editCase, stotkinEditData, FormData, 'kjhgfdsdfghjk');
     const handleSaveRow = async (row, rowId) => {
+        console.log('👉 editCase:', editCase);
+        console.log('👉 rowId:', rowId);
+        console.log('👉 row._id:', row?._id);
+
         const quantity = row?.quantity;
-        console.log(quantity, 'quantity');
         const selectedWarehouseId = selectedWarehouse?.value;
 
-        if (rowId) {
+        const productId =
+            row?.productCode?.value ||
+            row?.modalName?.value ||
+            row?.selectedProduct?.value ||
+            row?.selectedProduct?.data?._id ||
+            '';
+
+        if (!productId || !quantity) {
+            console.warn('❌ Missing required fields');
+            return;
+        }
+
+        if (editCase === true && rowId) {
+            console.log('✅ UPDATE triggered for:', rowId);
+
             const updateData = {
-                stockInProductId: row?._id,
-                quantity: quantity,
+                stockInProductId: rowId,
+                quantity,
+                productId,
+                warehouseId: selectedWarehouseId,
+                stockInId: editData._id,
             };
+
             const res = await dispatch(updateStockInProductActions(updateData));
             if (res?.payload?.status === 200) {
-                dispatch(getStockInByIdActions(editData._id));
+                console.log('✅ Updated successfully');
             }
         } else {
+            console.log('✅ CREATE triggered');
+
             const createData = {
                 stockInId: editData._id,
-                productId: row?.selectedProduct?.data?._id,
-                quantity: quantity,
+                productId,
+                quantity,
                 warehouseId: selectedWarehouseId,
             };
-            dispatch(createStockInProductActions(createData));
+
+            const res = await dispatch(createStockInProductActions(createData));
+            if (res?.payload?.status === 201 || res?.payload?.status === 200) {
+                console.log('✅ Created successfully');
+                setFormData({
+                    searchType: 'modelName',
+                    selectedProduct: null,
+                    searchTerm: '',
+                    quantity: '',
+                    quantityError: '',
+                    modalName: null,
+                    productCode: null,
+                });
+            }
         }
     };
 
     useEffect(() => {
         dispatch(getStockInByIdActionsReset());
     }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(getStockInByIdActions(editData._id));
+    }, []);
+    const handleDeleteRow = () => {
+        setFormData({
+            searchType: 'modelName',
+            selectedProduct: null,
+            searchTerm: '',
+            quantity: '',
+            quantityError: '',
+            modalName: null,
+            productCode: null,
+        });
+        setEditCase(false);
+    };
 
     return (
         <div className="container-fluid ">
@@ -386,19 +478,17 @@ function EditStockin() {
                         {editData?.controlNumber}
                     </span>
                 </div>
-                <div className="col-4 text-end">
-                    <Button variant="close" aria-label="Close" />
-                </div>
+                <div className="col-4 text-end">{/* <Button variant="close" aria-label="Close" /> */}</div>
             </div>
 
             {/* Main Form */}
             <Form onSubmit={handleSubmit(onSubmit)} className="  rounded-3  ">
                 {/* Basic Information Row */}
                 <div className="border p-3 " style={{ borderRadius: '6px' }}>
-                    <Row className="mb-3">
+                    <Row className="mb-2">
                         <Col sm={3}>
                             <Form.Group>
-                                <Form.Label className="mb-1 fw-semibold">
+                                <Form.Label className="mb-0 fw-semibold">
                                     Warehouse <span className="text-danger">*</span>
                                 </Form.Label>
                                 <Select
@@ -415,7 +505,7 @@ function EditStockin() {
                         </Col>
                         <Col sm={3}>
                             <Form.Group>
-                                <Form.Label className="mb-1 fw-semibold">
+                                <Form.Label className="mb-0 fw-semibold">
                                     Received By <span className="text-danger">*</span>
                                 </Form.Label>
                                 <Select
@@ -433,7 +523,7 @@ function EditStockin() {
                         </Col>
                         <Col sm={3}>
                             <Form.Group>
-                                <Form.Label className="mb-1 fw-semibold">
+                                <Form.Label className="mb-0 fw-semibold">
                                     Supplier <span className="text-danger">*</span>
                                 </Form.Label>
                                 <Select
@@ -451,7 +541,7 @@ function EditStockin() {
                         </Col>
                         <Col sm={3}>
                             <Form.Group>
-                                <Form.Label className="mb-1 fw-semibold">Date</Form.Label>
+                                <Form.Label className="mb-0 fw-semibold">Date</Form.Label>
                                 <Form.Control
                                     type="date"
                                     value={today}
@@ -464,10 +554,10 @@ function EditStockin() {
                     </Row>
 
                     {/* Invoice Information Row */}
-                    <Row className="mb-3">
+                    <Row className="mb-1">
                         <Col sm={3}>
                             <Form.Group>
-                                <Form.Label className="mb-1 fw-semibold">
+                                <Form.Label className="mb-0 fw-semibold">
                                     Invoice Number <span className="text-danger">*</span>
                                 </Form.Label>
                                 <Form.Control
@@ -482,7 +572,7 @@ function EditStockin() {
                         </Col>
                         <Col sm={3}>
                             <Form.Group>
-                                <Form.Label className="mb-1 fw-semibold">
+                                <Form.Label className="mb-0 fw-semibold">
                                     Attachment
                                     {attachmentType && <span className="text-capitalize"> ({attachmentType})</span>}
                                     {editData?.invoiceAttachment && (
@@ -541,7 +631,7 @@ function EditStockin() {
                         </Col>
                         <Col sm={3}>
                             <Form.Group>
-                                <Form.Label className="mb-1 fw-semibold">Invoice Value</Form.Label>
+                                <Form.Label className="mb-0 fw-semibold">Invoice Value</Form.Label>
                                 <Form.Control
                                     type="text"
                                     {...register('invoiceValue')}
@@ -553,7 +643,7 @@ function EditStockin() {
                         </Col>
                         <Col sm={3}>
                             <Form.Group>
-                                <Form.Label className="mb-1 fw-semibold">Description</Form.Label>
+                                <Form.Label className="mb-0 fw-semibold">Description</Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     rows={1}
@@ -570,7 +660,7 @@ function EditStockin() {
                             variant="primary"
                             type="submit"
                             disabled={store?.updateStockInReducer?.loading}
-                            className="px-4 rounded-pill">
+                            className="px-3 py-1 rounded-pill">
                             {store?.updateStockInReducer?.loading ? (
                                 <span className="d-flex align-items-center">
                                     <span
@@ -589,250 +679,173 @@ function EditStockin() {
                     {/* Form Actions */}
 
                     {/* Products List */}
+                    {/* {stotkinEditData.length} */}
                     <div className="">
-                        {rows.map((row, index) => (
-                            <div key={index} className="border rounded mb-2 p-2">
-                                <Row className="align-items-center g-2">
-                                    {/* Row Number */}
-                                    <Col xs={1} className="text-center mt-3">
-                                        <span className="fw-bold">{index + 1}.</span>
-                                    </Col>
+                        {/* cHANGEEEE */}
+                        <div className="border rounded mb-2 p-2">
+                            <Row className="align-items-center g-2">
+                                {/* Row Number (Always 1) */}
+                                <Col xs={1} className="text-center mt-3">
+                                    <span className="fw-bold">1.</span>
+                                </Col>
 
-                                    {/* Search Type */}
-                                    <Col sm={2}>
-                                        <Form.Group className="mb-0">
-                                            <Form.Label className="small mb-0">Search By</Form.Label>
-                                            <Form.Select
-                                                value={row?.searchType}
-                                                onChange={(e) =>
-                                                    setRows((prev) => {
-                                                        const updated = [...prev];
-                                                        updated[index] = {
-                                                            ...updated[index],
-                                                            searchType: e.target.value,
-                                                            selectedProduct: null,
-                                                            searchTerm: '',
-                                                        };
-                                                        return updated;
-                                                    })
-                                                }>
-                                                <option value="modelName">Model Name</option>
-                                                <option value="code">Product Code</option>
-                                            </Form.Select>
-                                        </Form.Group>
-                                    </Col>
+                                {/* Search Type */}
+                                <Col sm={2}>
+                                    <Form.Group className="mb-0">
+                                        <Form.Label className="small mb-0">Search By</Form.Label>
+                                        <Form.Select
+                                            value={row?.searchType}
+                                            onChange={(e) => {
+                                                setEditCase(false);
+                                                setFormData({
+                                                    ...row,
+                                                    searchType: e.target.value,
+                                                    selectedProduct: null,
+                                                    searchTerm: '',
+                                                });
+                                            }}>
+                                            <option value="modelName">Model Name</option>
+                                            <option value="code">Product Code</option>
+                                        </Form.Select>
+                                    </Form.Group>
+                                </Col>
 
-                                    {/* Dynamic Search Field */}
-                                    <Col sm={2}>
-                                        <Form.Group className="mb-0">
-                                            <Form.Label className="small mb-0">
-                                                {row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}
-                                            </Form.Label>
-                                            {row.searchType === 'modelName' ? (
-                                                <Select
-                                                    value={row?.selectedProduct}
-                                                    onChange={(selected) => handleProductChange(selected, index)}
-                                                    onInputChange={(inputValue) => {
-                                                        setRows((prev) => {
-                                                            const updated = [...prev];
-                                                            updated[index].searchTerm = inputValue;
-                                                            return updated;
-                                                        });
-                                                        handleSearch(inputValue, row.searchType);
-                                                    }}
-                                                    options={productOptions}
-                                                    placeholder={`Search by model`}
-                                                    isClearable
-                                                    isSearchable
-                                                    isLoading={productLoading}
-                                                    filterOption={() => true}
-                                                />
-                                            ) : (
-                                                <Select
-                                                    value={row?.selectedProduct}
-                                                    onChange={(selected) => handleProductChange(selected, index)}
-                                                    onInputChange={(inputValue) => {
-                                                        setRows((prev) => {
-                                                            const updated = [...prev];
-                                                            updated[index].searchTerm = inputValue;
-                                                            return updated;
-                                                        });
-                                                        handleSearch(inputValue, row.searchType);
-                                                    }}
-                                                    options={productOptionsCode}
-                                                    placeholder={`Search by code`}
-                                                    isClearable
-                                                    isSearchable
-                                                    isLoading={productLoading}
-                                                    filterOption={() => true}
-                                                />
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-
-                                    {/* Complementary Info */}
-                                    <Col sm={2}>
-                                        <Form.Group>
-                                            <Form.Label className="small mb-0">
-                                                {row.searchType === 'modelName' ? 'Code' : 'Model'}
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="text"
+                                {/* Dynamic Search Field */}
+                                <Col sm={2}>
+                                    <Form.Group className="mb-0">
+                                        <Form.Label className="small mb-0">
+                                            {FormData?.searchType === 'modelName' ? 'Model Name' : 'Product Code'}
+                                        </Form.Label>
+                                        {FormData?.searchType === 'modelName' ? (
+                                            <Select
                                                 value={
-                                                    row.searchType === 'modelName'
-                                                        ? row.selectedProduct?.code
-                                                        : row.selectedProduct?.data?.modelId?.name || ''
+                                                    FormData?.modalName
+                                                        ? FormData?.modalName
+                                                        : FormData?.selectedProduct || { label: '', value: '' }
                                                 }
-                                                readOnly
-                                                className="form-control-sm bg-light"
-                                                style={{ padding: '0.47rem' }}
+                                                onChange={(selected) => {
+                                                    setFormData((prev) => ({ ...prev, selectedProduct: selected }));
+                                                }}
+                                                onInputChange={(inputValue) => {
+                                                    handleSearch(inputValue, FormData?.searchType);
+                                                }}
+                                                options={productOptions}
+                                                placeholder="Search by model"
+                                                isClearable
+                                                isSearchable
+                                                isDisabled={editCase}
+                                                isLoading={productLoading}
+                                                filterOption={() => true}
                                             />
-                                        </Form.Group>
-                                    </Col>
+                                        ) : (
+                                            <Select
+                                                value={
+                                                    FormData?.productCode
+                                                        ? FormData?.productCode
+                                                        : FormData?.selectedProduct || null
+                                                }
+                                                onChange={(selected) => {
+                                                    // handleProductChange(selected, index)
 
-                                    {/* Product Name */}
-                                    <Col sm={2}>
-                                        <Form.Group>
-                                            <Form.Label className="small mb-0">Product Name</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                value={row.selectedProduct?.name || ''}
-                                                readOnly
-                                                className="form-control-sm bg-light"
-                                                style={{ padding: '0.47rem' }}
+                                                    setFormData((prev) => ({ ...prev, selectedProduct: selected }));
+                                                }}
+                                                onInputChange={(inputValue) => {
+                                                    handleSearch(inputValue, FormData?.searchType);
+                                                }}
+                                                options={productOptionsCode}
+                                                placeholder={`Search by code`}
+                                                isClearable
+                                                isSearchable
+                                                isDisabled={editCase}
+                                                isLoading={productLoading}
+                                                filterOption={() => true}
                                             />
-                                        </Form.Group>
-                                    </Col>
+                                        )}
+                                    </Form.Group>
+                                </Col>
+                                <Col sm={2}>
+                                    <Form.Group>
+                                        <Form.Label className="small mb-0">
+                                            {FormData.searchType === 'modelName' ? 'Code' : 'Model'}
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            value={
+                                                !editCase
+                                                    ? FormData.searchType === 'modelName'
+                                                        ? FormData?.selectedProduct?.code
+                                                        : FormData?.selectedProduct?.data?.modelId?.name
+                                                    : FormData.searchType === 'modelName'
+                                                    ? FormData.productCode?.label || ''
+                                                    : FormData.modalName?.label || ''
+                                            }
+                                            readOnly
+                                            className="form-control-sm bg-light"
+                                            style={{ padding: '0.47rem' }}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                {/* Product Name */}
+                                <Col sm={2}>
+                                    <Form.Group>
+                                        <Form.Label className="small mb-0">Product Name</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            value={FormData?.selectedProduct?.name || ''}
+                                            readOnly
+                                            className="form-control-sm bg-light"
+                                            style={{ padding: '0.47rem' }}
+                                        />
+                                    </Form.Group>
+                                </Col>
 
-                                    {/* Quantity */}
-                                    <Col xs={2}>
-                                        <Form.Group>
-                                            <Form.Label className="small mb-0">Qty</Form.Label>
-                                            <Form.Control
-                                                type="number"
-                                                value={row.quantity}
-                                                onChange={(e) => handleQuantityChange(e, index)}
-                                                onBlur={(e) => validateQuantity(e, index)}
-                                                required
-                                                isInvalid={!!row.quantityError}
-                                                className="form-control-sm"
-                                                style={{ padding: '0.47rem' }}
-                                            />
-                                            {row.quantityError && (
-                                                <Form.Control.Feedback type="invalid" className="d-block">
-                                                    {row.quantityError}
-                                                </Form.Control.Feedback>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
+                                {/* Quantity */}
+                                <Col xs={2}>
+                                    <Form.Group>
+                                        <Form.Label className="small mb-0">Qty</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            value={FormData?.quantity || ''}
+                                            onChange={handleQuantityChange}
+                                            // onBlur={validateQuantity}
+                                            required
+                                            isInvalid={!!FormData?.quantityError}
+                                            className="form-control-sm"
+                                            style={{ padding: '0.47rem' }}
+                                        />
 
-                                    {/* Action Buttons */}
-                                    <Col xs={1} className="text-center" style={{ paddingTop: '16px' }}>
-                                        <div className="d-flex justify-content-center gap-1">
-                                            <Button
-                                                variant="outline-success"
-                                                size="sm"
-                                                title="Save"
-                                                onClick={() => handleSaveRow(row, row._id)}
-                                                disabled={!row.selectedProduct || !row.quantity}>
-                                                <MdSave />
-                                            </Button>
+                                        {FormData?.quantityError && (
+                                            <Form.Control.Feedback type="invalid" className="d-block">
+                                                {FormData?.quantityError}
+                                            </Form.Control.Feedback>
+                                        )}
+                                    </Form.Group>
+                                </Col>
 
-                                            {/* <Button
-                                                variant="outline-danger"
-                                                size="sm"
-                                                title="Delete"
-                                                onClick={() => {
-                                                    setRows((prev) => {
-                                                        const updated = [...prev];
-                                                        updated[index] = {
-                                                            ...updated[index],
-                                                            searchType: 'modelName', // or your default
-                                                            selectedProduct: null,
-                                                            searchTerm: '',
-                                                            quantity: '',
-                                                            quantityError: '',
-                                                        };
-                                                        return updated;
-                                                    });
-
-                                                    // ✅ Still call delete API for the backend
-                                                    dispatch(
-                                                        deleteStockInProductActions({
-                                                            stockInProductId: row?._id,
-                                                            action: 'delete',
-                                                        })
-                                                    );
-                                                }}>
-                                                <MdDelete />
-                                            </Button> */}
-
-                                            <Button
-                                                variant="outline-danger"
-                                                size="sm"
-                                                title="Delete"
-                                                onClick={() => {
-                                                    setRows((prev) => {
-                                                        if (prev.length === 1) {
-                                                            // ✅ Only one row left: clear it
-                                                            const clearedRow = {
-                                                                ...prev[0],
-                                                                searchType: 'modelName', // or your default
-                                                                selectedProduct: null,
-                                                                searchTerm: '',
-                                                                quantity: '',
-                                                                quantityError: '',
-                                                            };
-                                                            // ✅ Navigate back
-                                                            navigate(-1);
-                                                            return [clearedRow];
-                                                        } else {
-                                                            // ✅ More than one row: remove this row
-                                                            return prev.filter((_, i) => i !== index);
-                                                        }
-                                                    });
-
-                                                    // ✅ Always call backend delete
-                                                    dispatch(
-                                                        deleteStockInProductActions({
-                                                            stockInProductId: row?._id,
-                                                            action: 'delete',
-                                                        })
-                                                    );
-                                                }}>
-                                                <MdDelete />
-                                            </Button>
-
-                                            {/* <Button
-                                                variant="outline-danger"
-                                                size="sm"
-                                                title="Delete"
-                                                onClick={() => {
-                                                    // ✅ Remove from local state immediately
-                                                    setRows((prev) => prev.filter((_, i) => i !== index));
-
-                                                    dispatch(
-                                                        deleteStockInProductActions({
-                                                            stockInProductId: row?._id,
-                                                            action: 'delete',
-                                                        })
-                                                    );
-                                                }}>
-                                                <MdDelete />
-                                            </Button> */}
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </div>
-                        ))}
-                        <div className="d-flex justify-content-end mb-2">
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                onClick={handleAddRow}
-                                className="d-flex align-items-center">
-                                <IoIosAdd className="me-1" /> Add Product
-                            </Button>
+                                {/* Action Buttons */}
+                                <Col xs={1} className="text-center" style={{ paddingTop: '16px' }}>
+                                    <div className="d-flex justify-content-center gap-1">
+                                        <Button
+                                            variant="outline-success"
+                                            className="border-0 fs-3"
+                                            size="sm"
+                                            title="Save"
+                                            onClick={() => handleSaveRow(FormData, FormData._id)}
+                                            // disabled={!row?.selectedProduct || !row?.quantity}
+                                        >
+                                            <MdSave />
+                                        </Button>
+                                        <Button
+                                            variant="outline-danger"
+                                            className="border-0 fs-3"
+                                            size="sm"
+                                            title="Delete"
+                                            onClick={() => handleDeleteRow(row)}>
+                                            <MdDelete />
+                                        </Button>
+                                    </div>
+                                </Col>
+                            </Row>
                         </div>
                     </div>
                 </div>
@@ -845,7 +858,7 @@ function EditStockin() {
                 </>
             ) : (
                 <>
-                    <div className="table-responsive">
+                    <div className="table-responsive border " style={{ borderRadius: '6px' }}>
                         <table className="table table-striped bg-white mb-0">
                             <thead>
                                 <tr className="table_header">
@@ -855,7 +868,7 @@ function EditStockin() {
                                     <th scope="col">Code</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">CreatedAt</th>
-                                    {/* <th scope="col">Action</th> */}
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -890,14 +903,25 @@ function EditStockin() {
                                                 <td className="font_work">{product?.productData?.code || '-'}</td>
                                                 <td className="font_work">{product?.quantity ?? '-'}</td>
                                                 <td className="font_work">{product?.productData?.createdAt || '-'}</td>
-                                                {/* <td>
+                                                <td>
                                                     <span
                                                         className="icon-wrapper"
                                                         title="Edit"
                                                         onClick={() => {
-                                                            navigate('editStockin', {
-                                                                state: { editData: data }, // pass whole object
+                                                            setFormData({
+                                                                _id: product?._id, // ✅ This is the key fix
+                                                                selectedProduct: { name: product?.productData?.name },
+                                                                modalName: {
+                                                                    label: product?.productData?.modelData?.[0]?.name,
+                                                                    value: product?.productData?.modelData?.[0]?._id,
+                                                                },
+                                                                productCode: {
+                                                                    label: product?.productData?.code,
+                                                                    value: product?.productData?._id,
+                                                                },
+                                                                quantity: product?.quantity || '',
                                                             });
+                                                            setEditCase(true);
                                                         }}>
                                                         <AiOutlineEdit className="fs-4" style={{ cursor: 'pointer' }} />{' '}
                                                     </span>
@@ -905,15 +929,18 @@ function EditStockin() {
                                                         className="icon-wrapper"
                                                         title="Delete"
                                                         onClick={() => {
-                                                            setStockToDelete(data?._id);
-                                                            setShowConfirm(true);
+                                                            dispatch(
+                                                                deleteStockInProductActions({
+                                                                    stockInProductId: product._id,
+                                                                })
+                                                            );
                                                         }}>
                                                         <RiDeleteBinLine
                                                             className="fs-4"
                                                             style={{ cursor: 'pointer' }}
                                                         />
                                                     </span>
-                                                </td> */}
+                                                </td>
                                             </tr>
                                         ))
                                     )
@@ -923,24 +950,6 @@ function EditStockin() {
                     </div>
                 </>
             )}
-
-            <Modal show={showConfirm} onHide={() => setShowConfirm(false)}>
-                <Modal.Body className="text-center">
-                    <h4 className="text-black">Confirm Deletion</h4>
-                    <p className="mt-2 mb-3"> Are you sure you want to delete this Stock?</p>
-                    <span className="bg-light rounded-circle p-3 ">
-                        <MdDeleteOutline className="fs-1  text-danger" />
-                    </span>
-                    <div className="d-flex justify-content-center mt-3 gap-2">
-                        <Button className="cancel-button" onClick={() => setShowConfirm(false)}>
-                            Cancel
-                        </Button>
-                        <Button className="custom-button" onClick={handleDelete}>
-                            Delete
-                        </Button>
-                    </div>
-                </Modal.Body>
-            </Modal>
         </div>
     );
 }
