@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkhyper_react=self.webpackChunkhyper_react||[]).push([[8381],{5009:(t,e,a)=>{a.d(e,{A:()=>r});a(5043);var s=a(1072),i=a(579);const r=t=>(0,i.jsx)(s.A,{})},8381:(t,e,a)=>{a.r(e),a.d(e,{default:()=>r});a(5043);var s=a(5009),i=a(579);const r=()=>(0,i.jsx)("div",{children:(0,i.jsx)(s.A,{breadCrumbItems:[{label:"SHIVAY Setting",path:"/shivay/setting"},{label:"Setting",path:"/shivay/setting",active:!0}],title:"Setting"})})}}]);
-//# sourceMappingURL=8381.fffd51ee.chunk.js.map
