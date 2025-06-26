@@ -88,8 +88,9 @@ const StockIn = () => {
                             />
                             <Button
                                 className="mt-2 fw-bold custom-button"
-                                // onClick={() => setShowAddModal(true)}
-                                onClick={() => navigate('addStockin')}>
+                                onClick={() => setShowAddModal(true)}
+                                // onClick={() => navigate('addStockin')}
+                            >
                                 <IoIosAdd className="fs-3" />
                                 &nbsp;Add
                             </Button>
@@ -187,7 +188,12 @@ const StockIn = () => {
                                                                         navigate('editStockin', {
                                                                             state: { editData: data }, // pass whole object
                                                                         });
-                                                                    }}>
+                                                                    }}
+                                                                    //  {() => {
+                                                                    //     setShowEditModal(true);
+                                                                    //     setEditData(data?._id);
+                                                                    // }}
+                                                                >
                                                                     <AiOutlineEdit
                                                                         className="fs-4"
                                                                         style={{ cursor: 'pointer' }}
