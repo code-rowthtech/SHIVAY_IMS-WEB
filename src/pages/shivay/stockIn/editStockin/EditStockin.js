@@ -865,11 +865,7 @@ function EditStockin() {
                                                         className="icon-wrapper"
                                                         title="Delete"
                                                         onClick={() => {
-                                                            dispatch(
-                                                                deleteStockInProductActions({
-                                                                    stockInProductId: product._id,
-                                                                })
-                                                            );
+                                                            dispatch(deleteStockInProductActions(product._id));
                                                         }}>
                                                         <RiDeleteBinLine
                                                             className="fs-4"

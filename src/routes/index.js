@@ -12,6 +12,8 @@ import DetachedLayout from '../layouts/Detached';
 import HorizontalLayout from '../layouts/Horizontal';
 import FullLayout from '../layouts/Full';
 import EditStockin from '../pages/shivay/stockIn/editStockin/EditStockin';
+import EditDispatchPage from '../pages/shivay/dispatch/editDispatch/EditDispatchPage';
+import EditStockPage from '../pages/shivay/openingStock/editStock/EditStockPage';
 
 // lazy load all the views
 
@@ -191,6 +193,17 @@ const AllRoutes = () => {
                         {
                             path: 'stockIn/editStockin',
                             element: <LoadComponent component={EditStockin} />,
+                        },
+                        //EditDispatch
+
+                        {
+                            path: 'dispatch/editDispatchPage',
+                            element: <LoadComponent component={EditDispatchPage} />,
+                        },
+                        //EditStockPage
+                        {
+                            path: 'openingStock/editStockPage',
+                            element: <LoadComponent component={EditStockPage} />,
                         },
                     ],
                 },

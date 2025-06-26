@@ -38,10 +38,13 @@ export const updateStockInProductActions = (data) => ({
     data,
 });
 
-export const deleteStockInProductActions = (data) => ({
-    type: StockInActionTypes.DELETE_STOCKIN_PRODUCT_FIRST,
-    data,
-});
+export const deleteStockInProductActions = (data) => {
+    console.log(data, 'ASDD');
+    return {
+        type: StockInActionTypes.DELETE_STOCKIN_PRODUCT_FIRST,
+        data,
+    };
+};
 
 export const createStockInProductActions = (data) => ({
     type: StockInActionTypes.CREATE_STOCKIN_PRODUCT_FIRST,
