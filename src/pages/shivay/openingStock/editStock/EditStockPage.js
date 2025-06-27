@@ -623,39 +623,46 @@ function EditStockPage() {
                                     </td>
                                 </tr>
                             ) : (
-                                stockDetails?.[0]?.stockProducts?.map((product, index) => (
-                                    <tr key={product._id} className="text-dark text-nowrap highlight-row">
-                                        <td className="font_work">{(pageIndex - 1) * pageSize + index + 1}</td>
-                                        <td className="font_work">{product?.product?.name || '-'}</td>
-                                        <td className="font_work">
-                                            {product?.product?.model?.name
-                                                ? product?.product?.model?.name.slice(0, 25) +
-                                                  (product?.product?.model?.name.length > 25 ? '...' : '')
-                                                : '-'}
-                                        </td>
-                                        <td className="font_work">{product?.product?.code || '-'}</td>
-                                        <td className="font_work">{product?.quantity ?? '-'}</td>
-                                        <td className="font_work">
-                                            {product?.createdAt
-                                                ? new Date(product.createdAt).toLocaleDateString()
-                                                : '-'}
-                                        </td>
-                                        <td>
-                                            <span
-                                                className="icon-wrapper"
-                                                title="Edit"
-                                                onClick={() => handleEdit(product)}>
-                                                <AiOutlineEdit className="fs-4" style={{ cursor: 'pointer' }} />
-                                            </span>
-                                            <span
-                                                className="icon-wrapper"
-                                                title="Delete"
-                                                onClick={() => handleDelete(product)}>
-                                                <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))
+                                (() => {
+                                    const capitalizeFirst = (str) => {
+                                        if (!str) return '-';
+                                        return str.charAt(0).toUpperCase() + str.slice(1);
+                                    };
+
+                                    return stockDetails?.[0]?.stockProducts?.map((product, index) => (
+                                        <tr key={product._id} className="text-dark text-nowrap highlight-row">
+                                            <td className="font_work">{(pageIndex - 1) * pageSize + index + 1}</td>
+                                            <td className="font_work">{capitalizeFirst(product?.product?.name)}</td>
+                                            <td className="font_work">
+                                                {product?.product?.model?.name
+                                                    ? capitalizeFirst(product?.product?.model?.name.slice(0, 25)) +
+                                                      (product?.product?.model?.name.length > 25 ? '...' : '')
+                                                    : '-'}
+                                            </td>
+                                            <td className="font_work">{product?.product?.code || '-'}</td>
+                                            <td className="font_work">{product?.quantity ?? '-'}</td>
+                                            <td className="font_work">
+                                                {product?.createdAt
+                                                    ? new Date(product.createdAt).toLocaleDateString()
+                                                    : '-'}
+                                            </td>
+                                            <td>
+                                                <span
+                                                    className="icon-wrapper"
+                                                    title="Edit"
+                                                    onClick={() => handleEdit(product)}>
+                                                    <AiOutlineEdit className="fs-4" style={{ cursor: 'pointer' }} />
+                                                </span>
+                                                <span
+                                                    className="icon-wrapper"
+                                                    title="Delete"
+                                                    onClick={() => handleDelete(product)}>
+                                                    <RiDeleteBinLine className="fs-4" style={{ cursor: 'pointer' }} />
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ));
+                                })()
                             )}
                         </tbody>
                     </table>
