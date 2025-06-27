@@ -789,12 +789,10 @@ function EditStockin() {
                 </div>
             </div>
             {stockInLoading === true ? (
-                <>
-                    <CartLoading />
-                </>
+                <CartLoading />
             ) : (
                 <>
-                    <div className="table-responsive border " style={{ borderRadius: '6px' }}>
+                    <div className="table-responsive border" style={{ borderRadius: '6px' }}>
                         <table className="table table-striped bg-white mb-0">
                             <thead>
                                 <tr className="table_header">
@@ -821,61 +819,92 @@ function EditStockin() {
                                         </td>
                                     </tr>
                                 ) : (
-                                    stockInData?.map((data, stockInIndex) =>
-                                        data.stockInProducts?.map((product, productIndex) => (
-                                            <tr key={product._id} className="text-dark text-nowrap highlight-row">
-                                                <td className="font_work">
-                                                    {(pageIndex - 1) * pageSize + stockInIndex + 1}-{productIndex + 1}
-                                                </td>
-                                                <td className="font_work">{product?.productData?.name || '-'}</td>
-                                                <td className="font_work">
-                                                    {product?.productData?.modelData?.[0]?.name
-                                                        ? product?.productData?.modelData?.[0]?.name.slice(0, 25) +
-                                                          (product?.productData?.modelData?.[0]?.name.length > 25
-                                                              ? '...'
-                                                              : '')
-                                                        : '-'}
-                                                </td>
-                                                <td className="font_work">{product?.productData?.code || '-'}</td>
-                                                <td className="font_work">{product?.quantity ?? '-'}</td>
-                                                <td className="font_work">{product?.productData?.createdAt || '-'}</td>
-                                                <td>
-                                                    <span
-                                                        className="icon-wrapper"
-                                                        title="Edit"
-                                                        onClick={() => {
-                                                            setProductFormData({
-                                                                _id: product?._id,
-                                                                selectedProduct: { name: product?.productData?.name },
-                                                                modalName: {
-                                                                    label: product?.productData?.modelData?.[0]?.name,
-                                                                    value: product?.productData?.modelData?.[0]?._id,
-                                                                },
-                                                                productCode: {
-                                                                    label: product?.productData?.code,
-                                                                    value: product?.productData?._id,
-                                                                },
-                                                                quantity: product?.quantity || '',
-                                                            });
-                                                            setEditCase(true);
-                                                        }}>
-                                                        <AiOutlineEdit className="fs-4" style={{ cursor: 'pointer' }} />{' '}
-                                                    </span>
-                                                    <span
-                                                        className="icon-wrapper"
-                                                        title="Delete"
-                                                        onClick={() => {
-                                                            dispatch(deleteStockInProductActions(product._id));
-                                                        }}>
-                                                        <RiDeleteBinLine
-                                                            className="fs-4"
-                                                            style={{ cursor: 'pointer' }}
-                                                        />
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    )
+                                    (() => {
+                                        let rowIndex = 0;
+
+                                        const capitalizeFirst = (str) => {
+                                            if (!str) return '-';
+                                            return str.charAt(0).toUpperCase() + str.slice(1);
+                                        };
+
+                                        return stockInData?.map((data) =>
+                                            data.stockInProducts?.map((product) => {
+                                                rowIndex++;
+                                                return (
+                                                    <tr
+                                                        key={product._id}
+                                                        className="text-dark text-nowrap highlight-row">
+                                                        <td className="font_work">{rowIndex}</td>
+                                                        <td className="font_work">
+                                                            {capitalizeFirst(product?.productData?.name)}
+                                                        </td>
+                                                        <td className="font_work">
+                                                            {product?.productData?.modelData?.[0]?.name
+                                                                ? capitalizeFirst(
+                                                                      product?.productData?.modelData?.[0]?.name.slice(
+                                                                          0,
+                                                                          25
+                                                                      )
+                                                                  ) +
+                                                                  (product?.productData?.modelData?.[0]?.name.length >
+                                                                  25
+                                                                      ? '...'
+                                                                      : '')
+                                                                : '-'}
+                                                        </td>
+                                                        <td className="font_work">
+                                                            {product?.productData?.code || '-'}
+                                                        </td>
+                                                        <td className="font_work">{product?.quantity ?? '-'}</td>
+                                                        <td className="font_work">
+                                                            {product?.productData?.createdAt || '-'}
+                                                        </td>
+                                                        <td>
+                                                            <span
+                                                                className="icon-wrapper"
+                                                                title="Edit"
+                                                                onClick={() => {
+                                                                    setProductFormData({
+                                                                        _id: product?._id,
+                                                                        selectedProduct: {
+                                                                            name: product?.productData?.name,
+                                                                        },
+                                                                        modalName: {
+                                                                            label: product?.productData?.modelData?.[0]
+                                                                                ?.name,
+                                                                            value: product?.productData?.modelData?.[0]
+                                                                                ?._id,
+                                                                        },
+                                                                        productCode: {
+                                                                            label: product?.productData?.code,
+                                                                            value: product?.productData?._id,
+                                                                        },
+                                                                        quantity: product?.quantity || '',
+                                                                    });
+                                                                    setEditCase(true);
+                                                                }}>
+                                                                <AiOutlineEdit
+                                                                    className="fs-4"
+                                                                    style={{ cursor: 'pointer' }}
+                                                                />
+                                                            </span>
+                                                            <span
+                                                                className="icon-wrapper"
+                                                                title="Delete"
+                                                                onClick={() => {
+                                                                    dispatch(deleteStockInProductActions(product._id));
+                                                                }}>
+                                                                <RiDeleteBinLine
+                                                                    className="fs-4"
+                                                                    style={{ cursor: 'pointer' }}
+                                                                />
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })
+                                        );
+                                    })()
                                 )}
                             </tbody>
                         </table>
