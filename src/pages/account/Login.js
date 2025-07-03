@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,7 @@ const Login = (): React$Element<any> => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const location = useLocation();
+    const navigate = useNavigate();
     const redirectUrl = location.state?.from?.pathname || '/';
 
     const { rolesList } = useSelector((state) => state.rolesListReducer || {});
@@ -111,6 +112,9 @@ const Login = (): React$Element<any> => {
                         </Button>
                     </div>
                 </form>
+                <div onClick={() => navigate('/account/forget-password')} role="button">
+                    <p className="text-end text-primary mb-0">Forget Password?</p>
+                </div>
             </AccountLayout>
         </>
     );

@@ -10,7 +10,7 @@ import { getMenuItems } from '../helpers/menu';
 import AppMenu from './Menu';
 
 // images
-import { Logo, Shivay_Logo, } from '../helpers/image';
+import { Logo, Shivay_Logo } from '../helpers/image';
 import LogoutModal from '../pages/account/LogoutModal';
 
 type SideBarContentProps = {
@@ -72,23 +72,23 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
     const MENU_ITEMS_END = [
         {
             label: 'Help & Support',
-            icon: "mdi-help-circle-outline",
+            icon: 'mdi-help-circle-outline',
             isExpandable: true,
             contactInfo: {
                 email: 'support@rowthtech.com',
-                phone: '9876897645'
-            }
+                phone: '9876897645',
+            },
         },
         {
             label: 'Privacy Policy',
-            icon: "mdi-shield-lock-outline",
-            url: "https://www.avepl.com/privacy-policy/",
-            onClick: () => window.open("https://www.avepl.com/privacy-policy/", "_blank")
+            icon: 'mdi-shield-lock-outline',
+            url: 'https://www.avepl.com/privacy-policy/',
+            onClick: () => window.open('https://www.avepl.com/privacy-policy/', '_blank'),
         },
         {
             label: 'Terms & Conditions',
-            icon: "mdi-file-document-edit-outline",
-            redirectTo: "#",
+            icon: 'mdi-file-document-edit-outline',
+            redirectTo: '#',
         },
         {
             key: 'logout',
@@ -105,7 +105,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
 
     const handleLogoutConfirm = () => {
         setShowLogoutModal(false);
-        navigate('/account/logout')
+        navigate('/account/logout');
     };
 
     const handleLogoutCancel = () => {
@@ -113,17 +113,15 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
     };
 
     const toggleExpand = (label) => {
-        setExpandedItems(prev => ({
+        setExpandedItems((prev) => ({
             ...prev,
-            [label]: !prev[label]
+            [label]: !prev[label],
         }));
     };
 
     return (
         <>
             <div className="leftside-menu" ref={menuNodeRef}>
-
-
                 {!hideLogo && (
                     <>
                         <Link to="/" className="logo text-center logo-light">
@@ -152,7 +150,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                         {!isCondensed ? (
                             <SimpleBar style={{ maxHeight: '100%' }} timeout={500} scrollbarMaxSize={320}>
                                 <SideBarContent
-                                    menuClickHandler={() => { }}
+                                    menuClickHandler={() => {}}
                                     isLight={isLight}
                                     hideUserProfile={hideUserProfile}
                                 />
@@ -169,8 +167,8 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                             const isExpanded = expandedItems[ele.label];
 
                             return (
-                                <div key={index} className=''>
-                                    <div className='info-color px-2 py-1 align-items-center'>
+                                <div key={index} className="">
+                                    <div className="info-color px-2 py-1 align-items-center">
                                         <button
                                             onClick={() => {
                                                 if (isLogout) {
@@ -180,15 +178,14 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                                                 } else if (ele.isExpandable) {
                                                     toggleExpand(ele.label);
                                                 } else {
-                                                    navigate(ele.redirectTo || "#");
+                                                    navigate(ele.redirectTo || '#');
                                                 }
                                             }}
-                                            className="px-2 textLeftSidebar bg-transparent border-0 w-100 text-start"
-                                        >
+                                            className="px-2 textLeftSidebar bg-transparent border-0 w-100 text-start">
                                             <span className={`mdi ${ele.icon} mdi-18px px-1 iconsLeftSidebar`}></span>
                                             <span className="px-2 sidebar_listItems notranslate">{ele.label}</span>
                                             {ele.isExpandable && (
-                                                <span className="float-end" style={{marginTop:'5px'}}>
+                                                <span className="float-end" style={{ marginTop: '5px' }}>
                                                     <i className={`mdi mdi-chevron-${isExpanded ? 'up' : 'down'}`}></i>
                                                 </span>
                                             )}
@@ -198,12 +195,22 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                                     {ele.isExpandable && isExpanded && (
                                         <div className="px-4 py-2 bg-light">
                                             <div className="d-flex align-items-center mb-1">
-                                                <i className="mdi mdi-email-outline me-2" style={{fontSize:'14px'}}></i>
-                                                <a style={{fontSize:'14px'}} href={`mailto:${ele.contactInfo.email}`}>{ele.contactInfo.email}</a>
+                                                <i
+                                                    className="mdi mdi-email-outline me-2"
+                                                    style={{ fontSize: '14px' }}></i>
+                                                <a
+                                                    style={{ fontSize: '14px' }}
+                                                    href={`mailto:${ele.contactInfo.email}`}>
+                                                    {ele.contactInfo.email}
+                                                </a>
                                             </div>
                                             <div className="d-flex align-items-center">
-                                                <i className="mdi mdi-phone-outline me-2" style={{fontSize:'14px'}}></i>
-                                                <a style={{fontSize:'14px'}} href={`tel:${ele.contactInfo.phone.replace(/\D/g, '')}`}>
+                                                <i
+                                                    className="mdi mdi-phone-outline me-2"
+                                                    style={{ fontSize: '14px' }}></i>
+                                                <a
+                                                    style={{ fontSize: '14px' }}
+                                                    href={`tel:${ele.contactInfo.phone.replace(/\D/g, '')}`}>
                                                     {ele.contactInfo.phone}
                                                 </a>
                                             </div>
@@ -215,13 +222,8 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                     </div>
                 </div>
 
-                <LogoutModal
-                    show={showLogoutModal}
-                    onConfirm={handleLogoutConfirm}
-                    onCancel={handleLogoutCancel}
-                />
+                <LogoutModal show={showLogoutModal} onConfirm={handleLogoutConfirm} onCancel={handleLogoutCancel} />
             </div>
-
         </>
     );
 };

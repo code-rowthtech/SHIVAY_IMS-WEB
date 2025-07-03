@@ -34,10 +34,18 @@ export const forgotPassword = (email: string): AuthAction => ({
     payload: { email },
 });
 
-export const forgotPasswordChange = (email: string): AuthAction => ({
-    type: AuthActionTypes.FORGOT_PASSWORD_CHANGE,
-    payload: { email },
-});
+// export const forgotPasswordChange = (token: string, newPassword: string): AuthAction => ({
+//     type: AuthActionTypes.FORGOT_PASSWORD_CHANGE,
+//     payload: { token, newPassword },
+// });
+
+export const forgotPasswordChange = (data) => {
+    console.log(data, 'forgotPasswordChange');
+    return {
+        type: AuthActionTypes.FORGOT_PASSWORD_CHANGE,
+        payload: data,
+    };
+};
 
 export const resetAuth = (): AuthAction => ({
     type: AuthActionTypes.RESET,

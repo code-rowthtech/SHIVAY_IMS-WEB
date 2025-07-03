@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { Logo, Shivay_Logo } from '../helpers/image'
-import { CgProfile } from "react-icons/cg";
+import { Logo, Shivay_Logo } from '../helpers/image';
+import { CgProfile } from 'react-icons/cg';
 
 // actions
 import { changeSidebarType } from '../redux/actions';
@@ -16,7 +16,7 @@ import NotificationDropdown from '../components/NotificationDropdown';
 //constants
 import * as layoutConstants from '../constants/layout';
 import { Dropdown } from 'react-bootstrap';
-const Notifications = []
+const Notifications = [];
 // get the profilemenu
 const ProfileMenus = [
     // {
@@ -54,7 +54,6 @@ type TopbarProps = {
 };
 
 const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: TopbarProps): React$Element<any> => {
-
     const location = useLocation(); // Get the current location object
     const { pathname, search } = location;
     // Define a mapping of paths to titles
@@ -72,8 +71,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         '/shivay/addStockIn': 'Add Stock In',
         '/shivay/addDispatch': 'Add Dispatch',
         '/shivay/ViewProduct': 'View Product',
-        '/shivay/viewProductStock' : 'Product Stock'
-
+        '/shivay/viewProductStock': 'Product Stock',
     };
 
     const getPageTitle = (pathToTitleMap, pathname, search) => {
@@ -97,14 +95,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     const pageTitle = getPageTitle(pathToTitleMap, pathname, search);
 
-
-
-
-
     const dispatch = useDispatch();
 
     const [isopen, setIsopen] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const navbarCssClasses = navCssClasses || '';
     const containerCssClasses = !hideLogo ? 'container-fluid' : '';
 
@@ -145,11 +139,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
      * Toggles the right sidebar
      */
 
-
     return (
         <>
-           <div className={classNames('navbar-custom', navbarCssClasses, 'mb-3')}>
-
+            <div className={classNames('navbar-custom', navbarCssClasses, 'mb-3')}>
                 <div className={containerCssClasses}>
                     {!hideLogo && (
                         <Link to="/" className="topnav-logo">
@@ -167,7 +159,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <LanguageDropdown />
                         </li> */}
 
-                        <li className="dropdown notification-list" title="Notifications" >
+                        <li className="dropdown notification-list" title="Notifications">
                             <NotificationDropdown notifications={Notifications} />
                         </li>
                         {/* <li className="dropdown notification-list d-none d-sm-inline-block">
@@ -201,19 +193,16 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                     </ul>
                     <div className="d-flex justify-content-start align-items-center">
                         {/* toggle for vertical layout */}
-                        {(layoutType === layoutConstants.LAYOUT_VERTICAL || layoutType === layoutConstants.LAYOUT_FULL) && (
+                        {(layoutType === layoutConstants.LAYOUT_VERTICAL ||
+                            layoutType === layoutConstants.LAYOUT_FULL) && (
                             <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
                                 <i className="mdi mdi-menu" />
                             </button>
                         )}
 
                         {/* Page Title */}
-                        <div className="">
-                            <h4>{pageTitle}</h4>
-                        </div>
+                        <div className="">{/* <h4>{pageTitle}</h4> */}</div>
                     </div>
-
-
 
                     {/* toggle for horizontal layout */}
                     {layoutType === layoutConstants.LAYOUT_HORIZONTAL && (
@@ -239,13 +228,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </div>
                         </Link>
                     )}
-
-
                 </div>
-
-
             </div>
-
         </>
     );
 };

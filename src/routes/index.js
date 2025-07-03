@@ -14,6 +14,8 @@ import FullLayout from '../layouts/Full';
 import EditStockin from '../pages/shivay/stockIn/editStockin/EditStockin';
 import EditDispatchPage from '../pages/shivay/dispatch/editDispatch/EditDispatchPage';
 import EditStockPage from '../pages/shivay/openingStock/editStock/EditStockPage';
+import ConfirmForgetPassword from '../pages/account/ConfirmForgetPassword';
+import Transactionlog from '../pages/shivay/transactionlog/Transactionlog';
 
 // lazy load all the views
 
@@ -40,7 +42,7 @@ const Dispatch = React.lazy(() => import('../pages/shivay/dispatch/Dispatch'));
 
 const Customer = React.lazy(() => import('../pages/shivay/customer/Customer'));
 const Supplier = React.lazy(() => import('../pages/shivay/supplier/Supplier'));
-const Setting = React.lazy(() => import('../pages/shivay/setting/Setting'));
+const SettingPage = React.lazy(() => import('../pages/shivay/setting/Setting'));
 const NoInternet = React.lazy(() => import('../pages/noInternet/NoInternet'));
 
 const ErrorPageNotFound = React.lazy(() => import('../pages/error/PageNotFound'));
@@ -102,6 +104,10 @@ const AllRoutes = () => {
                         { path: 'forget-password', element: <LoadComponent component={ForgetPassword} /> },
                         { path: 'lock-screen', element: <LoadComponent component={LockScreen} /> },
                         { path: 'logout', element: <LoadComponent component={Logout} /> },
+                        {
+                            path: 'confirm-forget-password/:token',
+                            element: <LoadComponent component={ConfirmForgetPassword} />,
+                        },
                     ],
                 },
                 {
@@ -186,8 +192,12 @@ const AllRoutes = () => {
                             element: <LoadComponent component={Supplier} />,
                         },
                         {
-                            path: 'setting',
-                            element: <LoadComponent component={Setting} />,
+                            path: 'settingPage',
+                            element: <LoadComponent component={SettingPage} />,
+                        },
+                        {
+                            path: 'transactionlog',
+                            element: <LoadComponent component={Transactionlog} />,
                         },
                         //EditStockin
                         {
@@ -205,6 +215,7 @@ const AllRoutes = () => {
                             path: 'openingStock/editStockPage',
                             element: <LoadComponent component={EditStockPage} />,
                         },
+                        //
                     ],
                 },
             ],

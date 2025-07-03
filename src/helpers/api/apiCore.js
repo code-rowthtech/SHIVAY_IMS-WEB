@@ -5,7 +5,7 @@ import config from '../../config';
 import NoInternet from '../../pages/noInternet/NoInternet';
 
 // content type
-// axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.baseURL = config.API_URL;
 // 'http://192.168.0.106:5004/'
 // intercepting to capture errors
@@ -15,20 +15,20 @@ axios.interceptors.response.use(
     (error) => {
         if (!navigator.onLine) {
             // window.location.href = "/no-internet";
-            <NoInternet />
-            return Promise.reject("No internet connection");
+            <NoInternet />;
+            return Promise.reject('No internet connection');
         }
         if (!error.response) {
             // Network errors or no response from server
-            return Promise.reject("Network error. Please check your internet connection.");
+            return Promise.reject('Network error. Please check your internet connection.');
         }
 
         const { status, data } = error.response;
-        let message = data?.message || "An unexpected error occurred.";
+        let message = data?.message || 'An unexpected error occurred.';
 
         switch (status) {
             case 400:
-                console.error("Bad Request:", data);
+                console.error('Bad Request:', data);
                 break;
             case 403:
                 message = data?.message;
@@ -46,7 +46,6 @@ axios.interceptors.response.use(
         return Promise.reject(message);
     }
 );
-
 
 const AUTH_SESSION_KEY = 'bmg_user';
 
@@ -73,8 +72,8 @@ class APICore {
         if (params) {
             var queryString = params
                 ? Object.keys(params)
-                    .map((key) => key + '=' + params[key])
-                    .join('&')
+                      .map((key) => key + '=' + params[key])
+                      .join('&')
                 : '';
             response = axios.get(`${url}?${queryString}`, params);
         } else {
@@ -88,8 +87,8 @@ class APICore {
         if (params) {
             var queryString = params
                 ? Object.keys(params)
-                    .map((key) => key + '=' + params[key])
-                    .join('&')
+                      .map((key) => key + '=' + params[key])
+                      .join('&')
                 : '';
             response = axios.get(`${url}?${queryString}`, { responseType: 'blob' });
         } else {
@@ -104,8 +103,8 @@ class APICore {
         if (params) {
             queryString = params
                 ? Object.keys(params)
-                    .map((key) => key + '=' + params[key])
-                    .join('&')
+                      .map((key) => key + '=' + params[key])
+                      .join('&')
                 : '';
         }
 
@@ -140,7 +139,7 @@ class APICore {
      * Deletes data
      */
     delete = (url, data) => {
-        console.log({ url, data }, 'url,data api core')
+        console.log({ url, data }, 'url,data api core');
         return axios.delete(url, data);
     };
 

@@ -16,7 +16,8 @@ import stockInSaga from './stockIn/saga';
 import dispatchSaga from './dispatch/saga';
 import reportSaga from './report/saga';
 import notificationSaga from './notification/saga';
-
+import changeProfilePasswordSaga from './setting/saga';
+import logSaga from './transactionlog/saga';
 
 export default function* rootSaga(): any {
     yield all([
@@ -35,6 +36,7 @@ export default function* rootSaga(): any {
         dispatchSaga(),
         reportSaga(),
         notificationSaga(),
+        changeProfilePasswordSaga(),
+        logSaga(),
     ]);
-
 }

@@ -2,7 +2,14 @@ import { useEffect, useMemo, useCallback, useState } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
-import { searchProductActions, updateStockActions, deleteStockProductActions, updateStockProductActions, getStockByIdActions, createStockProductActions } from '../../../../redux/actions';
+import {
+    searchProductActions,
+    updateStockActions,
+    deleteStockProductActions,
+    updateStockProductActions,
+    getStockByIdActions,
+    createStockProductActions,
+} from '../../../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoIosAdd } from 'react-icons/io';
 import { MdDelete, MdSave } from 'react-icons/md';
@@ -11,25 +18,30 @@ import { ButtonLoading, Loading } from '../../../../helpers/loader/Loading';
 
 function EditStockModal({ show, onHide, stockId }) {
     const dispatch = useDispatch();
-    const { handleSubmit, register, setValue, formState: { errors } } = useForm();
+    const {
+        handleSubmit,
+        register,
+        setValue,
+        formState: { errors },
+    } = useForm();
     const [rows, setRows] = useState([]);
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
 
     const {
         searchProductReducer: {
             searchProduct: { response: ProductSearch = [], loading: productLoading },
-            error: productError
+            error: productError,
         },
     } = useSelector((state) => state);
     const store = useSelector((state) => state);
 
-    const stockDetails = store?.stockByIdReducer?.stockById?.response
+    const stockDetails = store?.stockByIdReducer?.stockById?.response;
     const detailsLoading = store?.stockByIdReducer?.loading;
-    const warehouseError = store?.getWarehouseListReducer?.error
+    const warehouseError = store?.getWarehouseListReducer?.error;
     const DeleteProductResponse = store?.deleteStockProductReducer?.deleteStockProduct?.status;
-    const UpdateResponse = store?.updateStockReducer?.updateStock?.status
+    const UpdateResponse = store?.updateStockReducer?.updateStock?.status;
 
-    const [stateDelete, setStateDelete] = useState(false)
+    const [stateDelete, setStateDelete] = useState(false);
 
     useEffect(() => {
         if (show && stockId) {
@@ -51,28 +63,29 @@ function EditStockModal({ show, onHide, stockId }) {
 
     useEffect(() => {
         if (stockDetails) {
-            const initialRows = stockDetails?.[0]?.stockProducts?.map(item => {
-                const product = item?.product || {};
-                const modelName = product.model?.name || '';
-                const Qty = item?.quantity;
-                const code = product.code || '';
-                const name = product.name || '';
-                return {
-                    _id: item._id,
-                    searchType: 'modelName',
-                    selectedProduct: {
-                        value: item.productId,
-                        label: modelName || name,
-                        code,
-                        name,
-                        data: item
-                    },
-                    quantity: Qty,
-                    searchTerm: modelName || name
-                };
-            }) || [];
+            const initialRows =
+                stockDetails?.[0]?.stockProducts?.map((item) => {
+                    const product = item?.product || {};
+                    const modelName = product.model?.name || '';
+                    const Qty = item?.quantity;
+                    const code = product.code || '';
+                    const name = product.name || '';
+                    return {
+                        _id: item._id,
+                        searchType: 'modelName',
+                        selectedProduct: {
+                            value: item.productId,
+                            label: modelName || name,
+                            code,
+                            name,
+                            data: item,
+                        },
+                        quantity: Qty,
+                        searchTerm: modelName || name,
+                    };
+                }) || [];
             setRows(initialRows);
-           
+
             setValue(
                 'date',
                 stockDetails?.[0]?.date ? new Date(stockDetails?.[0]?.date).toISOString().split('T')[0] : ''
@@ -83,7 +96,7 @@ function EditStockModal({ show, onHide, stockId }) {
             const updateWarehouses = stockDetails?.[0]?.warehouseData
                 ? [{ value: stockDetails?.[0].warehouseId, label: stockDetails?.[0].warehouseData.name }]
                 : [];
-            setSelectedWarehouse(updateWarehouses)
+            setSelectedWarehouse(updateWarehouses);
         }
     }, [stockDetails, setValue, DeleteProductResponse]);
 
@@ -102,19 +115,21 @@ function EditStockModal({ show, onHide, stockId }) {
             label: product?.modelId?.name,
             code: product?.code,
             name: product?.name,
-            data: product
+            data: product,
         }));
     }, [ProductSearch]);
 
-    const productOptionsCode = useMemo(() => (
-        ProductSearch?.map(product => ({
-            value: product._id,
-            label: product.code,
-            code: product.code,
-            name: product.name,
-            data: product
-        })) || []
-    ), [ProductSearch]);
+    const productOptionsCode = useMemo(
+        () =>
+            ProductSearch?.map((product) => ({
+                value: product._id,
+                label: product.code,
+                code: product.code,
+                name: product.name,
+                data: product,
+            })) || [],
+        [ProductSearch]
+    );
 
     useEffect(() => {
         if (productError) {
@@ -125,37 +140,42 @@ function EditStockModal({ show, onHide, stockId }) {
         }
     }, [productError, warehouseError]);
 
-    const handleSearch = useCallback((searchTerm, searchType, index) => {
-        if (!searchTerm || searchTerm?.length < 1) return;
+    const handleSearch = useCallback(
+        (searchTerm, searchType, index) => {
+            if (!searchTerm || searchTerm?.length < 1) return;
 
-        const searchParams = {};
-        if (searchType === 'modelName') {
-            searchParams.modelName = searchTerm;
-        } else if (searchType === 'code') {
-            searchParams.code = searchTerm;
-        }
+            const searchParams = {};
+            if (searchType === 'modelName') {
+                searchParams.modelName = searchTerm;
+            } else if (searchType === 'code') {
+                searchParams.code = searchTerm;
+            }
 
-        dispatch(searchProductActions(searchParams));
-    }, [dispatch]);
+            dispatch(searchProductActions(searchParams));
+        },
+        [dispatch]
+    );
 
     const handleAddRow = useCallback(() => {
-        setRows(prev => [...(Array.isArray(prev) ? prev : []), {
-            searchType: 'modelName',
-            selectedProduct: null,
-            quantity: '',
-            searchTerm: ''
-        }]);
+        setRows((prev) => [
+            ...(Array.isArray(prev) ? prev : []),
+            {
+                searchType: 'modelName',
+                selectedProduct: null,
+                quantity: '',
+                searchTerm: '',
+            },
+        ]);
     }, []);
 
     const handleSaveRow = (row, rowId) => {
-
         const quantity = row?.quantity;
         const selectedWarehouseId = selectedWarehouse?.[0]?.value;
 
         if (rowId) {
             const updateData = {
                 stockProductId: row?._id,
-                quantity: quantity
+                quantity: quantity,
             };
             dispatch(updateStockProductActions(updateData));
         } else {
@@ -163,20 +183,19 @@ function EditStockModal({ show, onHide, stockId }) {
                 stockId: stockId,
                 productId: row?.selectedProduct?.data?._id,
                 quantity: quantity,
-                warehouseId: selectedWarehouseId
+                warehouseId: selectedWarehouseId,
             };
             dispatch(createStockProductActions(createData));
         }
     };
 
-
     const handleProductChange = useCallback((selectedOption, index) => {
-        setRows(prev => {
+        setRows((prev) => {
             const updated = [...prev];
             updated[index] = {
                 ...updated[index],
                 selectedProduct: selectedOption,
-                searchTerm: selectedOption?.label || ''
+                searchTerm: selectedOption?.label || '',
             };
             return updated;
         });
@@ -184,10 +203,10 @@ function EditStockModal({ show, onHide, stockId }) {
 
     const handleQuantityChange = useCallback((e, index) => {
         const value = e.target.value === '' ? '' : parseInt(e.target.value);
-        setRows(prev => {
+        setRows((prev) => {
             const updated = [...prev];
             updated[index].quantity = value;
-            updated[index].quantityError = ''; 
+            updated[index].quantityError = '';
             return updated;
         });
     }, []);
@@ -195,9 +214,9 @@ function EditStockModal({ show, onHide, stockId }) {
     const validateQuantity = useCallback((e, index) => {
         const value = e.target.value;
         if (value === '') {
-            setRows(prev => {
+            setRows((prev) => {
                 const updated = [...prev];
-                updated[index].quantity = 1; 
+                updated[index].quantity = 1;
                 updated[index].quantityError = '';
                 return updated;
             });
@@ -206,13 +225,13 @@ function EditStockModal({ show, onHide, stockId }) {
 
         const numValue = parseInt(value);
         if (isNaN(numValue) || numValue <= 0) {
-            setRows(prev => {
+            setRows((prev) => {
                 const updated = [...prev];
                 updated[index].quantityError = 'Quantity must be greater than 0';
                 return updated;
             });
         } else {
-            setRows(prev => {
+            setRows((prev) => {
                 const updated = [...prev];
                 updated[index].quantity = numValue;
                 updated[index].quantityError = '';
@@ -222,20 +241,18 @@ function EditStockModal({ show, onHide, stockId }) {
     }, []);
 
     const onSubmit = (data) => {
-
         const payload = {
             warehouseId: selectedWarehouse?.[0]?.value,
             description: data?.description,
-            date: data?.date
+            date: data?.date,
         };
 
         dispatch(updateStockActions({ ...payload, stockId: stockId }));
-
     };
 
     if (detailsLoading && !stateDelete) {
         return (
-            <Modal show={show} onHide={onHide} size='xl' centered>
+            <Modal show={show} onHide={onHide} size="xl" centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Edit Stock</Modal.Title>
                 </Modal.Header>
@@ -247,20 +264,22 @@ function EditStockModal({ show, onHide, stockId }) {
     }
 
     return (
-        <Modal show={show} onHide={onHide} size='xl' backdrop='static' centered>
-            <Modal.Header className='py-1' closeButton>
+        <Modal show={show} onHide={onHide} size="xl" backdrop="static" centered>
+            <Modal.Header className="py-1" closeButton>
                 <Modal.Title>Edit Stock</Modal.Title>
             </Modal.Header>
-            <Modal.Body className='pt-1'>
+            <Modal.Body className="pt-1">
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Row className="mb-1">
                         <Col sm={4}>
                             <Form.Group className="mb-1">
-                                <Form.Label>Warehouse <span className="text-danger">*</span></Form.Label>
+                                <Form.Label>
+                                    Warehouse <span className="text-danger">*</span>
+                                </Form.Label>
                                 <Select
                                     options={warehouseOptions}
                                     placeholder="Select Warehouse"
-                                    noOptionsMessage={() => "No warehouse found"}
+                                    noOptionsMessage={() => 'No warehouse found'}
                                     value={selectedWarehouse}
                                     onChange={(selected) => setValue('warehouseId', selected?.value)}
                                     isClearable
@@ -272,11 +291,13 @@ function EditStockModal({ show, onHide, stockId }) {
 
                         <Col sm={4}>
                             <Form.Group className="mb-1">
-                                <Form.Label>Date <span className="text-danger">*</span></Form.Label>
+                                <Form.Label>
+                                    Date <span className="text-danger">*</span>
+                                </Form.Label>
                                 <Form.Control
                                     type="date"
                                     required
-                                    max={new Date().toISOString().split("T")[0]}
+                                    max={new Date().toISOString().split('T')[0]}
                                     {...register('date', { required: true })}
                                 />
                             </Form.Group>
@@ -295,7 +316,7 @@ function EditStockModal({ show, onHide, stockId }) {
                         </Col>
                     </Row>
 
-                    <hr className='mt-2 mb-1' />
+                    <hr className="mt-2 mb-1" />
 
                     <div
                         style={{
@@ -303,31 +324,34 @@ function EditStockModal({ show, onHide, stockId }) {
                             overflowY: rows?.length >= 3 ? 'auto' : 'visible',
                             // border: '1px solid #ccc',
                             padding: '10px',
-                        }}
-                    >
+                        }}>
                         {rows?.map((row, index) => (
-                            <div className='mb-1 rounded-1 ps-1' style={{ border: '1px solid rgba(218, 224, 225, 0.97)' }} key={index}>
+                            <div
+                                className="mb-1 rounded-1 ps-1"
+                                style={{ border: '1px solid rgba(218, 224, 225, 0.97)' }}
+                                key={index}>
                                 <Row className="align-items-center mb-2 g-2">
-                                    <Col xs={2} className='d-flex'>
-                                        <span className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1">{index + 1}.</span>
+                                    <Col xs={2} className="d-flex">
+                                        <span className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1">
+                                            {index + 1}.
+                                        </span>
                                         <div>
-                                            <Form.Group className='mb-0'>
+                                            <Form.Group className="mb-0">
                                                 <Form.Label className="small mb-0">Search By</Form.Label>
                                                 <Form.Select
                                                     value={row.searchType}
                                                     onChange={(e) => {
-                                                        setRows(prev => {
+                                                        setRows((prev) => {
                                                             const updated = [...prev];
                                                             updated[index] = {
                                                                 ...updated[index],
                                                                 searchType: e.target.value,
                                                                 selectedProduct: null,
-                                                                searchTerm: ''
+                                                                searchTerm: '',
                                                             };
                                                             return updated;
                                                         });
-                                                    }}
-                                                >
+                                                    }}>
                                                     <option value="modelName">Model Name</option>
                                                     <option value="code">Product Code</option>
                                                 </Form.Select>
@@ -336,16 +360,16 @@ function EditStockModal({ show, onHide, stockId }) {
                                     </Col>
 
                                     <Col xs={3}>
-                                        <Form.Group className='mb-0'>
+                                        <Form.Group className="mb-0">
                                             <Form.Label className="small mb-0">
                                                 {row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}
                                             </Form.Label>
-                                            {row.searchType === 'modelName' ?
+                                            {row.searchType === 'modelName' ? (
                                                 <Select
                                                     value={row?.selectedProduct}
                                                     onChange={(selected) => handleProductChange(selected, index)}
                                                     onInputChange={(inputValue) => {
-                                                        setRows(prev => {
+                                                        setRows((prev) => {
                                                             const updated = [...prev];
                                                             updated[index].searchTerm = inputValue;
                                                             return updated;
@@ -353,18 +377,20 @@ function EditStockModal({ show, onHide, stockId }) {
                                                         handleSearch(inputValue, row.searchType);
                                                     }}
                                                     options={productOptions}
-                                                    placeholder={`Search by ${row.searchType === 'modelName' ? 'model' : 'code'}`}
+                                                    placeholder={`Search by ${
+                                                        row.searchType === 'modelName' ? 'model' : 'code'
+                                                    }`}
                                                     isClearable
                                                     isSearchable
                                                     isLoading={productLoading}
                                                     filterOption={() => true}
                                                 />
-                                                :
+                                            ) : (
                                                 <Select
                                                     value={row?.selectedProduct}
                                                     onChange={(selected) => handleProductChange(selected, index)}
                                                     onInputChange={(inputValue) => {
-                                                        setRows(prev => {
+                                                        setRows((prev) => {
                                                             const updated = [...prev];
                                                             updated[index].searchTerm = inputValue;
                                                             return updated;
@@ -378,26 +404,30 @@ function EditStockModal({ show, onHide, stockId }) {
                                                     isLoading={productLoading}
                                                     filterOption={() => true}
                                                 />
-                                            }
+                                            )}
                                         </Form.Group>
                                     </Col>
 
                                     <Col xs={2}>
-                                        <Form.Group className='mb-0'>
+                                        <Form.Group className="mb-0">
                                             <Form.Label className="small mb-0">
                                                 {row.searchType === 'modelName' ? 'Code' : 'Model'}
                                             </Form.Label>
                                             <Form.Control
-                                                type='text'
+                                                type="text"
                                                 readOnly
-                                                value={row.searchType === 'modelName' ? row?.selectedProduct?.code : row?.selectedProduct?.data?.modelId?.name}
+                                                value={
+                                                    row.searchType === 'modelName'
+                                                        ? row?.selectedProduct?.code
+                                                        : row?.selectedProduct?.data?.modelId?.name
+                                                }
                                                 placeholder={row.searchType === 'modelName' ? 'Code' : 'Model'}
                                             />
                                         </Form.Group>
                                     </Col>
 
                                     <Col xs={2}>
-                                        <Form.Group className='mb-0'>
+                                        <Form.Group className="mb-0">
                                             <Form.Label className="small mb-0">Product Name</Form.Label>
                                             <Form.Control
                                                 type="text"
@@ -409,7 +439,7 @@ function EditStockModal({ show, onHide, stockId }) {
                                     </Col>
 
                                     <Col xs={2}>
-                                        <Form.Group className='mb-0'>
+                                        <Form.Group className="mb-0">
                                             <Form.Label className="small mb-0">Qty</Form.Label>
                                             <Form.Control
                                                 type="number"
@@ -429,27 +459,27 @@ function EditStockModal({ show, onHide, stockId }) {
                                     </Col>
 
                                     <Col xs={1} className="text-center mt-2 pt-1">
-                                        <div className='d-flex justify-content-end'>
+                                        <div className="d-flex justify-content-end">
                                             <Button
                                                 variant="outline-success"
-                                                title='Update'
+                                                title="Update"
                                                 onClick={() => handleSaveRow(row, row._id)}
-                                                className="p-1 me-1 mt-2"
-                                            >
+                                                className="p-1 me-1 mt-2">
                                                 <MdSave className="fs-6" />
                                             </Button>
                                             <Button
                                                 variant="outline-danger"
-                                                title='Delete'
+                                                title="Delete"
                                                 onClick={() => {
-                                                    setStateDelete(true)
-                                                    dispatch(deleteStockProductActions({
-                                                        stockProductId: row?._id,
-                                                        action: 'delete'
-                                                    }));
+                                                    setStateDelete(true);
+                                                    dispatch(
+                                                        deleteStockProductActions({
+                                                            stockProductId: row?._id,
+                                                            action: 'delete',
+                                                        })
+                                                    );
                                                 }}
-                                                className="p-1 mt-2 me-2"
-                                            >
+                                                className="p-1 mt-2 me-2">
                                                 <MdDelete className="fs-6" />
                                             </Button>
                                         </div>
@@ -460,7 +490,7 @@ function EditStockModal({ show, onHide, stockId }) {
                     </div>
 
                     <div className="d-flex justify-content-between mt-3">
-                        <Button className='outline-custom-button' onClick={handleAddRow}>
+                        <Button className="outline-custom-button" onClick={handleAddRow}>
                             <IoIosAdd className="me-1" /> Add Row
                         </Button>
 
@@ -469,16 +499,10 @@ function EditStockModal({ show, onHide, stockId }) {
                                 Cancel
                             </Button>
                             <Button
-                                className='custom-button'
+                                className="custom-button"
                                 type="submit"
-                                disabled={store?.updateStockReducer?.loading}
-                            >
-                                {store?.updateStockReducer?.loading ? (
-                                    "Updating..."
-                                ) : (
-                                    'Update'
-                                )}
-
+                                disabled={store?.updateStockReducer?.loading}>
+                                {store?.updateStockReducer?.loading ? 'Updating...' : 'Update'}
                             </Button>
                         </div>
                     </div>

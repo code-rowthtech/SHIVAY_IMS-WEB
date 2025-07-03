@@ -389,6 +389,28 @@ function EditStockPage() {
                             </Form.Group>
                         </Col>
 
+                        {/*  <Col sm={4}>
+                            <Form.Group className="mb-1">
+                                <Form.Label>
+                                    Warehouse <span className="text-danger">*</span>
+                                </Form.Label>
+                                <Select
+                                    options={warehouseOptions}
+                                    placeholder="Select Warehouse"
+                                    noOptionsMessage={() => 'No warehouse found'}
+                                    value={selectedWarehouse}
+                                    onChange={(selected) => {
+                                        setSelectedWarehouse(selected);
+                                        setValue('warehouseId', selected?.value || '');
+                                    }}
+                                    isClearable
+                                    isLoading={!warehouseOptions?.length}
+                                />
+
+                                {errors.warehouseId && <small className="text-danger">Warehouse is required</small>}
+                            </Form.Group>
+                        </Col> */}
+
                         <Col sm={4}>
                             <Form.Group className="mb-1">
                                 <Form.Label>
