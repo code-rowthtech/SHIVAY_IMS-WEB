@@ -253,54 +253,109 @@ function EditDispatchPage() {
         [selectedWarehouse, dispatch, productFormData.quantity]
     );
 
-    const handleQuantityChange = useCallback(
-        (e) => {
-            const value = e.target.value === '' ? '' : parseInt(e.target.value);
-            setProductFormData((prev) => ({
-                ...prev,
-                quantity: value,
-                quantityError: '',
-            }));
+    // const handleQuantityChange = useCallback(
+    //     (e) => {
+    //         const value = e.target.value === '' ? '' : parseInt(e.target.value);
+    //         setProductFormData((prev) => ({
+    //             ...prev,
+    //             quantity: value,
+    //             quantityError: '',
+    //         }));
 
-            if (productFormData?.selectedProduct?.value && selectedWarehouse?.value) {
-                dispatch(
-                    createStockCheckActions({
-                        warehouseId: selectedWarehouse.value,
-                        productId: productFormData.selectedProduct.value,
-                        qty: value,
-                        oldQty: '',
-                    })
-                );
+    //         if (productFormData?.selectedProduct?.value && selectedWarehouse?.value) {
+    //             dispatch(
+    //                 createStockCheckActions({
+    //                     warehouseId: selectedWarehouse.value,
+    //                     productId: productFormData.selectedProduct.value,
+    //                     qty: value,
+    //                     oldQty: '',
+    //                 })
+    //             );
+    //         }
+    //     },
+    //     [selectedWarehouse, dispatch, productFormData.selectedProduct]
+    // );
+
+    const handleQuantityChange = useCallback((e) => {
+        const value = e.target.value === '' ? '' : parseInt(e.target.value);
+        setProductFormData((prev) => ({
+            ...prev,
+            quantity: value,
+            quantityError: '',
+        }));
+    }, []);
+
+    // const validateQuantity = useCallback((e) => {
+    //     const value = e.target.value;
+    //     if (value === '') {
+    //         setProductFormData((prev) => ({
+    //             ...prev,
+    //             quantity: 1,
+    //             quantityError: '',
+    //         }));
+    //         return;
+    //     }
+
+    //     const numValue = parseInt(value);
+    //     if (isNaN(numValue) || numValue <= 0) {
+    //         setProductFormData((prev) => ({
+    //             ...prev,
+    //             quantityError: 'Quantity must be greater than 0',
+    //         }));
+    //     } else {
+    //         setProductFormData((prev) => ({
+    //             ...prev,
+    //             quantity: numValue,
+    //             quantityError: '',
+    //         }));
+    //     }
+    // }, []);
+
+    const validateQuantity = useCallback(
+        (e) => {
+            const value = e.target.value;
+
+            if (value === '') {
+                setProductFormData((prev) => ({
+                    ...prev,
+                    quantity: 1,
+                    quantityError: '',
+                }));
+                return;
+            }
+
+            const numValue = parseInt(value);
+            if (isNaN(numValue) || numValue <= 0) {
+                setProductFormData((prev) => ({
+                    ...prev,
+                    quantityError: 'Quantity must be greater than 0',
+                }));
+            } else {
+                setProductFormData((prev) => {
+                    const updated = {
+                        ...prev,
+                        quantity: numValue,
+                        quantityError: '',
+                    };
+
+                    // API call moved here
+                    if (prev?.selectedProduct?.value && selectedWarehouse?.value) {
+                        dispatch(
+                            createStockCheckActions({
+                                warehouseId: selectedWarehouse.value,
+                                productId: prev.selectedProduct.value,
+                                qty: numValue,
+                                oldQty: '',
+                            })
+                        );
+                    }
+
+                    return updated;
+                });
             }
         },
-        [selectedWarehouse, dispatch, productFormData.selectedProduct]
+        [dispatch, selectedWarehouse]
     );
-
-    const validateQuantity = useCallback((e) => {
-        const value = e.target.value;
-        if (value === '') {
-            setProductFormData((prev) => ({
-                ...prev,
-                quantity: 1,
-                quantityError: '',
-            }));
-            return;
-        }
-
-        const numValue = parseInt(value);
-        if (isNaN(numValue) || numValue <= 0) {
-            setProductFormData((prev) => ({
-                ...prev,
-                quantityError: 'Quantity must be greater than 0',
-            }));
-        } else {
-            setProductFormData((prev) => ({
-                ...prev,
-                quantity: numValue,
-                quantityError: '',
-            }));
-        }
-    }, []);
 
     const handleDelete = (product) => {
         dispatch(

@@ -1,6 +1,6 @@
 // src/constants/menuItems.ts
 
-import { getUserFromSession } from "../helpers/api/apiCore";
+import { getUserFromSession } from '../helpers/api/apiCore';
 
 const Role = getUserFromSession()?.user?.role?.name;
 
@@ -76,10 +76,27 @@ const RAW_MENU_ITEMS = [
         icon: ' uil-truck',
         url: '/shivay/supplier',
     },
+    {
+        key: 'settingPage',
+        label: 'Setting',
+        isTitle: false,
+        icon: ' uil-cog',
+        url: '/shivay/settingPage',
+    },
+    {
+        key: 'transactionlog',
+        label: 'Transaction log',
+        isTitle: false,
+        icon: ' uil-history',
+        url: '/shivay/transactionlog',
+    },
 ];
 
-const MENU_ITEMS = Role === 'admin'
-    ? RAW_MENU_ITEMS
-    : RAW_MENU_ITEMS.filter(item => !['user', 'openingStock', 'warehouse'].includes(item.key));
+const MENU_ITEMS =
+    Role === 'admin'
+        ? RAW_MENU_ITEMS
+        : RAW_MENU_ITEMS.filter(
+              (item) => !['user', 'openingStock', 'warehouse', 'settingPage', 'transactionlog'].includes(item.key)
+          );
 
 export default MENU_ITEMS;

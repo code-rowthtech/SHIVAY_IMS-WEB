@@ -1,4 +1,3 @@
-// main code
 import { useEffect, useMemo, useCallback, useState, useRef } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -31,14 +30,20 @@ function EditStockin() {
     // Router hooks
     const location = useLocation();
     const editData = location.state?.editData;
+    console.log(editData, ',mnbv');
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     // Form handling
-    const { handleSubmit, register, setValue, reset, resetField } = useForm();
+    const { handleSubmit, register, setValue, reset, resetField, watch } = useForm({
+        defaultValues: {
+            date: editData?.date
+                ? new Date(editData.date).toISOString().split('T')[0]
+                : new Date().toISOString().split('T')[0],
+        },
+    });
 
     // State management
-    const [today, setToday] = useState(new Date().toISOString().split('T')[0]);
     const [rows, setRows] = useState([
         { searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' },
     ]);
@@ -139,7 +144,6 @@ function EditStockin() {
     // Effect hooks
     useEffect(() => {
         if (UpdateResponse === 200) {
-            // reset();
             setRows([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
         }
     }, [UpdateResponse]);
@@ -191,7 +195,12 @@ function EditStockin() {
                 }) || [];
 
             setRows(initialRows);
-            setToday(editData?.createdAt ? new Date(editData?.createdAt).toISOString().split('T')[0] : '');
+            setValue(
+                'date',
+                editData?.date
+                    ? new Date(editData.date).toISOString().split('T')[0]
+                    : new Date().toISOString().split('T')[0]
+            );
 
             const updateWarehouses = editData?.warehouseData
                 ? {
@@ -343,6 +352,7 @@ function EditStockin() {
         formDataObj.append('description', data?.description);
         formDataObj.append('invoiceNumber', data?.invoiceNumber);
         formDataObj.append('fright', data?.invoiceValue);
+        formDataObj.append('date', data?.date);
         formDataObj.append('invoiceAttachmentType', attachmentType);
         formDataObj.append('newProductArr', JSON.stringify([]));
         formDataObj.append('productDetailsArr', JSON.stringify([]));
@@ -518,7 +528,12 @@ function EditStockin() {
                     <Col sm={3}>
                         <Form.Group className="mb-1">
                             <Form.Label className="mb-0">Date</Form.Label>
-                            <Form.Control type="date" value={today} {...register('date')} />
+                            <Form.Control
+                                type="date"
+                                {...register('date')}
+                                value={watch('date') || ''}
+                                onChange={(e) => setValue('date', e.target.value)}
+                            />
                         </Form.Group>
                     </Col>
                     <Col sm={3}>
@@ -615,17 +630,11 @@ function EditStockin() {
                         </Button>
                     </div>
                 </Row>
-
-                {/* Form Actions */}
-
-                {/* Products Table Section */}
             </Form>
 
             <div className=" py-2 my-0">
                 {/* Products List */}
-                {/* {stotkinEditData.length} */}
                 <div className="">
-                    {/* cHANGEEEE */}
                     <div className="border rounded mb-2 p-2">
                         <Row className="align-items-center g-2">
                             {/* Row Number (Always 1) */}

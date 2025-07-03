@@ -12,6 +12,7 @@ import { Loading } from '../../../helpers/loader/Loading';
 import AddDispatchModal from './addDispatch/AddDispatchModal';
 import EditDispatchModal from './editDispatch/EditDispatchModal';
 import { useNavigate } from 'react-router-dom';
+import { getUserFromSession } from '../../../helpers/api/apiCore';
 
 const Dispatch = () => {
     const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const Dispatch = () => {
     const [dispatchToDelete, setDispatchToDelete] = useState(null);
     const totalRecords = '0';
     const [pageIndex, setPageIndex] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(20);
     const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / pageSize));
     const store = useSelector((state) => state);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -29,9 +30,13 @@ const Dispatch = () => {
     const [editData, setEditData] = useState(null);
 
     const DispatchData = store?.getDispatchDataReducer?.dispatchList?.response;
+    console.log(DispatchData, 'DispatchData');
     const deleteResponse = store?.deleteDispatchReducer?.deleteDispatch?.status;
     const UpdateResponse = store?.updateDispatchReducer?.updateDispatch?.status;
     const CreateResponse = store?.createDispatchReducer?.createDispatch?.status;
+    const Role = getUserFromSession()?.user?.role?.name;
+
+    console.log(Role, 'Role');
 
     useEffect(() => {
         dispatch(
@@ -104,6 +109,12 @@ const Dispatch = () => {
                                         <thead>
                                             <tr className="table_header">
                                                 <th scope="col">#</th>
+                                                {Role === 'admin' && (
+                                                    <>
+                                                        <th scope="col">User Name</th>
+                                                        <th scope="col">User Email</th>
+                                                    </>
+                                                )}
                                                 <th scope="col">Customer Name</th>
                                                 <th scope="col">Dispatch by</th>
                                                 <th scope="col">Control No.</th>
@@ -115,6 +126,7 @@ const Dispatch = () => {
                                                 <th scope="col">Action</th>
                                             </tr>
                                         </thead>
+
                                         {store?.getDispatchDataReducer?.loading ? (
                                             <tr>
                                                 <td className="text-center" colSpan={10}>
@@ -137,6 +149,16 @@ const Dispatch = () => {
                                                             <td className="font_work">
                                                                 {(pageIndex - 1) * pageSize + index + 1}
                                                             </td>
+                                                            {Role === 'admin' && (
+                                                                <>
+                                                                    <td className="text-capitalize font_work">
+                                                                        {data?.userName}
+                                                                    </td>
+                                                                    <td className="text-capitalize font_work">
+                                                                        {data?.userEmail}
+                                                                    </td>
+                                                                </>
+                                                            )}
                                                             <td
                                                                 className="text-capitalize font_work"
                                                                 title={data?.customerData?.[0]?.name || ''}>

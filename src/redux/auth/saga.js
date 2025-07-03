@@ -19,14 +19,14 @@ const api = new APICore();
 /**
  * Login the user
  * @param {*} payload - email and password
- * 
+ *
  */
 function* login({ payload: data }) {
     try {
         const response = yield call(loginApi, data);
         const user = response?.data;
         let userData = {
-           user:user?.response,
+            user: user?.response,
             token: user?.token,
         };
         // NOTE - You can change this according to response format from your api
@@ -34,7 +34,7 @@ function* login({ payload: data }) {
         setAuthorization(user?.token);
         yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, userData));
     } catch (error) {
-        ToastContainer(error,'danger')
+        ToastContainer(error, 'danger');
         yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, error));
         api.setLoggedInUser(null);
         setAuthorization(null);
@@ -78,12 +78,13 @@ function* forgotPassword({ payload: { email } }) {
     }
 }
 
-function* forgotPasswordChange({ payload: { data } }) {
+function* forgotPasswordChange({ payload }) {
+    console.log('forgotPasswordChange saga:', payload); // { token, newPassword }
     try {
-        const response = yield call(forgotPasswordConfirm, data);
+        const response = yield call(forgotPasswordConfirm, payload);
         yield put(authApiResponseSuccess(AuthActionTypes.FORGOT_PASSWORD_CHANGE, response.data));
     } catch (error) {
-        yield put(authApiResponseError(AuthActionTypes.FORGOT_PASSWORD_CHANGE, error));
+        yield put(authApiResponseError(AuthActionTypes.FORGOT_PASSWORD_CHANGE, error?.response?.data || error));
     }
 }
 

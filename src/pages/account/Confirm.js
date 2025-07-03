@@ -23,9 +23,15 @@ const Confirm = (): React$Element<any> => {
                             'A email has been send to <b>youremail@domain.com</b>. Please check for an email from company and click on the included link to reset your password.'
                         )}
                     </p>
-                    <p className="text-center">
+                    {/* <p className="text-center">
                         <Link className="btn btn-primary" to="/account/login">
                             {t('Back to Login')}
+                        </Link>
+                    </p> */}
+
+                    <p className="text-center">
+                        <Link className="btn btn-primary" to="/account/login">
+                            Back to Login
                         </Link>
                     </p>
                 </div>

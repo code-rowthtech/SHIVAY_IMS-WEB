@@ -13,5 +13,4 @@ export * from './stockIn/action';
 export * from './dispatch/action';
 export * from './report/action';
 export * from './notification/action';
-
-
+export * from './setting/action';

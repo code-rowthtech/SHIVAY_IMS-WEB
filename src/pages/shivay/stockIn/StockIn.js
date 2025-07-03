@@ -12,6 +12,7 @@ import Pagination from '../../../helpers/Pagination';
 import { Loading } from '../../../helpers/loader/Loading';
 import AddStockinModal from './addStockIn/AddStockinModal';
 import EditStockinModal from './editStockin/EditStockInModal';
+import { getUserFromSession } from '../../../helpers/api/apiCore';
 
 const StockIn = () => {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ const StockIn = () => {
     const [showConfirm, setShowConfirm] = useState(false);
     const totalRecords = '0';
     const [pageIndex, setPageIndex] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(20);
     const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / pageSize));
 
     const [showAddModal, setShowAddModal] = useState(false);
@@ -30,9 +31,11 @@ const StockIn = () => {
     const [editData, setEditData] = useState(null);
 
     const StockInData = store?.stockInListReducer?.stockInList?.response;
+    console.log(StockInData, 'StockInData');
     const deleteResponse = store?.deleteStockInReducer?.deleteStockIn?.status;
     const UpdateResponse = store?.updateStockInReducer?.updateStockIn?.status;
     const CreateResponse = store?.createStockInReducer?.createStockIn?.status;
+    const Role = getUserFromSession()?.user?.role?.name;
 
     useEffect(() => {
         dispatch(
@@ -109,6 +112,12 @@ const StockIn = () => {
                                         <thead>
                                             <tr className="table_header">
                                                 <th scope="col">#</th>
+                                                {Role === 'admin' && (
+                                                    <>
+                                                        <th scope="col">User Name</th>
+                                                        <th scope="col">User Email</th>
+                                                    </>
+                                                )}
                                                 <th scope="col">Supplier</th>
                                                 <th scope="col">Control No.</th>
                                                 <th scope="col">Warehouse</th>
@@ -140,6 +149,16 @@ const StockIn = () => {
                                                             <td className="font_work">
                                                                 {(pageIndex - 1) * pageSize + index + 1}
                                                             </td>
+                                                            {Role === 'admin' && (
+                                                                <>
+                                                                    <td className="text-capitalize font_work">
+                                                                        {data?.userName}
+                                                                    </td>
+                                                                    <td className="text-capitalize font_work">
+                                                                        {data?.userEmail}
+                                                                    </td>
+                                                                </>
+                                                            )}
                                                             <td
                                                                 className="text-capitalize font_work"
                                                                 title={data?.supplierData?.[0]?.name || '-'}>
@@ -150,7 +169,6 @@ const StockIn = () => {
                                                                     <span className="text-black">-</span>
                                                                 )}
                                                             </td>
-
                                                             <td className="font_work">
                                                                 {data?.controlNumber || (
                                                                     <span className="text-black">-</span>
@@ -162,14 +180,10 @@ const StockIn = () => {
                                                                 )}
                                                             </td>
                                                             <td className="font_work">
-                                                                {data?.createdAt ? (
-                                                                    new Date(data?.createdAt).toLocaleDateString(
-                                                                        'en-GB'
-                                                                    )
-                                                                ) : (
-                                                                    <span className="text-black">-</span>
-                                                                )}
-                                                            </td>
+                                                                {data?.date
+                                                                    ? new Date(data.date).toISOString().split('T')[0]
+                                                                    : '-'}
+                                                            </td>{' '}
                                                             <td className="font_work">
                                                                 {data?.totalStockInProductCount || (
                                                                     <span className="text-black">-</span>

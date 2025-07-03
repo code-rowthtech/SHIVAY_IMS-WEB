@@ -85,3 +85,9 @@ export const GET_REPORT = 'api/report/send';
 
 // notifications
 export const GET_NOTIFICATION = 'api/notification/list';
+// profile password change
+
+export const changeProfilePassword = '/api/profile/changePassword';
+// log
+
+export const log = '/api/logs/get';

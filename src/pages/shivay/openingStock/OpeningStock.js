@@ -14,6 +14,7 @@ import { getStockListActions } from '../../../redux/actions';
 import AddStockModal from './addStock/AddStockModal';
 import EditStockModal from './editStock/EditStockModal';
 import { useNavigate } from 'react-router-dom';
+import { getUserFromSession } from '../../../helpers/api/apiCore';
 
 const OpeningStock = () => {
     const dispatch = useDispatch();
@@ -21,11 +22,12 @@ const OpeningStock = () => {
 
     const [search, setSearch] = useState('');
     const [pageIndex, setPageIndex] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(20);
     const [totalPages, setTotalPages] = useState(0);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editData, setEditData] = useState(null);
+    const Role = getUserFromSession()?.user?.role?.name;
 
     const store = useSelector((state) => state);
     const {
@@ -38,6 +40,7 @@ const OpeningStock = () => {
     } = store;
 
     const openingStockData = stockList?.response || [];
+    console.log(openingStockData, 'openingStockData');
     const totalRecords = stockList?.totalCount || 0;
 
     const createResponse = createStockReducer?.createStock?.status;
@@ -105,6 +108,13 @@ const OpeningStock = () => {
                                         <thead>
                                             <tr className="table_header">
                                                 <th>#</th>
+
+                                                {Role === 'admin' && (
+                                                    <>
+                                                        <th scope="col">User Name</th>
+                                                        <th scope="col">User Email</th>
+                                                    </>
+                                                )}
                                                 <th>Warehouse</th>
                                                 <th>Date</th>
                                                 <th>Description</th>
@@ -125,6 +135,16 @@ const OpeningStock = () => {
                                                         <td className="font_work">
                                                             {(pageIndex - 1) * pageSize + index + 1}
                                                         </td>
+                                                        {Role === 'admin' && (
+                                                            <>
+                                                                <td className="text-capitalize font_work">
+                                                                    {data?.userName}
+                                                                </td>
+                                                                <td className="text-capitalize font_work">
+                                                                    {data?.userEmail}
+                                                                </td>
+                                                            </>
+                                                        )}
                                                         <td className="text-capitalize font_work">
                                                             {data?.warehouseData?.name || '-'}
                                                         </td>
@@ -133,7 +153,23 @@ const OpeningStock = () => {
                                                                 ? new Date(data.date).toLocaleDateString('en-GB')
                                                                 : '-'}
                                                         </td>
-                                                        <td className="font_work">{data?.description || '-'}</td>
+                                                        <td
+                                                            className="font_work"
+                                                            title={data?.description || ''} // This will show full text on hover
+                                                        >
+                                                            {
+                                                                data?.description
+                                                                    ? // Show first 5 words if description exists
+                                                                      data.description
+                                                                          .split(' ')
+                                                                          .slice(0, 5)
+                                                                          .join(' ') +
+                                                                      (data.description.split(' ').length > 5
+                                                                          ? '...'
+                                                                          : '')
+                                                                    : '-' // Show dash if no description
+                                                            }
+                                                        </td>{' '}
                                                         <td className="font_work">
                                                             {data?.totalStockProductCount || '-'}
                                                         </td>
