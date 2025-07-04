@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { CgCloseO } from "react-icons/cg";
+import { CgCloseO } from 'react-icons/cg';
 import {
     createStockInActions,
     getWarehouseListActions,
@@ -19,23 +19,32 @@ import { MdDelete } from 'react-icons/md';
 
 function AddStockinModal({ show, onHide }) {
     const dispatch = useDispatch();
-    const { handleSubmit, register, setValue, reset, resetField, formState: { errors } } = useForm();
-    const store = useSelector((state) => state)
+    const {
+        handleSubmit,
+        register,
+        setValue,
+        reset,
+        resetField,
+        formState: { errors },
+    } = useForm();
+    const store = useSelector((state) => state);
 
     const [today] = useState(new Date().toISOString().split('T')[0]);
-    const [rows, setRows] = useState([{ searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+    const [rows, setRows] = useState([
+        { searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' },
+    ]);
 
     const {
         searchProductReducer: {
             searchProduct: { response: ProductSearch = [], loading: productLoading },
-            error: productError
+            error: productError,
         },
         getWarehouseListReducer: {
             searchWarehouse: { response: Warehouse = [] },
-            error: warehouseError
+            error: warehouseError,
         },
-        createStockReducer: { createStockIn: { status: createResponse, loading: createLoading } = {} }
-    } = useSelector(state => state);
+        createStockReducer: { createStockIn: { status: createResponse, loading: createLoading } = {} },
+    } = useSelector((state) => state);
 
     const UsersList = store?.listingUsersReducer?.listingUsers?.response;
     const SupplierList = store?.listingSupplierReducer?.listingSupplier?.response;
@@ -61,7 +70,6 @@ function AddStockinModal({ show, onHide }) {
     useEffect(() => {
         dispatch(getWarehouseListActions());
         dispatch(listingSupplierActions());
-
     }, [dispatch]);
 
     useEffect(() => {
@@ -69,45 +77,56 @@ function AddStockinModal({ show, onHide }) {
         if (warehouseError) toast.error(warehouseError.message || 'Failed to load warehouses');
     }, [productError, warehouseError]);
 
-    const warehouseOptions = useMemo(() => (
-        Warehouse?.map(({ _id, name }) => ({ value: _id, label: name }))
-    ), [Warehouse]);
+    const warehouseOptions = useMemo(
+        () => Warehouse?.map(({ _id, name }) => ({ value: _id, label: name })),
+        [Warehouse]
+    );
 
-    const productOptions = useMemo(() => (
-        ProductSearch?.map(product => ({
-            value: product._id,
-            label: product.modelId?.name,
-            code: product.code,
-            name: product.name,
-            data: product
-        })) || []
-    ), [ProductSearch]);
-    const productOptionsCode = useMemo(() => (
-        ProductSearch?.map(product => ({
-            value: product._id,
-            label: product.code,
-            code: product.code,
-            name: product.name,
-            data: product
-        })) || []
-    ), [ProductSearch]);
+    const productOptions = useMemo(
+        () =>
+            ProductSearch?.map((product) => ({
+                value: product._id,
+                label: product.modelId?.name,
+                code: product.code,
+                name: product.name,
+                data: product,
+            })) || [],
+        [ProductSearch]
+    );
+    const productOptionsCode = useMemo(
+        () =>
+            ProductSearch?.map((product) => ({
+                value: product._id,
+                label: product.code,
+                code: product.code,
+                name: product.name,
+                data: product,
+            })) || [],
+        [ProductSearch]
+    );
 
-    const handleSearch = useCallback((term, type) => {
-        if (!term || term.length < 1) return;
-        dispatch(searchProductActions(type === 'modelName' ? { modelName: term } : { code: term }));
-    }, [dispatch]);
+    const handleSearch = useCallback(
+        (term, type) => {
+            if (!term || term.length < 1) return;
+            dispatch(searchProductActions(type === 'modelName' ? { modelName: term } : { code: term }));
+        },
+        [dispatch]
+    );
 
     const handleAddRow = useCallback(() => {
-        setRows(prev => [...prev, { searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
+        setRows((prev) => [...prev, { searchType: 'modelName', selectedProduct: null, quantity: '', searchTerm: '' }]);
     }, []);
 
-    const handleDeleteRow = useCallback((index) => {
-        if (rows.length <= 1) return;
-        setRows(prev => prev.filter((_, i) => i !== index));
-    }, [rows.length]);
+    const handleDeleteRow = useCallback(
+        (index) => {
+            if (rows.length <= 1) return;
+            setRows((prev) => prev.filter((_, i) => i !== index));
+        },
+        [rows.length]
+    );
 
     const handleProductChange = useCallback((selected, index) => {
-        setRows(prev => {
+        setRows((prev) => {
             const updated = [...prev];
             updated[index] = { ...updated[index], selectedProduct: selected, searchTerm: selected?.label || '' };
             return updated;
@@ -116,10 +135,10 @@ function AddStockinModal({ show, onHide }) {
 
     const handleQuantityChange = useCallback((e, index) => {
         const value = e.target.value === '' ? '' : parseInt(e.target.value);
-        setRows(prev => {
+        setRows((prev) => {
             const updated = [...prev];
             updated[index].quantity = value;
-            updated[index].quantityError = ''; 
+            updated[index].quantityError = '';
             return updated;
         });
     }, []);
@@ -127,9 +146,9 @@ function AddStockinModal({ show, onHide }) {
     const validateQuantity = useCallback((e, index) => {
         const value = e.target.value;
         if (value === '') {
-            setRows(prev => {
+            setRows((prev) => {
                 const updated = [...prev];
-                updated[index].quantity = 1; 
+                updated[index].quantity = 1;
                 updated[index].quantityError = '';
                 return updated;
             });
@@ -138,13 +157,13 @@ function AddStockinModal({ show, onHide }) {
 
         const numValue = parseInt(value);
         if (isNaN(numValue) || numValue <= 0) {
-            setRows(prev => {
+            setRows((prev) => {
                 const updated = [...prev];
                 updated[index].quantityError = 'Quantity must be greater than 0';
                 return updated;
             });
         } else {
-            setRows(prev => {
+            setRows((prev) => {
                 const updated = [...prev];
                 updated[index].quantity = numValue;
                 updated[index].quantityError = '';
@@ -153,25 +172,27 @@ function AddStockinModal({ show, onHide }) {
         }
     }, []);
 
-
     const onSubmit = (data) => {
-        const productStock = rows?.map(({ selectedProduct, quantity }) => {
-            if (!selectedProduct) return toast.error('Please select a product for all rows');
-            if (!quantity) return toast.error('Please enter quantity for all products');
-            return {
-                productId: selectedProduct.value,
-                quantity,
-                code: selectedProduct.code,
-                name: selectedProduct.name || selectedProduct.label
-            };
-        }).filter(Boolean);
+        const productStock = rows
+            ?.map(({ selectedProduct, quantity }) => {
+                if (!selectedProduct) return toast.error('Please select a product for all rows');
+                if (!quantity) return toast.error('Please enter quantity for all products');
+                return {
+                    productId: selectedProduct.value,
+                    quantity,
+                    code: selectedProduct.code,
+                    name: selectedProduct.name || selectedProduct.label,
+                };
+            })
+            .filter(Boolean);
 
-        if (productStock.length !== rows.length) return; const formData = new FormData();
+        if (productStock.length !== rows.length) return;
+        const formData = new FormData();
         if (data?.invoiceAttachment?.[0] instanceof File) {
             formData.append('invoiceAttachment', data.invoiceAttachment?.[0]);
         }
 
-        formData.append('warehouseId', selectedWarehouse?.value)
+        formData.append('warehouseId', selectedWarehouse?.value);
         formData.append('receivedBy', selectedUser?.value);
         formData.append('supplierId', selectedSupplier?.value);
         formData.append('description', data?.description);
@@ -188,7 +209,7 @@ function AddStockinModal({ show, onHide }) {
         value: users._id,
         label: users.name
             .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join(' '),
     }));
 
@@ -200,7 +221,7 @@ function AddStockinModal({ show, onHide }) {
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedSupplier, setSelectedSupplier] = useState(null);
-    const [attachmentType, setAttachmentType] = useState("");
+    const [attachmentType, setAttachmentType] = useState('');
 
     const handleWarehouseChange = (selectedOption) => {
         setSelectedWarehouse(selectedOption);
@@ -219,13 +240,13 @@ function AddStockinModal({ show, onHide }) {
     const handleAttachmentTypeChange = (e) => {
         const type = e.target.value;
         setAttachmentType(type);
-        setValue("invoiceAttachmentType", type);
+        setValue('invoiceAttachmentType', type);
     };
     const resetAttachmentType = () => {
-        setAttachmentType("");
-        setValue("invoiceAttachmentType", "");
-        resetField("invoiceAttachment");
-        if (fileInputRef.current) fileInputRef.current.value = "";
+        setAttachmentType('');
+        setValue('invoiceAttachmentType', '');
+        resetField('invoiceAttachment');
+        if (fileInputRef.current) fileInputRef.current.value = '';
     };
 
     useEffect(() => {
@@ -235,17 +256,18 @@ function AddStockinModal({ show, onHide }) {
     }, [dispatch, selectedWarehouse]);
 
     return (
-        <Modal show={show} onHide={handleClose} size='xl' backdrop="static" centered>
-            <Modal.Header className='py-1' closeButton>
+        <Modal show={show} onHide={handleClose} size="xl" backdrop="static" centered>
+            <Modal.Header className="py-1" closeButton>
                 <Modal.Title>Add Stock</Modal.Title>
             </Modal.Header>
-            <Modal.Body className='pt-1'>
+            <Modal.Body className="pt-1">
                 <Form onSubmit={handleSubmit(onSubmit)}>
-
                     <Row>
                         <Col sm={3}>
                             <Form.Group className="mb-1">
-                                <Form.Label className='mb-0'>Warehouse <span className='text-danger'>*</span></Form.Label>
+                                <Form.Label className="mb-0">
+                                    Warehouse <span className="text-danger">*</span>
+                                </Form.Label>
                                 <Select
                                     value={selectedWarehouse}
                                     onChange={handleWarehouseChange}
@@ -258,11 +280,13 @@ function AddStockinModal({ show, onHide }) {
                         </Col>
                         <Col sm={3}>
                             <Form.Group className="mb-1">
-                                <Form.Label className="mb-0">Received By <span className='text-danger'>*</span></Form.Label>
+                                <Form.Label className="mb-0">
+                                    Received By <span className="text-danger">*</span>
+                                </Form.Label>
                                 <Select
                                     value={selectedUser}
                                     onChange={handleUserChange}
-                                    className='text-capitalize'
+                                    className="text-capitalize"
                                     options={usersOptions}
                                     placeholder="Select a User"
                                     isClearable
@@ -272,12 +296,14 @@ function AddStockinModal({ show, onHide }) {
                         </Col>
                         <Col sm={3}>
                             <Form.Group className="mb-1">
-                                <Form.Label className="mb-0">Supplier <span className='text-danger'>*</span></Form.Label>
+                                <Form.Label className="mb-0">
+                                    Supplier <span className="text-danger">*</span>
+                                </Form.Label>
                                 <Select
                                     value={selectedSupplier}
                                     onChange={handleSupplierChange}
                                     options={supplierOptions}
-                                    className='text-capitalize'
+                                    className="text-capitalize"
                                     placeholder="Select a Supplier"
                                     isClearable
                                     required
@@ -286,13 +312,13 @@ function AddStockinModal({ show, onHide }) {
                         </Col>
                         <Col sm={3}>
                             <Form.Group className="mb-1">
-                                <Form.Label className='mb-0'>Date</Form.Label>
+                                <Form.Label className="mb-0">Date</Form.Label>
                                 <Form.Control
                                     type="date"
                                     {...register('date', {
-                                        value: new Date().toISOString().split('T')[0] 
+                                        value: new Date().toISOString().split('T')[0],
                                     })}
-                                    max={new Date().toISOString().split('T')[0]} 
+                                    max={new Date().toISOString().split('T')[0]}
                                 />
                             </Form.Group>
                         </Col>
@@ -303,12 +329,10 @@ function AddStockinModal({ show, onHide }) {
                                 placeholder="Enter Invoice Number"
                                 {...register('invoiceNumber', {
                                     required: 'Invoice Number is required',
-                                    validate: value => {
+                                    validate: (value) => {
                                         const trimmed = value.trim();
-                                        return /^0+$/.test(trimmed)
-                                            ? "Invoice Number cannot be all zeros"
-                                            : true;
-                                    }
+                                        return /^0+$/.test(trimmed) ? 'Invoice Number cannot be all zeros' : true;
+                                    },
                                 })}
                             />
                             {errors.invoiceNumber && (
@@ -327,8 +351,7 @@ function AddStockinModal({ show, onHide }) {
                                         className="mb-0"
                                         value={attachmentType}
                                         onChange={handleAttachmentTypeChange}
-                                        required
-                                    >
+                                        required>
                                         <option value="">Select Attachment Type</option>
                                         <option value="Invoice">Invoice</option>
                                         <option value="Delivery Challan">Delivery Challan</option>
@@ -340,13 +363,13 @@ function AddStockinModal({ show, onHide }) {
                                             accept=".pdf,.docx,.jpg,.jpeg,.png"
                                             required
                                             placeholder="Upload file"
-                                            {...register("invoiceAttachment")}
+                                            {...register('invoiceAttachment')}
                                         />
 
                                         <CgCloseO
                                             size={20}
-                                            className='text-danger'
-                                            style={{ cursor: "pointer" }}
+                                            className="text-danger"
+                                            style={{ cursor: 'pointer' }}
                                             onClick={resetAttachmentType}
                                             title="Change attachment type"
                                         />
@@ -375,28 +398,43 @@ function AddStockinModal({ show, onHide }) {
                                 />
                             </Form.Group>
                         </Col>
-
                     </Row>
 
-                    <hr className='mt-2 mb-1' />
-                    <div style={{ maxHeight: rows?.length >= 3 ? '51vh' : 'auto', overflowY: rows?.length >= 3 ? 'auto' : 'visible', padding: '10px' }}>
+                    <hr className="mt-2 mb-1" />
+                    <div
+                        style={{
+                            maxHeight: rows?.length >= 3 ? '51vh' : 'auto',
+                            overflowY: rows?.length >= 3 ? 'auto' : 'visible',
+                            padding: '10px',
+                        }}>
                         {rows?.map((row, index) => (
-                            <div className='mb-1 rounded-1 ps-1' style={{ border: '1px solid rgba(218, 224, 225, 0.97)' }} key={index}>
+                            <div
+                                className="mb-1 rounded-1 ps-1"
+                                style={{ border: '1px solid rgba(218, 224, 225, 0.97)' }}
+                                key={index}>
                                 <Row className="align-items-center mb-2 g-2">
                                     {/* Search By */}
-                                    <Col sm={2} className='d-flex'>
-                                        <span className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1">{index + 1}.</span>
+                                    <Col sm={2} className="d-flex">
+                                        <span className="fw-semibold d-flex align-items-center me-1 mt-2 pt-1">
+                                            {index + 1}.
+                                        </span>
                                         <div>
-                                            <Form.Group className='mb-0'>
+                                            <Form.Group className="mb-0">
                                                 <Form.Label className="small mb-0">Search By</Form.Label>
                                                 <Form.Select
                                                     value={row?.searchType}
-                                                    onChange={(e) => setRows(prev => {
-                                                        const updated = [...prev];
-                                                        updated[index] = { ...updated[index], searchType: e.target.value, selectedProduct: null, searchTerm: '' };
-                                                        return updated;
-                                                    })}
-                                                >
+                                                    onChange={(e) =>
+                                                        setRows((prev) => {
+                                                            const updated = [...prev];
+                                                            updated[index] = {
+                                                                ...updated[index],
+                                                                searchType: e.target.value,
+                                                                selectedProduct: null,
+                                                                searchTerm: '',
+                                                            };
+                                                            return updated;
+                                                        })
+                                                    }>
                                                     <option value="modelName">Model Name</option>
                                                     <option value="code">Product Code</option>
                                                 </Form.Select>
@@ -406,14 +444,16 @@ function AddStockinModal({ show, onHide }) {
 
                                     {/* Dynamic Search Field */}
                                     <Col sm={3}>
-                                        <Form.Group className='mb-0'>
-                                            <Form.Label className="small mb-0">{row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}</Form.Label>
-                                            {row.searchType === 'modelName' ?
+                                        <Form.Group className="mb-0">
+                                            <Form.Label className="small mb-0">
+                                                {row.searchType === 'modelName' ? 'Model Name' : 'Product Code'}
+                                            </Form.Label>
+                                            {row.searchType === 'modelName' ? (
                                                 <Select
                                                     value={row?.selectedProduct}
                                                     onChange={(selected) => handleProductChange(selected, index)}
                                                     onInputChange={(inputValue) => {
-                                                        setRows(prev => {
+                                                        setRows((prev) => {
                                                             const updated = [...prev];
                                                             updated[index].searchTerm = inputValue;
                                                             return updated;
@@ -427,12 +467,12 @@ function AddStockinModal({ show, onHide }) {
                                                     isLoading={productLoading}
                                                     filterOption={() => true}
                                                 />
-                                                :
+                                            ) : (
                                                 <Select
                                                     value={row?.selectedProduct}
                                                     onChange={(selected) => handleProductChange(selected, index)}
                                                     onInputChange={(inputValue) => {
-                                                        setRows(prev => {
+                                                        setRows((prev) => {
                                                             const updated = [...prev];
                                                             updated[index].searchTerm = inputValue;
                                                             return updated;
@@ -446,17 +486,23 @@ function AddStockinModal({ show, onHide }) {
                                                     isLoading={productLoading}
                                                     filterOption={() => true}
                                                 />
-                                            }
+                                            )}
                                         </Form.Group>
                                     </Col>
 
                                     {/* Complementary Info */}
                                     <Col sm={2}>
-                                        <Form.Group className='mb-0'>
-                                            <Form.Label className="small mb-0">{row.searchType === 'modelName' ? 'Code' : 'Model'}</Form.Label>
+                                        <Form.Group className="mb-0">
+                                            <Form.Label className="small mb-0">
+                                                {row.searchType === 'modelName' ? 'Code' : 'Model'}
+                                            </Form.Label>
                                             <Form.Control
-                                                type='text'
-                                                value={row.searchType === 'modelName' ? row.selectedProduct?.data?.code : row.selectedProduct?.data?.modelId?.name || ''}
+                                                type="text"
+                                                value={
+                                                    row.searchType === 'modelName'
+                                                        ? row.selectedProduct?.data?.code
+                                                        : row.selectedProduct?.data?.modelId?.name || ''
+                                                }
                                                 placeholder={row.searchType === 'modelName' ? 'Code' : 'Model'}
                                                 readOnly
                                             />
@@ -465,7 +511,7 @@ function AddStockinModal({ show, onHide }) {
 
                                     {/* Product Name */}
                                     <Col sm={2}>
-                                        <Form.Group className='mb-0'>
+                                        <Form.Group className="mb-0">
                                             <Form.Label className="small mb-0">Product Name</Form.Label>
                                             <Form.Control
                                                 type="text"
@@ -478,7 +524,7 @@ function AddStockinModal({ show, onHide }) {
 
                                     {/* Quantity */}
                                     <Col xs={2}>
-                                        <Form.Group className='mb-0'>
+                                        <Form.Group className="mb-0">
                                             <Form.Label className="small mb-0">Qty</Form.Label>
                                             <Form.Control
                                                 type="number"
@@ -502,10 +548,9 @@ function AddStockinModal({ show, onHide }) {
                                         {rows.length > 1 && (
                                             <Button
                                                 variant="outline-danger"
-                                                title='Delete'
+                                                title="Delete"
                                                 onClick={() => handleDeleteRow(index)}
-                                                className="p-1 mt-2"
-                                            >
+                                                className="p-1 mt-2">
                                                 <MdDelete className="fs-6" />
                                             </Button>
                                         )}
@@ -516,40 +561,31 @@ function AddStockinModal({ show, onHide }) {
                     </div>
 
                     <div className="d-flex justify-content-between mt-3">
-                        <Button className='outline-custom-button' style={{ height: '38px' }} onClick={handleAddRow}>
+                        <Button className="outline-custom-button" style={{ height: '38px' }} onClick={handleAddRow}>
                             <IoIosAdd className="me-1" /> Add Row
                         </Button>
 
-                        <div className='d-flex gap-2'>
-                            <Button onClick={handleClose} style={{ height: '38px' }} className="cancel-button">Cancel</Button>
+                        <div className="d-flex gap-2">
+                            <Button onClick={handleClose} style={{ height: '38px' }} className="cancel-button">
+                                Cancel
+                            </Button>
                             {rows?.some((data) => !data?.selectedProduct) ? (
                                 <OverlayTrigger
                                     placement="top"
-                                    overlay={<Tooltip>Please Fill required fields and select product...</Tooltip>}
-                                >
+                                    overlay={<Tooltip>Please Fill required fields and select product...</Tooltip>}>
                                     <div>
-                                        <Button
-                                            className='custom-button'
-                                            type="submit"
-                                            disabled
-                                        >
+                                        <Button className="custom-button" type="submit" disabled>
                                             {createLoading ? 'Saving...' : 'Save'}
                                         </Button>
                                     </div>
                                 </OverlayTrigger>
                             ) : (
                                 <Button
-                                    className='custom-button'
+                                    className="custom-button"
                                     type="submit"
                                     disabled={store?.createStockInReducer?.loading}
-                                    style={{ width: '70px !important' }}
-                                >
-                                    {store?.createStockInReducer?.loading ? (
-                                        'Saving...'
-                                    ) : (
-                                        'Save'
-                                    )}
-
+                                    style={{ width: '70px !important' }}>
+                                    {store?.createStockInReducer?.loading ? 'Saving...' : 'Save'}
                                 </Button>
                             )}
                         </div>
