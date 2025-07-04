@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 import { createWarehouseActions, getLocationActions, updateWarehouseActions } from '../../../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import Select from 'react-select';
 const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
     const { type } = warehouseData;
     const dispatch = useDispatch();
+
     const {
         handleSubmit,
         register,
@@ -18,36 +19,42 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
     } = useForm();
 
     const { location } = useSelector((state) => state?.locationReducer || {});
-    const [locationSelected, setLocationSelected] = useState(null)
+    const [locationSelected, setLocationSelected] = useState(null);
     const locationData = location?.response || [];
 
     const closeModal = () => {
         reset();
         handleClose();
         setLocationSelected(null);
-    }
+    };
 
     useEffect(() => {
         dispatch(getLocationActions());
     }, [dispatch]);
 
+    // Register 'location' field manually
     useEffect(() => {
-        if (warehouseData.data && locationData) {
-            const selectedLocation = locationData.find(
-                (loc) => loc._id === warehouseData.data?.locationId?._id
-            );
+        register('location', { required: 'Location is required' });
+    }, [register]);
 
-            setValue('warehouse', warehouseData.data?.name)
-            setValue('address', warehouseData.data?.address)
+    // Set form values in edit mode
+    useEffect(() => {
+        if (warehouseData.data && locationData.length > 0) {
+            const selectedLocation = locationData.find((loc) => loc._id === warehouseData.data?.locationId?._id);
+
+            setValue('warehouse', warehouseData.data?.name);
+            setValue('address', warehouseData.data?.address);
 
             if (selectedLocation) {
-                setLocationSelected({
+                const selectedOption = {
                     label: selectedLocation.name,
                     value: selectedLocation._id,
-                });
+                };
+                setLocationSelected(selectedOption);
+                setValue('location', selectedOption.value); // ✅ Set location value here
             }
         }
-    }, [warehouseData, locationData]);
+    }, [warehouseData, locationData, setValue]);
 
     const onSubmit = (data) => {
         const payload = {
@@ -69,14 +76,10 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
         closeModal();
     };
 
-    useEffect(() => {
-        register('location', { required: 'Location is required' });
-    }, [register]);
-
     return (
-        <Modal show={showModal} centered size='lg' onHide={closeModal} backdrop="static">
+        <Modal show={showModal} centered size="lg" onHide={closeModal} backdrop="static">
             <Modal.Header closeButton>
-                <Modal.Title className='text-black'>{type} Warehouse</Modal.Title>
+                <Modal.Title className="text-black">{type} Warehouse</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit(onSubmit)}>
@@ -91,15 +94,17 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
                                     placeholder="Enter Warehouse"
                                     {...register('warehouse', {
                                         required: 'Warehouse is required',
-                                        validate: value => {
+                                        validate: (value) => {
                                             const trimmed = value.trim();
                                             if (!trimmed) return 'Warehouse cannot be empty spaces';
 
-                                            const emojiRegex = /(\p{Extended_Pictographic}|\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu;
+                                            const emojiRegex =
+                                                /(\p{Extended_Pictographic}|\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu;
 
-                                            if (emojiRegex.test(trimmed)) return 'Emojis are not allowed in warehouse name';
+                                            if (emojiRegex.test(trimmed))
+                                                return 'Emojis are not allowed in warehouse name';
                                             return true;
-                                        }
+                                        },
                                     })}
                                 />
                                 {errors.warehouse && <small className="text-danger">{errors.warehouse.message}</small>}
@@ -108,7 +113,9 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
 
                         <Col sm={6}>
                             <Form.Group className="mb-1">
-                                <Form.Label className="mb-0">Location  <span className='text-danger'>*</span></Form.Label>
+                                <Form.Label className="mb-0">
+                                    Location <span className="text-danger">*</span>
+                                </Form.Label>
                                 <Select
                                     options={locationData?.map((loc) => ({
                                         label: loc.name,
@@ -123,7 +130,6 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
                                     value={locationSelected}
                                     isSearchable
                                 />
-
                                 {errors.location && <small className="text-danger">Location is required</small>}
                             </Form.Group>
                         </Col>
@@ -139,33 +145,30 @@ const AddWarehouseModal = ({ showModal, handleClose, warehouseData }) => {
                                     placeholder="Enter Address"
                                     {...register('address', {
                                         required: 'Address is required',
-                                        validate: value => {
+                                        validate: (value) => {
                                             const cleaned = value.replace(/[\n\r\s]/g, '');
                                             if (!cleaned) return 'Address cannot be empty or only new lines';
                                             return true;
-                                        }
+                                        },
                                     })}
                                 />
-                                {errors.address && (
-                                    <small className="text-danger">{errors.address.message}</small>
-                                )}
+                                {errors.address && <small className="text-danger">{errors.address.message}</small>}
                             </Form.Group>
                         </Col>
-
                     </Row>
 
                     <Modal.Footer>
-                        <Button className='cancel-button' onClick={closeModal}>
+                        <Button className="cancel-button" onClick={closeModal}>
                             Close
                         </Button>
-                        <Button className='custom-button' type='submit'>
+                        <Button className="custom-button" type="submit">
                             {type === 'Add' ? 'Save' : 'Update'}
                         </Button>
                     </Modal.Footer>
                 </Form>
             </Modal.Body>
         </Modal>
-    )
-}
+    );
+};
 
 export default AddWarehouseModal;

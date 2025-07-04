@@ -5,7 +5,7 @@ import config from '../../config';
 import NoInternet from '../../pages/noInternet/NoInternet';
 
 // content type
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+// axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.baseURL = config.API_URL;
 // 'http://192.168.0.106:5004/'
 // intercepting to capture errors
