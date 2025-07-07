@@ -109,16 +109,16 @@ const OpeningStock = () => {
                                             <tr className="table_header">
                                                 <th>#</th>
 
-                                                {Role === 'admin' && (
-                                                    <>
-                                                        <th scope="col">User Name</th>
-                                                        <th scope="col">User Email</th>
-                                                    </>
-                                                )}
                                                 <th>Warehouse</th>
                                                 <th>Date</th>
                                                 <th>Description</th>
                                                 <th>No. of Products</th>
+                                                {Role === 'admin' && (
+                                                    <>
+                                                        <th scope="col">Last Updated By </th>
+                                                        <th scope="col">User Email</th>
+                                                    </>
+                                                )}
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -135,16 +135,6 @@ const OpeningStock = () => {
                                                         <td className="font_work">
                                                             {(pageIndex - 1) * pageSize + index + 1}
                                                         </td>
-                                                        {Role === 'admin' && (
-                                                            <>
-                                                                <td className="text-capitalize font_work">
-                                                                    {data?.userName}
-                                                                </td>
-                                                                <td className="text-capitalize font_work">
-                                                                    {data?.userEmail}
-                                                                </td>
-                                                            </>
-                                                        )}
                                                         <td className="text-capitalize font_work">
                                                             {data?.warehouseData?.name || '-'}
                                                         </td>
@@ -173,6 +163,16 @@ const OpeningStock = () => {
                                                         <td className="font_work">
                                                             {data?.totalStockProductCount || '-'}
                                                         </td>
+                                                        {Role === 'admin' && (
+                                                            <>
+                                                                <td className="text-capitalize font_work">
+                                                                    {data?.userName}
+                                                                </td>
+                                                                <td className="text-capitalize font_work">
+                                                                    {data?.userEmail}
+                                                                </td>
+                                                            </>
+                                                        )}
                                                         <td>
                                                             <span
                                                                 className="icon-wrapper me-4"
