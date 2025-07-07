@@ -109,12 +109,7 @@ const Dispatch = () => {
                                         <thead>
                                             <tr className="table_header">
                                                 <th scope="col">#</th>
-                                                {Role === 'admin' && (
-                                                    <>
-                                                        <th scope="col">User Name</th>
-                                                        <th scope="col">User Email</th>
-                                                    </>
-                                                )}
+
                                                 <th scope="col">Customer Name</th>
                                                 <th scope="col">Dispatch by</th>
                                                 <th scope="col">Control No.</th>
@@ -122,7 +117,15 @@ const Dispatch = () => {
                                                 <th scope="col">Warehouse</th>
                                                 <th scope="col">Location</th>
                                                 <th scope="col">Date</th>
-                                                <th scope="col">No. of Products</th>
+                                                <th scope="col" style={{ whiteSpace: 'nowrap' }}>
+                                                    No. of Products
+                                                </th>
+                                                {Role === 'admin' && (
+                                                    <>
+                                                        <th scope="col">Last Updated By </th>
+                                                        <th scope="col">User Email</th>
+                                                    </>
+                                                )}
                                                 <th scope="col">Action</th>
                                             </tr>
                                         </thead>
@@ -149,16 +152,7 @@ const Dispatch = () => {
                                                             <td className="font_work">
                                                                 {(pageIndex - 1) * pageSize + index + 1}
                                                             </td>
-                                                            {Role === 'admin' && (
-                                                                <>
-                                                                    <td className="text-capitalize font_work">
-                                                                        {data?.userName}
-                                                                    </td>
-                                                                    <td className="text-capitalize font_work">
-                                                                        {data?.userEmail}
-                                                                    </td>
-                                                                </>
-                                                            )}
+
                                                             <td
                                                                 className="text-capitalize font_work"
                                                                 title={data?.customerData?.[0]?.name || ''}>
@@ -211,6 +205,16 @@ const Dispatch = () => {
                                                                     <span className="text-black">-</span>
                                                                 )}
                                                             </td>
+                                                            {Role === 'admin' && (
+                                                                <>
+                                                                    <td className="text-capitalize font_work">
+                                                                        {data?.userName}
+                                                                    </td>
+                                                                    <td className="text-capitalize font_work">
+                                                                        {data?.userEmail}
+                                                                    </td>
+                                                                </>
+                                                            )}
                                                             <td>
                                                                 <span
                                                                     className="icon-wrapper "
