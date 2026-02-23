@@ -1,0 +1,7 @@
+services:
+  shivay-ims-web:
+    build: ./
+    container_name: shivay-ims-web
+    ports:
+      - "5007:80"
+    restart: always
